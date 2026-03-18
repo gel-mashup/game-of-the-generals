@@ -64,7 +64,7 @@ export default function GamePage() {
       if ((deployedCounts[selectedPieceType] ?? 0) >= pieceConfig.count) return;
 
       const piece: Piece = {
-        id: `${piece.type}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        id: `${selectedPieceType}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         type: selectedPieceType,
         owner: playerSide,
         rank: pieceConfig.rank,
@@ -100,21 +100,6 @@ export default function GamePage() {
       // Clicking elsewhere — deselect
       selectPiece(null);
     }
-      // Clicking own piece — select
-      if (target && target.owner === playerSide) {
-        selectPiece({ row, col });
-        return;
-      }
-      // Clicking empty valid-move square — make move
-      const { validMoves, selectedPiece: sel } = useGameStore.getState();
-      if (sel && validMoves.some((m) => m.row === row && m.col === col)) {
-        makeMove(sel, { row, col });
-        socket?.emit('make-move', { from: sel, to: { row, col } });
-        return;
-      }
-      // Clicking elsewhere — deselect
-      selectPiece(null);
-    }
   };
 
   // Socket listeners
@@ -143,11 +128,25 @@ export default function GamePage() {
       setTurn(data.currentTurn);
     };
 
-    const handleMoveResult = (data: { move: { from: Position; to: Position }; outcome: any; board: (Piece | null)[][]; currentTurn: 'red' | 'blue' }) => {
+    const handleMoveResult = (data: { move: { from: Position; to: Position }; outcome: any; attacker: Piece | null; defender: Piece | null; attackerPosition: Position; defenderPosition: Position; board: (Piece | null)[][]; currentTurn: 'red' | 'blue' }) => {
       setBoard(data.board);
       setTurn(data.currentTurn);
-      if (data.outcome) {
-        setBattleOutcome(data.outcome);
+      if (data.attacker && data.defender && data.outcome) {
+        let result: 'attacker_wins' | 'defender_wins' | 'tie' = 'tie';
+        if (data.outcome.winner === 'tie') {
+          result = 'tie';
+        } else if (data.outcome.attackerWins === true) {
+          result = 'attacker_wins';
+        } else if (data.outcome.attackerWins === false) {
+          result = 'defender_wins';
+        }
+        setBattleOutcome({
+          attacker: data.attacker,
+          defender: data.defender,
+          attackerPosition: data.attackerPosition,
+          defenderPosition: data.defenderPosition,
+          result,
+        });
       }
     };
 

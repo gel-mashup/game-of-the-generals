@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useGameStore } from '@/store/gameStore';
+import { useRoomStore } from '@/store/roomStore';
 import Piece from './Piece';
 
 const ROWS = 8;
@@ -13,7 +14,8 @@ interface BoardProps {
 }
 
 export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps) {
-  const { board, selectedPiece, validMoves, currentTurn, gameStatus, playerSide, selectPiece } = useGameStore();
+  const { board, selectedPiece, validMoves, currentTurn, gameStatus, selectPiece } = useGameStore();
+  const { playerSide } = useRoomStore();
 
   const isValidMove = (row: number, col: number) =>
     validMoves.some((m) => m.row === row && m.col === col);
