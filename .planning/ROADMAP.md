@@ -23,6 +23,12 @@
 
 **Requirements:** AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04
 
+**Plans:** 2 plans
+
+**Plan List:**
+- [ ] 01-01-PLAN.md — Project scaffold, Socket.io server, Zustand stores, landing page
+- [ ] 01-02-PLAN.md — Game board UI, pieces, deployment zones, lobby completion
+
 **Success Criteria:**
 1. Landing page shows "Play vs Bot" and "Play Online" buttons
 2. Room creation generates 6-character alphanumeric code
@@ -34,14 +40,14 @@
 8. Deployment zones visible and enforced (rows 0-2 for Red, 5-7 for Blue)
 
 **Tasks:**
-- [ ] Setup Docker Compose with client/server
-- [ ] Landing page with mode selection
-- [ ] Lobby page with create/join room UI
-- [ ] Socket.io room management (create, join, leave)
-- [ ] Board component rendering 9x8 grid
-- [ ] Piece component with rank display
-- [ ] Deployment zone rendering
-- [ ] Piece palette for deployment phase
+- [x] Setup Docker Compose with client/server
+- [x] Landing page with mode selection
+- [x] Lobby page with create/join room UI
+- [x] Socket.io room management (create, join, leave)
+- [x] Board component rendering 9x8 grid
+- [x] Piece component with rank display
+- [x] Deployment zone rendering
+- [x] Piece palette for deployment phase
 
 ---
 
