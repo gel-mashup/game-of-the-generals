@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-dominant: #1a2e1a;
+  --color-secondary: #2d4a2d;
+  --color-accent: #d4a847;
+}
+
+body {
+  @apply bg-[#1a2e1a] text-white font-sans antialiased;
+}
+
+/* Custom scrollbar for piece palette */
+.piece-palette::-webkit-scrollbar {
+  height: 8px;
+}
+
+.piece-palette::-webkit-scrollbar-track {
+  @apply bg-secondary rounded;
+}
+
+.piece-palette::-webkit-scrollbar-thumb {
+  @apply bg-accent/50 rounded;
+}
+
+.piece-palette::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent/70;
+}
