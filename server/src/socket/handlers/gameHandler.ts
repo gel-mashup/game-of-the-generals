@@ -329,6 +329,10 @@ export function gameHandler(io: Server, socket: Socket) {
       return;
     }
 
+    // Capture attacker and defender pieces BEFORE applyMove modifies the board
+    const attacker = room.board[from.row][from.col];
+    const defender = room.board[to.row][to.col];
+
     // Apply move and resolve battle
     const { room: updatedRoom, battleOutcome } = applyMove(room, from, to);
 
@@ -337,10 +341,14 @@ export function gameHandler(io: Server, socket: Socket) {
     room.currentTurn = updatedRoom.currentTurn;
     room.deployedPieces = updatedRoom.deployedPieces;
 
-    // Broadcast move result to ALL in room
+    // Broadcast move result to ALL in room — includes attacker/defender for BattleReveal
     io.to(roomId).emit('move:result', {
       move: { from, to },
       outcome: battleOutcome,
+      attacker,
+      defender,
+      attackerPosition: from,
+      defenderPosition: to,
       board: room.board,
       currentTurn: room.currentTurn,
     });
