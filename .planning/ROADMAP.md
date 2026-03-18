@@ -11,7 +11,7 @@
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|-------------|------------------|
 | 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8/8 ✓ |
-| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 0/15 |
+| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 3/15 |
 | 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 0/7 |
 | 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 0/4 |
 
@@ -62,9 +62,9 @@
 **Plans:** 3 plans in 3 waves
 
 **Plan List:**
-- [ ] 02-01-PLAN.md — Server game engine (pure functions, unit tests) ✓ (2026-03-18)
-- [ ] 02-02-PLAN.md — Server game handler (socket events, bot integration) ✓ (2026-03-18)
-- [ ] 02-03-PLAN.md — Client game features (store, components, battle reveal) ✓ (2026-03-18)
+- [x] 02-01-PLAN.md — Server game engine (pure functions, unit tests) ✓ (2026-03-18)
+- [x] 02-02-PLAN.md — Server game handler (socket events, bot integration) ✓ (2026-03-18)
+- [x] 02-03-PLAN.md — Client game features (store, components, battle reveal) ✓ (2026-03-19)
 
 **Success Criteria:**
 1. Users can place pieces by clicking piece then board square
@@ -158,4 +158,4 @@
 ---
 
 *Roadmap created: 2026-03-18*
-*Last updated: 2026-03-18*
+*Last updated: 2026-03-19*

@@ -21,21 +21,21 @@
 
 ### Deployment Phase
 
-- [x] **DEP-01**: User can place pieces by clicking piece then board square
+- [x] **DEP-01**: User can place pieces by clicking piece then board square ✓
 - [ ] **DEP-02**: User can only place pieces in their deployment zone
-- [ ] **DEP-03**: User can use auto-deploy for random placement
-- [x] **DEP-04**: User can signal ready when deployment is complete
-- [x] **DEP-05**: Game starts when both players are ready
+- [x] **DEP-03**: User can use auto-deploy for random placement ✓
+- [x] **DEP-04**: User can signal ready when deployment is complete ✓
+- [x] **DEP-05**: Game starts when both players are ready ✓
 
 ### Gameplay
 
-- [x] **GAME-01**: Players alternate turns starting with Red
-- [ ] **GAME-02**: User can select a piece during their turn
-- [x] **GAME-03**: Valid moves are highlighted when piece selected
+- [x] **GAME-01**: Players alternate turns starting with Red ✓
+- [x] **GAME-02**: User can select a piece during their turn ✓
+- [x] **GAME-03**: Valid moves are highlighted when piece selected ✓
 - [ ] **GAME-04**: User can move piece to adjacent orthogonal square
 - [ ] **GAME-05**: User cannot move to square occupied by own piece
-- [x] **GAME-06**: Battle occurs when moving to occupied square
-- [ ] **GAME-07**: Higher rank wins; equal rank = both eliminated
+- [x] **GAME-06**: Battle occurs when moving to occupied square ✓
+- [x] **GAME-07**: Higher rank wins; equal rank = both eliminated ✓
 - [ ] **GAME-08**: Spy beats all officers (rank 0+)
 - [ ] **GAME-09**: Private beats Spy
 - [ ] **GAME-10**: Flag captured by any piece
@@ -95,18 +95,18 @@
 | GS-02 | Phase 1 | ✓ Complete |
 | GS-03 | Phase 1 | ✓ Complete |
 | GS-04 | Phase 1 | ✓ Complete |
-| DEP-01 | Phase 2 | Complete |
+| DEP-01 | Phase 2 | ✓ Complete |
 | DEP-02 | Phase 2 | Pending |
-| DEP-03 | Phase 2 | Pending |
-| DEP-04 | Phase 2 | Complete |
-| DEP-05 | Phase 2 | Complete |
-| GAME-01 | Phase 2 | Complete |
-| GAME-02 | Phase 2 | Pending |
-| GAME-03 | Phase 2 | Complete |
+| DEP-03 | Phase 2 | ✓ Complete |
+| DEP-04 | Phase 2 | ✓ Complete |
+| DEP-05 | Phase 2 | ✓ Complete |
+| GAME-01 | Phase 2 | ✓ Complete |
+| GAME-02 | Phase 2 | ✓ Complete |
+| GAME-03 | Phase 2 | ✓ Complete |
 | GAME-04 | Phase 2 | Pending |
 | GAME-05 | Phase 2 | Pending |
 | GAME-06 | Phase 2 | Complete |
-| GAME-07 | Phase 2 | Pending |
+| GAME-07 | Phase 2 | ✓ Complete |
 | GAME-08 | Phase 2 | Pending |
 | GAME-09 | Phase 2 | Pending |
 | GAME-10 | Phase 2 | Pending |
@@ -125,9 +125,10 @@
 **Coverage:**
 - v1 requirements: 30 total
 - Phase 1 complete: 8/30
+- Phase 2 complete: 9/15
 - Mapped to phases: 30
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-18*
-*Last updated: 2026-03-18 after initial definition*
+*Last updated: 2026-03-19 after completing Phase 02 Plan 03*

@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 02 (Game Core) — 02-02 complete. 6 more plans remaining.
+**Current focus:** Phase 02 (Game Core) — 02-03 complete. 12 more plans remaining.
 
 ---
 
@@ -20,7 +20,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ◐ In Progress | 2/15 | 13% |
+| 2 | Game Core | ◐ In Progress | 3/15 | 20% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -31,9 +31,9 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Mode:** YOLO
 - **Granularity:** Coarse
 - **Parallelization:** true
-- **Last advance:** 2026-03-18
+- **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-02-game-core
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03
 - **Verification status:** passed (52/52 engine tests)
 
 ---
@@ -90,6 +90,16 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - Bot auto-deploy triggered via socket.emit('auto-deploy')
 - 3-second countdown before playing phase
 
+**Plan 03 (Client Game Interactions) — Completed:** 2026-03-19
+**Requirements:** 6 verified (DEP-01, DEP-03, DEP-04, GAME-02, GAME-03, GAME-07)
+**Commits:** 4 (gameStore extension, Board/Piece updates, BattleReveal, game page)
+**Key deliverables:**
+- Extended gameStore: validMoves, selectedPiece computed, makeMove, setReady, battleOutcome, countdownSeconds
+- Board: green valid-move highlights (rgba(74,124,74,0.5)), gold selection border, turn indicator header
+- Piece: ring-2 ring-[#d4a847] gold border, red flash on opponent click (200ms)
+- BattleReveal: 3-phase animation (slide→reveal→result) with tie explosion + spark particles
+- Game page: Auto-Deploy (secondary), Ready (accent gold at 21 pieces), countdown overlay, battle reveal integration
+
 ---
 
-*State updated: 2026-03-18 after completing Phase 02 Plan 02 (Game Socket Handlers)*
+*State updated: 2026-03-19 after completing Phase 02 Plan 03 (Client Game Interactions)*
