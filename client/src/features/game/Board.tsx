@@ -8,37 +8,54 @@ const ROWS = 8;
 const COLS = 9;
 
 export default function Board() {
-  const { board } = useGameStore();
+  const { board, selectedPiece, validMoves, currentTurn, gameStatus, playerSide } = useGameStore();
+
+  const isValidMove = (row: number, col: number) =>
+    validMoves.some((m) => m.row === row && m.col === col);
+
+  const showTurnIndicator = gameStatus === 'playing' && playerSide;
+  const isMyTurn = currentTurn === playerSide;
 
   return (
-    <div className="grid grid-cols-9 grid-rows-8 gap-0 w-full max-w-3xl aspect-[9/8] border-4 border-[#2d4a2d] rounded-lg overflow-hidden shadow-2xl">
-      {Array.from({ length: ROWS }, (_, rowIndex) =>
-        Array.from({ length: COLS }, (_, colIndex) => {
-          const isDark = (rowIndex + colIndex) % 2 === 1;
-          const piece = board[rowIndex]?.[colIndex];
-
-          return (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              data-row={rowIndex}
-              data-col={colIndex}
-              className={`
-                relative flex items-center justify-center aspect-square
-                ${isDark ? 'bg-[#3a6a3a]' : 'bg-[#4a7c4a]'}
-                border border-[#2d4a2d]/30
-                transition-colors duration-100
-              `}
-            >
-              {piece && (
-                <Piece
-                  piece={piece}
-                  position={{ row: rowIndex, col: colIndex }}
-                />
-              )}
-            </div>
-          );
-        })
+    <div className="flex flex-col gap-2 w-full max-w-3xl">
+      {showTurnIndicator && (
+        <div className={`text-center font-bold text-lg ${isMyTurn ? 'text-[#d4a847]' : 'text-gray-400'}`}>
+          {isMyTurn ? 'Your turn' : 'Waiting for opponent…'}
+        </div>
       )}
+      <div className="grid grid-cols-9 grid-rows-8 gap-0 aspect-[9/8] border-4 border-[#2d4a2d] rounded-lg overflow-hidden shadow-2xl">
+        {Array.from({ length: ROWS }, (_, rowIndex) =>
+          Array.from({ length: COLS }, (_, colIndex) => {
+            const isDark = (rowIndex + colIndex) % 2 === 1;
+            const piece = board[rowIndex]?.[colIndex];
+            const isSelected = selectedPiece?.row === rowIndex && selectedPiece?.col === colIndex;
+            const hasValidMove = isValidMove(rowIndex, colIndex);
+
+            return (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                data-row={rowIndex}
+                data-col={colIndex}
+                className={`
+                  relative flex items-center justify-center aspect-square
+                  ${isDark ? 'bg-[#3a6a3a]' : 'bg-[#4a7c4a]'}
+                  border border-[#2d4a2d]/30
+                  transition-colors duration-100
+                  ${hasValidMove ? 'bg-[rgba(74,124,74,0.5)]' : ''}
+                `}
+              >
+                {piece && (
+                  <Piece
+                    piece={piece}
+                    position={{ row: rowIndex, col: colIndex }}
+                    isSelected={isSelected}
+                  />
+                )}
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }
