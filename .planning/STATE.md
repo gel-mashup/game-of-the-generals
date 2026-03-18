@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-18T23:08:48Z"
+last_updated: "2026-03-18T23:21:40.233Z"
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # State: Game of the Generals
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 02 (Game Core) — 02-04 complete. 2 gap closure plans remaining.
+**Current focus:** Phase 02 (Game Core) — 02-05 complete. 1 gap closure plan remaining.
 
 ---
 
@@ -33,7 +33,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ◐ In Progress | 4/6 | 67% |
+| 2 | Game Core | ◐ In Progress | 5/6 | 83% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -46,8 +46,8 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-02-game-core
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04
-- **Pending plans:** 02-05, 02-06 (gap closure)
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05
+- **Pending plans:** 02-06 (gap closure — dead code removed during 02-05 execution)
 - **Verification status:** gaps found — 3 blockers identified via 02-VERIFICATION.md
 
 ---
@@ -64,6 +64,9 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **08:** Spy beats all officers (rank ≥ 0) per game spec; only Private can beat Spy
 - **09:** Auto-deploy uses Fisher-Yates shuffle for randomized placement
 - **10:** Shared rooms Map in dedicated module for cross-handler room state access
+
+- **11:** Socket payload enrichment: server emits attacker/defender/positions in move:result; client transforms to BattleOutcome type
+- **12:** Capture attacker and defender pieces from board BEFORE applyMove (applyMove modifies board in-place)
 
 ---
 
@@ -122,12 +125,20 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - Manual deployment now syncs to server for multiplayer visibility
 - DEP-01 and DEP-04 fully unblocked
 
+**Plan 05 (BattleOutcome Payload Fix — Gap Closure) — Completed:** 2026-03-18
+**Requirements:** GAME-06 (battle reveal displays attacker/defender pieces)
+**Commits:** 2 (server payload augmentation, client transformation)
+**Key deliverables:**
+- Server emits attacker, defender, attackerPosition, defenderPosition in move:result payload
+- Client transforms server BattleOutcome (attackerWins boolean) to client BattleOutcomeResult type
+- Fixed 3 pre-existing TypeScript errors: dead code brace mismatch, piece.type circular ref, playerSide import
+
 **Gap Closure (Verification Gaps Found):** 2026-03-19
 After running verification on 02-01/02/03, 3 gaps identified:
-1. Missing `deploy-piece` socket emission (manual deployment never synced to server) → Plan 02-04
-2. Incomplete `battleOutcome` payload (server doesn't send attacker/defender pieces) → Plan 02-05
-3. Dead code block in handleCellClick (lines 102-117, duplicate playing-phase logic) → Plan 02-06
+1. Missing `deploy-piece` socket emission (manual deployment never synced to server) → Plan 02-04 ✓
+2. Incomplete `battleOutcome` payload (server doesn't send attacker/defender pieces) → Plan 02-05 ✓
+3. Dead code block in handleCellClick (lines 102-117, duplicate playing-phase logic) → Fixed during Plan 02-05 (auto-fixed as Rule 1 bug)
 
 ---
 
-*State updated: 2026-03-18 after completing 02-04 (deploy-piece socket emission)*
+*State updated: 2026-03-18 after completing 02-05 (battleOutcome payload fix + dead code removal)*
