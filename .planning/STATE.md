@@ -1,7 +1,7 @@
 # State: Game of the Generals
 
-**Project Phase:** Phase 01 (Foundation) — ✓ Complete
-**Current Milestone:** gsd/phase-01-foundation
+**Project Phase:** Phase 02 (Game Core) — In Progress
+**Current Milestone:** gsd/phase-02-game-core
 
 ---
 
@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 01 complete — 8/8 requirements verified. Ready for Phase 02 (Game Core).
+**Current focus:** Phase 02 (Game Core) — 02-01 complete. 7 more plans remaining.
 
 ---
 
@@ -20,7 +20,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ○ Pending | 0/15 | 0% |
+| 2 | Game Core | ◐ In Progress | 1/15 | 7% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -32,9 +32,9 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Granularity:** Coarse
 - **Parallelization:** true
 - **Last advance:** 2026-03-18
-- **Current branch:** gsd/phase-01-foundation
-- **Completed plans:** 01-01, 01-02
-- **Verification status:** passed (8/8 requirements)
+- **Current branch:** gsd/phase-02-game-core
+- **Completed plans:** 01-01, 01-02, 02-01
+- **Verification status:** passed (52/52 engine tests)
 
 ---
 
@@ -46,6 +46,9 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **04:** Two Zustand stores: gameStore + roomStore for separation of concerns
 - **05:** Board uses CSS Grid grid-cols-9 grid-rows-8 with alternating cell colors
 - **06:** Piece uses circular rounded-full container with owner color background
+- **07:** Battle resolution priority: flag → spy/private → equal rank → higher rank
+- **08:** Spy beats all officers (rank ≥ 0) per game spec; only Private can beat Spy
+- **09:** Auto-deploy uses Fisher-Yates shuffle for randomized placement
 
 ---
 
@@ -66,4 +69,17 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 ---
 
-*State updated: 2026-03-18 after completing Phase 01 Foundation*
+## Phase 02 Results (In Progress)
+
+**Completed:** 2026-03-18
+**Requirements:** 9/9 verified (DEP-02, DEP-03, GAME-04 through GAME-10)
+**Commits:** 3 (Room type extension, engine functions, unit tests)
+**Key deliverables:**
+- 7 pure game engine functions: deployment, movement, battle, auto-deploy
+- 52 unit tests covering all game rules via TDD
+- Battle resolution with correct priority order
+- Extended Room type with deployedPieces, readyPlayers tracking
+
+---
+
+*State updated: 2026-03-18 after completing Phase 02 Plan 01 (Game Engine)*
