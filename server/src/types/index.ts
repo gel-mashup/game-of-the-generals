@@ -46,6 +46,16 @@ export interface Room {
   isBotGame: boolean;
   botSide: 'red' | 'blue' | null;
   scores: { red: number; blue: number; draws: number; gamesPlayed: number };
+  deployedPieces: { red: Set<string>; blue: Set<string> };
+  readyPlayers: Set<string>;
+}
+
+export interface BattleOutcome {
+  winner: 'red' | 'blue' | 'tie';
+  capturedPieceIds: string[];
+  attackerWins: boolean | null; // null for tie
+  attackerRevealed: boolean;
+  defenderRevealed: boolean;
 }
 
 export interface PieceConfig {
