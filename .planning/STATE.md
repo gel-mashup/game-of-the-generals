@@ -1,6 +1,6 @@
 # State: Game of the Generals
 
-**Project Phase:** Phase 01 (Foundation) — Wave 1 Complete
+**Project Phase:** Phase 01 (Foundation) — ✓ Complete
 **Current Milestone:** gsd/phase-01-foundation
 
 ---
@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 01 — Foundation (Wave 1 complete, Wave 2 executing)
+**Current focus:** Phase 01 complete — 8/8 requirements verified. Ready for Phase 02 (Game Core).
 
 ---
 
@@ -19,7 +19,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
-| 1 | Foundation | ◐ Wave 1 complete, Wave 2 executing | 1/2 | 50% |
+| 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ○ Pending | 0/15 | 0% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
@@ -33,8 +33,8 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Parallelization:** true
 - **Last advance:** 2026-03-18
 - **Current branch:** gsd/phase-01-foundation
-- **Completed plans:** 01-01
-- **Pending plans:** 01-02 (Wave 2, checkpoint:human-verify)
+- **Completed plans:** 01-01, 01-02
+- **Verification status:** passed (8/8 requirements)
 
 ---
 
@@ -44,17 +44,26 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **02:** Multi-stage Docker build for client with standalone output
 - **03:** React Context pattern for Socket.io (SocketProvider) — single persistent connection
 - **04:** Two Zustand stores: gameStore + roomStore for separation of concerns
+- **05:** Board uses CSS Grid grid-cols-9 grid-rows-8 with alternating cell colors
+- **06:** Piece uses circular rounded-full container with owner color background
 
 ---
 
-## Current Wave
+## Phase 01 Results
 
-**Wave 2: Plan 01-02** — Board UI, piece rendering, piece palette, deployment zones
-- Task 1: Lobby page with leave functionality and game header
-- Task 2: Board component (9x8 CSS Grid)
-- Task 3: Piece, PiecePalette, DeploymentZone
-- Task 4: Human verification checkpoint
+**Completed:** 2026-03-18
+**Requirements:** 8/8 verified
+**Commits:** 6 (3 scaffold + 3 foundation)
+**Key deliverables:**
+- Docker Compose monorepo (client port 3000, server port 3001)
+- Socket.io room management (create/join/leave with 6-char codes)
+- Landing page with Play vs Bot and Play Online buttons
+- Lobby with create/join flow, waiting state, leave confirmation
+- 9x8 CSS Grid board with alternating green squares
+- 21-piece configuration per player with rank icons
+- Deployment zones (red rows 0-2, blue rows 5-7)
+- PiecePalette with count badges and selection state
 
 ---
 
-*State updated: 2026-03-18 after completing 01-01-PLAN.md*
+*State updated: 2026-03-18 after completing Phase 01 Foundation*

@@ -7,17 +7,17 @@
 
 ### Authentication
 
-- [ ] **AUTH-01**: User can create a game room with a unique 6-character code
-- [ ] **AUTH-02**: User can join an existing room using the room code
-- [ ] **AUTH-03**: User can set their display name
-- [ ] **AUTH-04**: User can leave a room at any time
+- [x] **AUTH-01**: User can create a game room with a unique 6-character code ✓
+- [x] **AUTH-02**: User can join an existing room using the room code ✓
+- [x] **AUTH-03**: User can set their display name ✓
+- [x] **AUTH-04**: User can leave a room at any time ✓
 
 ### Game Setup
 
-- [ ] **GS-01**: Board renders as a 9x8 grid
-- [ ] **GS-02**: Each player has 21 pieces with correct ranks
-- [ ] **GS-03**: Red player deployment zone is rows 0-2
-- [ ] **GS-04**: Blue player deployment zone is rows 5-7
+- [x] **GS-01**: Board renders as a 9x8 grid ✓
+- [x] **GS-02**: Each player has 21 pieces with correct ranks ✓
+- [x] **GS-03**: Red player deployment zone is rows 0-2 ✓
+- [x] **GS-04**: Blue player deployment zone is rows 5-7 ✓
 
 ### Deployment Phase
 
@@ -87,14 +87,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
-| GS-01 | Phase 1 | Pending |
-| GS-02 | Phase 1 | Pending |
-| GS-03 | Phase 1 | Pending |
-| GS-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | ✓ Complete |
+| AUTH-02 | Phase 1 | ✓ Complete |
+| AUTH-03 | Phase 1 | ✓ Complete |
+| AUTH-04 | Phase 1 | ✓ Complete |
+| GS-01 | Phase 1 | ✓ Complete |
+| GS-02 | Phase 1 | ✓ Complete |
+| GS-03 | Phase 1 | ✓ Complete |
+| GS-04 | Phase 1 | ✓ Complete |
 | DEP-01 | Phase 2 | Pending |
 | DEP-02 | Phase 2 | Pending |
 | DEP-03 | Phase 2 | Pending |
@@ -124,6 +124,7 @@
 
 **Coverage:**
 - v1 requirements: 30 total
+- Phase 1 complete: 8/30
 - Mapped to phases: 30
 - Unmapped: 0 ✓
 

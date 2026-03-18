@@ -10,10 +10,10 @@
 
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|-------------|------------------|
-| 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8 |
-| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 15 |
-| 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 7 |
-| 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 4 |
+| 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8/8 ✓ |
+| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 0/15 |
+| 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 0/7 |
+| 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 0/4 |
 
 ---
 
@@ -26,18 +26,20 @@
 **Plans:** 2 plans
 
 **Plan List:**
-- [ ] 01-01-PLAN.md — Project scaffold, Socket.io server, Zustand stores, landing page
-- [ ] 01-02-PLAN.md — Game board UI, pieces, deployment zones, lobby completion
+- [x] 01-01-PLAN.md — Project scaffold, Socket.io server, Zustand stores, landing page ✓ (2026-03-18)
+- [x] 01-02-PLAN.md — Game board UI, pieces, deployment zones, lobby completion ✓ (2026-03-18)
 
 **Success Criteria:**
-1. Landing page shows "Play vs Bot" and "Play Online" buttons
-2. Room creation generates 6-character alphanumeric code
-3. Players can join rooms using room code
-4. Players can set and see display names
-5. Players can leave rooms
-6. Board renders 9x8 grid correctly
-7. Each player has 21 pieces with correct ranks
-8. Deployment zones visible and enforced (rows 0-2 for Red, 5-7 for Blue)
+1. Landing page shows "Play vs Bot" and "Play Online" buttons ✓
+2. Room creation generates 6-character alphanumeric code ✓
+3. Players can join rooms using room code ✓
+4. Players can set and see display names ✓
+5. Players can leave rooms ✓
+6. Board renders 9x8 grid correctly ✓
+7. Each player has 21 pieces with correct ranks ✓
+8. Deployment zones visible and enforced (rows 0-2 for Red, 5-7 for Blue) ✓
+
+**Status:** ✓ Complete (2026-03-18)
 
 **Tasks:**
 - [x] Setup Docker Compose with client/server
