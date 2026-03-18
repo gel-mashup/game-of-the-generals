@@ -88,6 +88,21 @@ export function roomHandler(io: Server, socket: Socket) {
     socket.to(roomId).emit('player:joined', { player });
 
     console.log(`${playerName} (${socket.id}) joined room ${roomId}`);
+
+    // Trigger game:started when both players are present
+    if (room.players.length === 2) {
+      socket.to(roomId).emit('game:started', {
+        board: room.board,
+        currentTurn: 'red',
+        status: 'deploying',
+      });
+      // Also emit to the joining player's socket
+      socket.emit('game:started', {
+        board: room.board,
+        currentTurn: 'red',
+        status: 'deploying',
+      });
+    }
   });
 
   socket.on('leave-room', () => {
