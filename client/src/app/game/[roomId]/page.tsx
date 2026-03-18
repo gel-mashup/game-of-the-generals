@@ -72,6 +72,7 @@ export default function GamePage() {
       };
 
       deployPiece(piece, { row, col });
+      socket?.emit('deploy-piece', { pieceId: piece.id, row, col });
       setSelectedPieceType(null);
       return;
     }
