@@ -11,7 +11,7 @@
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|-------------|------------------|
 | 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8/8 ✓ |
-| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 3/15 |
+| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 3/15 ✓ |
 | 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 0/7 |
 | 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 0/4 |
 
@@ -65,9 +65,9 @@
 - [x] 02-01-PLAN.md — Server game engine (pure functions, unit tests) ✓ (2026-03-18)
 - [x] 02-02-PLAN.md — Server game handler (socket events, bot integration) ✓ (2026-03-18)
 - [x] 02-03-PLAN.md — Client game features (store, components, battle reveal) ✓ (2026-03-19)
-- [ ] 02-04-PLAN.md — Fix deploy-piece socket emission (gap closure)
-- [ ] 02-05-PLAN.md — Fix battleOutcome payload with attacker/defender pieces (gap closure)
-- [ ] 02-06-PLAN.md — Remove dead code block in handleCellClick (gap closure)
+- [x] 02-04-PLAN.md — Fix deploy-piece socket emission (gap closure) ✓ (2026-03-18)
+- [x] 02-05-PLAN.md — Fix battleOutcome payload with attacker/defender pieces (gap closure) ✓ (2026-03-18)
+- [x] 02-06-PLAN.md — Remove dead code block in handleCellClick (gap closure) ✓ (2026-03-18)
 
 **Success Criteria:**
 1. Users can place pieces by clicking piece then board square
@@ -97,6 +97,8 @@
 - [x] Battle resolution logic (Plan 01)
 - [x] Piece comparison (rank rules) (Plan 01)
 - [x] State broadcast after actions (Plan 02)
+
+**Status:** ✓ Complete (2026-03-18) — All 6 plans executed, all gap closures done
 
 ---
 
@@ -161,4 +163,4 @@
 ---
 
 *Roadmap created: 2026-03-18*
-*Last updated: 2026-03-19*
+*Last updated: 2026-03-18*
