@@ -1,5 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { customAlphabet } from 'nanoid';
+import { rooms } from '../rooms';
 import type { Room, Player } from '../../types';
 
 // 6-character alphanumeric room code (excludes ambiguous chars: I, l, O, 0)
@@ -7,8 +8,6 @@ const generateRoomCode = customAlphabet(
   'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789',
   6
 );
-
-const rooms = new Map<string, Room>();
 
 // Create empty 8x9 board
 function createEmptyBoard(): (null)[][] {
