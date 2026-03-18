@@ -9,7 +9,7 @@ function LobbyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { socket } = useSocket();
-  const { setRoom, addPlayer, clearRoom } = useRoomStore();
+  const { setRoom, addPlayer, removePlayer, clearRoom } = useRoomStore();
 
   const mode = searchParams.get('mode') || 'online';
 
@@ -18,6 +18,7 @@ function LobbyContent() {
   const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [isJoined, setIsJoined] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
   // Clear room state on mount
   useEffect(() => {
@@ -62,6 +63,11 @@ function LobbyContent() {
       setIsJoined(true);
     };
 
+    const handlePlayerLeft = ({ playerId }: { playerId: string; reason: string }) => {
+      removePlayer(playerId);
+      setIsJoined(false);
+    };
+
     const handleError = ({ message }: { message: string }) => {
       setError(message);
       setTimeout(() => setError(null), 5000);
@@ -70,15 +76,18 @@ function LobbyContent() {
     socket.on('room:created', handleRoomCreated);
     socket.on('room:joined', handleRoomJoined);
     socket.on('player:joined', handlePlayerJoined);
+    socket.on('player:left', handlePlayerLeft);
     socket.on('error', handleError);
 
     return () => {
       socket.off('room:created', handleRoomCreated);
       socket.off('room:joined', handleRoomJoined);
       socket.off('player:joined', handlePlayerJoined);
+      socket.off('player:left', handlePlayerLeft);
       socket.off('error', handleError);
+    socket.off('player:left', handlePlayerLeft);
     };
-  }, [socket, setRoom, addPlayer, clearRoom]);
+  }, [socket, setRoom, addPlayer, removePlayer, clearRoom]);
 
   // Navigate to game when both players present (for non-bot games)
   useEffect(() => {
@@ -153,13 +162,35 @@ function LobbyContent() {
             <p className="text-gray-300 text-lg">Starting game...</p>
           )}
 
-          {/* Leave button */}
-          <button
-            onClick={handleLeaveRoom}
-            className="mt-6 px-6 py-3 bg-red-600/80 hover:bg-red-600 text-white font-semibold rounded-lg transition-colors"
-          >
-            Leave Room
-          </button>
+          {/* Leave button with confirmation */}
+          {!showLeaveConfirm ? (
+            <button
+              onClick={() => setShowLeaveConfirm(true)}
+              className="mt-6 px-6 py-3 bg-red-600/80 hover:bg-red-600 text-white font-semibold rounded-lg transition-colors"
+            >
+              Leave Room
+            </button>
+          ) : (
+            <div className="mt-6 p-4 bg-red-900/30 border border-red-600/50 rounded-lg">
+              <p className="text-red-300 text-sm mb-3">
+                Leave Room: You&apos;ll need the room code to rejoin. Are you sure?
+              </p>
+              <div className="flex gap-3 justify-center">
+                <button
+                  onClick={handleLeaveRoom}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-medium rounded-lg transition-colors text-sm"
+                >
+                  Yes, Leave
+                </button>
+                <button
+                  onClick={() => setShowLeaveConfirm(false)}
+                  className="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white font-medium rounded-lg transition-colors text-sm"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     );
