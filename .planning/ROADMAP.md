@@ -59,12 +59,15 @@
 
 **Requirements:** DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10
 
-**Plans:** 3 plans in 3 waves
+**Plans:** 6 plans in 3 waves
 
 **Plan List:**
 - [x] 02-01-PLAN.md — Server game engine (pure functions, unit tests) ✓ (2026-03-18)
 - [x] 02-02-PLAN.md — Server game handler (socket events, bot integration) ✓ (2026-03-18)
 - [x] 02-03-PLAN.md — Client game features (store, components, battle reveal) ✓ (2026-03-19)
+- [ ] 02-04-PLAN.md — Fix deploy-piece socket emission (gap closure)
+- [ ] 02-05-PLAN.md — Fix battleOutcome payload with attacker/defender pieces (gap closure)
+- [ ] 02-06-PLAN.md — Remove dead code block in handleCellClick (gap closure)
 
 **Success Criteria:**
 1. Users can place pieces by clicking piece then board square
