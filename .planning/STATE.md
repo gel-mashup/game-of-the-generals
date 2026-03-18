@@ -19,7 +19,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
-| 1 | Foundation | ○ Pending | 0/8 | 0% |
+| 1 | Foundation | ◐ Context gathered | 0/8 | 0% |
 | 2 | Game Core | ○ Pending | 0/15 | 0% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
