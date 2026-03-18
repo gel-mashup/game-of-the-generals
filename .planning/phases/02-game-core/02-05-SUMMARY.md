@@ -130,3 +130,15 @@ None - no external service configuration required.
 ---
 *Phase: 02-game-core*
 *Completed: 2026-03-18*
+
+## Self-Check: PASSED
+
+- ✅ SUMMARY.md created in .planning/phases/02-game-core/
+- ✅ server/src/socket/handlers/gameHandler.ts modified (attacker/defender in move:result)
+- ✅ client/src/app/game/[roomId]/page.tsx modified (BattleOutcome transformation)
+- ✅ client/src/features/game/Board.tsx modified (playerSide from useRoomStore)
+- ✅ Task 1 commit: be3182c (server payload)
+- ✅ Task 2 commit: 841d6e4 (client transformation + 3 bug fixes)
+- ✅ Metadata commit: a717bc9 (SUMMARY + STATE + ROADMAP)
+- ✅ TypeScript: 0 errors on both server and client
+- ✅ All success criteria met
