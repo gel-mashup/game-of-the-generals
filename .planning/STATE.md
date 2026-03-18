@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-18T22:34:25.196Z"
+last_updated: "2026-03-18T23:08:48Z"
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 5
-  completed_plans: 5
+  completed_phases: 1
+  total_plans: 8
+  completed_plans: 6
 ---
 
 # State: Game of the Generals
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 02 (Game Core) — 02-03 complete. 12 more plans remaining.
+**Current focus:** Phase 02 (Game Core) — 02-04 complete. 2 gap closure plans remaining.
 
 ---
 
@@ -33,7 +33,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ◐ In Progress | 3/6 | 50% |
+| 2 | Game Core | ◐ In Progress | 4/6 | 67% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -46,8 +46,8 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-02-game-core
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03
-- **Pending plans:** 02-04, 02-05, 02-06 (gap closure)
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04
+- **Pending plans:** 02-05, 02-06 (gap closure)
 - **Verification status:** gaps found — 3 blockers identified via 02-VERIFICATION.md
 
 ---
@@ -114,6 +114,14 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - BattleReveal: 3-phase animation (slide→reveal→result) with tie explosion + spark particles
 - Game page: Auto-Deploy (secondary), Ready (accent gold at 21 pieces), countdown overlay, battle reveal integration
 
+**Plan 04 (Deploy-Piece Socket Emission — Gap Closure) — Completed:** 2026-03-18
+**Requirements:** 2/2 unblocked (DEP-01, DEP-04)
+**Commits:** 1 (deploy-piece socket emission)
+**Key deliverables:**
+- Added `socket.emit('deploy-piece', { pieceId, row, col })` after `deployPiece()` call
+- Manual deployment now syncs to server for multiplayer visibility
+- DEP-01 and DEP-04 fully unblocked
+
 **Gap Closure (Verification Gaps Found):** 2026-03-19
 After running verification on 02-01/02/03, 3 gaps identified:
 1. Missing `deploy-piece` socket emission (manual deployment never synced to server) → Plan 02-04
@@ -122,4 +130,4 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 ---
 
-*State updated: 2026-03-19 after creating gap closure plans 02-04/05/06*
+*State updated: 2026-03-18 after completing 02-04 (deploy-piece socket emission)*
