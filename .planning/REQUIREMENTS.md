@@ -21,20 +21,20 @@
 
 ### Deployment Phase
 
-- [ ] **DEP-01**: User can place pieces by clicking piece then board square
+- [x] **DEP-01**: User can place pieces by clicking piece then board square
 - [ ] **DEP-02**: User can only place pieces in their deployment zone
 - [ ] **DEP-03**: User can use auto-deploy for random placement
-- [ ] **DEP-04**: User can signal ready when deployment is complete
-- [ ] **DEP-05**: Game starts when both players are ready
+- [x] **DEP-04**: User can signal ready when deployment is complete
+- [x] **DEP-05**: Game starts when both players are ready
 
 ### Gameplay
 
-- [ ] **GAME-01**: Players alternate turns starting with Red
+- [x] **GAME-01**: Players alternate turns starting with Red
 - [ ] **GAME-02**: User can select a piece during their turn
-- [ ] **GAME-03**: Valid moves are highlighted when piece selected
+- [x] **GAME-03**: Valid moves are highlighted when piece selected
 - [ ] **GAME-04**: User can move piece to adjacent orthogonal square
 - [ ] **GAME-05**: User cannot move to square occupied by own piece
-- [ ] **GAME-06**: Battle occurs when moving to occupied square
+- [x] **GAME-06**: Battle occurs when moving to occupied square
 - [ ] **GAME-07**: Higher rank wins; equal rank = both eliminated
 - [ ] **GAME-08**: Spy beats all officers (rank 0+)
 - [ ] **GAME-09**: Private beats Spy
@@ -95,17 +95,17 @@
 | GS-02 | Phase 1 | ✓ Complete |
 | GS-03 | Phase 1 | ✓ Complete |
 | GS-04 | Phase 1 | ✓ Complete |
-| DEP-01 | Phase 2 | Pending |
+| DEP-01 | Phase 2 | Complete |
 | DEP-02 | Phase 2 | Pending |
 | DEP-03 | Phase 2 | Pending |
-| DEP-04 | Phase 2 | Pending |
-| DEP-05 | Phase 2 | Pending |
-| GAME-01 | Phase 2 | Pending |
+| DEP-04 | Phase 2 | Complete |
+| DEP-05 | Phase 2 | Complete |
+| GAME-01 | Phase 2 | Complete |
 | GAME-02 | Phase 2 | Pending |
-| GAME-03 | Phase 2 | Pending |
+| GAME-03 | Phase 2 | Complete |
 | GAME-04 | Phase 2 | Pending |
 | GAME-05 | Phase 2 | Pending |
-| GAME-06 | Phase 2 | Pending |
+| GAME-06 | Phase 2 | Complete |
 | GAME-07 | Phase 2 | Pending |
 | GAME-08 | Phase 2 | Pending |
 | GAME-09 | Phase 2 | Pending |

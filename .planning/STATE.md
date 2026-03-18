@@ -11,7 +11,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 02 (Game Core) — 02-01 complete. 7 more plans remaining.
+**Current focus:** Phase 02 (Game Core) — 02-02 complete. 6 more plans remaining.
 
 ---
 
@@ -20,7 +20,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ◐ In Progress | 1/15 | 7% |
+| 2 | Game Core | ◐ In Progress | 2/15 | 13% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -33,7 +33,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Parallelization:** true
 - **Last advance:** 2026-03-18
 - **Current branch:** gsd/phase-02-game-core
-- **Completed plans:** 01-01, 01-02, 02-01
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02
 - **Verification status:** passed (52/52 engine tests)
 
 ---
@@ -49,6 +49,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **07:** Battle resolution priority: flag → spy/private → equal rank → higher rank
 - **08:** Spy beats all officers (rank ≥ 0) per game spec; only Private can beat Spy
 - **09:** Auto-deploy uses Fisher-Yates shuffle for randomized placement
+- **10:** Shared rooms Map in dedicated module for cross-handler room state access
 
 ---
 
@@ -71,7 +72,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 ## Phase 02 Results (In Progress)
 
-**Completed:** 2026-03-18
+**Plan 01 (Game Engine) — Completed:** 2026-03-18
 **Requirements:** 9/9 verified (DEP-02, DEP-03, GAME-04 through GAME-10)
 **Commits:** 3 (Room type extension, engine functions, unit tests)
 **Key deliverables:**
@@ -80,6 +81,15 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - Battle resolution with correct priority order
 - Extended Room type with deployedPieces, readyPlayers tracking
 
+**Plan 02 (Game Socket Handlers) — Completed:** 2026-03-18
+**Requirements:** 6/9 verified (DEP-01, DEP-04, DEP-05, GAME-01, GAME-03, GAME-06)
+**Commits:** 3 (gameHandler, wire setup, game:started trigger)
+**Key deliverables:**
+- 5 socket event handlers: game:started, deploy-piece, auto-deploy, ready, make-move
+- Shared rooms Map module for cross-handler state
+- Bot auto-deploy triggered via socket.emit('auto-deploy')
+- 3-second countdown before playing phase
+
 ---
 
-*State updated: 2026-03-18 after completing Phase 02 Plan 01 (Game Engine)*
+*State updated: 2026-03-18 after completing Phase 02 Plan 02 (Game Socket Handlers)*
