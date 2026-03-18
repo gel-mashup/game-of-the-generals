@@ -59,6 +59,13 @@
 
 **Requirements:** DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10
 
+**Plans:** 3 plans in 3 waves
+
+**Plan List:**
+- [ ] 02-01-PLAN.md — Server game engine (pure functions, unit tests) ✓ (2026-03-18)
+- [ ] 02-02-PLAN.md — Server game handler (socket events, bot integration) ✓ (2026-03-18)
+- [ ] 02-03-PLAN.md — Client game features (store, components, battle reveal) ✓ (2026-03-18)
+
 **Success Criteria:**
 1. Users can place pieces by clicking piece then board square
 2. Invalid squares (wrong zone, occupied) reject placement
@@ -77,16 +84,16 @@
 15. Battle results displayed before state updates
 
 **Tasks:**
-- [ ] Piece placement validation
-- [ ] Ready state management
-- [ ] Turn management (Red starts)
-- [ ] Piece selection UI
-- [ ] Valid move highlighting
-- [ ] Move execution handler
-- [ ] Server-side move validation
-- [ ] Battle resolution logic
-- [ ] Piece comparison (rank rules)
-- [ ] State broadcast after actions
+- [x] Piece placement validation (Plan 01)
+- [x] Ready state management (Plan 02)
+- [x] Turn management (Red starts) (Plan 02)
+- [x] Piece selection UI (Plan 03)
+- [x] Valid move highlighting (Plan 03)
+- [x] Move execution handler (Plan 02)
+- [x] Server-side move validation (Plan 01)
+- [x] Battle resolution logic (Plan 01)
+- [x] Piece comparison (rank rules) (Plan 01)
+- [x] State broadcast after actions (Plan 02)
 
 ---
 
