@@ -33,7 +33,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 | # | Phase | Status | Plans | Progress |
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
-| 2 | Game Core | ◐ In Progress | 3/15 | 20% |
+| 2 | Game Core | ◐ In Progress | 3/6 | 50% |
 | 3 | Game Flow | ○ Pending | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
@@ -47,7 +47,8 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-02-game-core
 - **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03
-- **Verification status:** passed (52/52 engine tests)
+- **Pending plans:** 02-04, 02-05, 02-06 (gap closure)
+- **Verification status:** gaps found — 3 blockers identified via 02-VERIFICATION.md
 
 ---
 
@@ -113,6 +114,12 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - BattleReveal: 3-phase animation (slide→reveal→result) with tie explosion + spark particles
 - Game page: Auto-Deploy (secondary), Ready (accent gold at 21 pieces), countdown overlay, battle reveal integration
 
+**Gap Closure (Verification Gaps Found):** 2026-03-19
+After running verification on 02-01/02/03, 3 gaps identified:
+1. Missing `deploy-piece` socket emission (manual deployment never synced to server) → Plan 02-04
+2. Incomplete `battleOutcome` payload (server doesn't send attacker/defender pieces) → Plan 02-05
+3. Dead code block in handleCellClick (lines 102-117, duplicate playing-phase logic) → Plan 02-06
+
 ---
 
-*State updated: 2026-03-19 after completing Phase 02 Plan 03 (Client Game Interactions)*
+*State updated: 2026-03-19 after creating gap closure plans 02-04/05/06*
