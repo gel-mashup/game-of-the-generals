@@ -200,6 +200,18 @@
 
 **Status:** ✓ Complete (2026-03-19)
 
+### Phase 6: Debug game flow issue where pieces are not placed after joining room
+
+**Goal:** Fix timing issue where server emits events before client sets up listeners
+**Requirements**: Game startup synchronization
+**Depends on:** Phase 5
+**Plans:** 1 plan
+
+Plans:
+- [x] 06-01-PLAN.md — Fix sync-game-state mechanism ✓ (2026-03-19)
+
+**Status:** ✓ Complete (2026-03-19)
+
 ---
 
 *Roadmap created: 2026-03-18*

@@ -90,17 +90,13 @@ export default function GamePage() {
       const state = useGameStore.getState();
       const { board: currentBoard, validMoves, selectedPiece } = state;
       const target = currentBoard[row][col];
-      // Clicking opponent piece — deselect
-      if (target && target.owner !== playerSide) {
-        selectPiece(null);
-        return;
-      }
+
       // Clicking own piece — select
       if (target && target.owner === playerSide) {
         selectPiece({ row, col });
         return;
       }
-      // Clicking empty valid-move square — make move
+      // Clicking valid move square — make move (includes attacks on enemy pieces)
       if (selectedPiece && validMoves.some((m) => m.row === row && m.col === col)) {
         makeMove(selectedPiece, { row, col });
         socket?.emit('make-move', { from: selectedPiece, to: { row, col } });

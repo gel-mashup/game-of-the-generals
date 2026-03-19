@@ -5,15 +5,15 @@ milestone_name: milestone
 status: unknown
 last_updated: "2026-03-19T04:05:41.823Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 17
-  completed_plans: 17
+  total_phases: 6
+  completed_phases: 6
+  total_plans: 18
+  completed_plans: 18
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 05 (Dockerize) — ✓ Complete
+**Project Phase:** Phase 06 (Debug Game Flow) — ✓ Complete
 **Current Milestone:** gsd/phase-05-dockerize
 
 ---
@@ -27,6 +27,7 @@ progress:
 | 3 | Game Flow | ✓ Complete | 7/7 | 100% |
 | 4 | AI Opponent | ✓ Complete | 4/4 | 100% |
 | 5 | Dockerize | ✓ Complete | 1/1 | 100% |
+| 6 | Debug Game Flow | ✓ Complete | 1/1 | 100% |
 
 ---
 
@@ -37,7 +38,7 @@ progress:
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-05-dockerize
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-02, 04-03, 04-04, 05-01
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-02, 04-03, 04-04, 05-01, 06-01
 - **Pending plans:** None — all 17 plans complete
 - **Verification status:** All phases fully verified
 
@@ -275,4 +276,22 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 **Rule 1 fix (auto):** nanoid v5 ESM incompatibility — server crashes with ERR_REQUIRE_ESM in Docker container — downgraded to v3
 **Rule 3 fix (auto):** Missing client/public directory — Next.js standalone build failed — created client/public/ directory
+
+---
+
+## Phase 06 Results
+
+**Phase 06 (Debug game flow issue where pieces are not placed after joining room) — Completed:** 2026-03-19
+**Root Cause:** Server emitted `game:started` and `piece:deployed` events synchronously during room creation, BEFORE client mounted game page and set up socket listeners.
+
+**Fix applied:**
+- Added `sync-game-state` event handler to gameHandler.ts
+- Added `sync-game-state` emit on game page mount
+- Server now replays current state when client requests it
+
+**Verification:** Full end-to-end test confirmed:
+1. Create bot room → bot auto-deploys
+2. Client joins game page → requests sync
+3. Server responds → game enters "deploying"
+4. Player deploys and clicks Ready → countdown → "playing"
 

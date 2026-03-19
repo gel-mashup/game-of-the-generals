@@ -105,6 +105,24 @@ function createPiece(type: string, owner: 'red' | 'blue', rank: number): Piece {
 
 export function gameHandler(io: Server, socket: Socket) {
   /**
+   * sync-game-state — client requests current game state on page load.
+   * Useful when client joins after events were already emitted.
+   */
+  socket.on('sync-game-state', () => {
+    for (const [roomId, room] of rooms.entries()) {
+      if (room.players.some((p) => p.id === socket.id)) {
+        socket.emit('game:started', {
+          board: room.board,
+          currentTurn: room.currentTurn,
+          status: room.status,
+        });
+        console.log(`Synced game state to ${socket.id} for room ${roomId}`);
+        return;
+      }
+    }
+  });
+
+  /**
    * game:started — auto-emitted when second player joins (or bot joins).
    * Transitions room to 'deploying' and broadcasts game start to all players.
    * For bot games, triggers bot auto-deployment.
