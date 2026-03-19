@@ -38,6 +38,7 @@ export default function GamePage() {
   const [deployedCounts, setDeployedCounts] = useState<Record<string, number>>({});
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [botThinking, setBotThinking] = useState(false);
 
   // Compute deployed counts from board
   useEffect(() => {
@@ -235,6 +236,10 @@ export default function GamePage() {
       socket.emit('auto-deploy');
     });
 
+    // AI-04: Bot thinking indicator
+    socket.on('bot:thinking-start', () => setBotThinking(true));
+    socket.on('bot:thinking-end', () => setBotThinking(false));
+
     return () => {
       socket.off('piece:deployed', handlePieceDeployed);
       socket.off('player:ready', handlePlayerReady);
@@ -249,11 +254,14 @@ export default function GamePage() {
       socket.off('rematch:timeout');
       socket.off('rematch:confirmed');
       socket.off('bot:auto-deploy');
+      socket.off('bot:thinking-start');
+      socket.off('bot:thinking-end');
     };
   }, [
     socket, clearRoom, setBoard, setGameStatus, setTurn,
     setOpponentReady, setCountdownSeconds, setBattleOutcome,
     setWinner, resetForRematch, setScores, setOpponentWantsRematch, setIWantRematch,
+    setBotThinking,
   ]);
 
   const handleAutoDeploy = () => {
@@ -403,6 +411,15 @@ export default function GamePage() {
             onLeave={handleLeave}
             opponentWantsRematch={opponentWantsRematch}
           />
+        )}
+
+        {/* AI-04: Bot thinking indicator — board overlay */}
+        {botThinking && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-40 pointer-events-none">
+            <p className="text-white text-xl font-medium animate-pulse">
+              Bot is thinking...
+            </p>
+          </div>
         )}
       </div>
 
