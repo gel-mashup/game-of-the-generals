@@ -8,7 +8,81 @@ import {
   applyMove,
   generateAutoDeploy,
   checkWinCondition,
+  applyBotMove,
 } from '../../game/engine';
+import { findBestMove } from '../../game/botAI';
+
+/**
+ * Trigger bot to make a move. Called after deploy:complete and after human moves.
+ * Uses setImmediate to not block the event loop.
+ */
+function triggerBotMove(io: Server, room: Room, roomId: string) {
+  if (!room.isBotGame || !room.botSide) return;
+  if (room.status !== 'playing') return;
+  if (room.currentTurn !== room.botSide) return;
+
+  const botSide = room.botSide;
+
+  setImmediate(() => {
+    io.to(roomId).emit('bot:thinking-start', {});
+
+    const move = findBestMove(room.board, botSide, 3000);
+
+    if (!move) {
+      io.to(roomId).emit('bot:thinking-end', {});
+      return;
+    }
+
+    // Get pieces BEFORE mutating board
+    const attacker = room.board[move.from.row][move.from.col] ?? null;
+    const defender = room.board[move.to.row][move.to.col] ?? null;
+
+    // Apply bot move
+    const { battleOutcome } = applyBotMove(room.board, move.from, move.to);
+
+    // Toggle turn
+    room.currentTurn = room.currentTurn === 'red' ? 'blue' : 'red';
+
+    // Check win condition
+    const winResult = checkWinCondition(room);
+
+    if (winResult.gameOver) {
+      room.status = 'finished';
+      room.scores.gamesPlayed++;
+      if (winResult.winner === 'red') room.scores.red++;
+      else if (winResult.winner === 'blue') room.scores.blue++;
+      else room.scores.draws++;
+
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (room.board[r][c]) room.board[r][c]!.revealed = true;
+        }
+      }
+
+      io.to(roomId).emit('bot:thinking-end', {});
+      io.to(roomId).emit('game:over', {
+        winner: winResult.winner,
+        reason: winResult.reason,
+        scores: room.scores,
+        board: room.board,
+      });
+      io.to(roomId).emit('scores:update', { scores: room.scores });
+      return;
+    }
+
+    io.to(roomId).emit('bot:thinking-end', {});
+    io.to(roomId).emit('move:result', {
+      move: { from: move.from, to: move.to },
+      outcome: battleOutcome,
+      attacker,
+      defender,
+      attackerPosition: move.from,
+      defenderPosition: move.to,
+      board: room.board,
+      currentTurn: room.currentTurn,
+    });
+  });
+}
 
 function getPlayerSide(socketId: string, room: Room): 'red' | 'blue' | null {
   const player = room.players.find((p) => p.id === socketId);
@@ -386,6 +460,11 @@ export function gameHandler(io: Server, socket: Socket) {
       board: room.board,
       currentTurn: room.currentTurn,
     });
+
+    // For bot games: trigger bot to make its move
+    if (room.isBotGame && room.botSide && room.currentTurn === room.botSide) {
+      triggerBotMove(io, room, roomId);
+    }
 
     console.log(
       `Move in room ${roomId}: (${from.row},${from.col}) → (${to.row},${to.col}), battle: ${battleOutcome ? JSON.stringify(battleOutcome) : 'none'}`
