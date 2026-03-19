@@ -42,9 +42,9 @@
 
 ### Win Conditions
 
-- [ ] **WIN-01**: Game ends when flag is captured
-- [ ] **WIN-02**: Game ends when flag reaches opposite baseline with no adjacent enemies
-- [ ] **WIN-03**: Game ends when player has no valid moves
+- [x] **WIN-01**: Game ends when flag is captured
+- [x] **WIN-02**: Game ends when flag reaches opposite baseline with no adjacent enemies
+- [x] **WIN-03**: Game ends when player has no valid moves
 - [x] **WIN-04**: Winner is announced with reason
 
 ### AI Opponent
@@ -58,7 +58,7 @@
 
 - [x] **SES-01**: Session scores track wins/losses/draws
 - [x] **SES-02**: User can request rematch after game ends
-- [ ] **SES-03**: Host can reset scores
+- [x] **SES-03**: Host can reset scores
 
 ## v2 Requirements
 
@@ -110,9 +110,9 @@
 | GAME-08 | Phase 2 | Pending |
 | GAME-09 | Phase 2 | Pending |
 | GAME-10 | Phase 2 | Pending |
-| WIN-01 | Phase 3 | Pending |
-| WIN-02 | Phase 3 | Pending |
-| WIN-03 | Phase 3 | Pending |
+| WIN-01 | Phase 3 | Complete |
+| WIN-02 | Phase 3 | Complete |
+| WIN-03 | Phase 3 | Complete |
 | WIN-04 | Phase 3 | Complete |
 | AI-01 | Phase 4 | Pending |
 | AI-02 | Phase 4 | Pending |
@@ -120,7 +120,7 @@
 | AI-04 | Phase 4 | Pending |
 | SES-01 | Phase 3 | Complete |
 | SES-02 | Phase 3 | Complete |
-| SES-03 | Phase 3 | Pending |
+| SES-03 | Phase 3 | Complete |
 
 **Coverage:**
 - v1 requirements: 30 total

@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T00:45:38.427Z"
+last_updated: "2026-03-19T01:11:51Z"
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 10
 ---
 
 # State: Game of the Generals
@@ -139,6 +139,28 @@ After running verification on 02-01/02/03, 3 gaps identified:
 ---
 
 *State updated: 2026-03-19 after Phase 03 context gathered*
+
+## Phase 03 Results (Plan 01 Complete)
+
+**Plan 01 (Win Condition Detection + Game Flow Handlers) — Completed:** 2026-03-19
+**Requirements:** 6/6 (WIN-01, WIN-02, WIN-03, WIN-04, SES-02, SES-03)
+**Commits:** 4 (engine win functions, unit tests, game:over emission, rematchHandler)
+**Key deliverables:**
+- 4 pure win condition functions: checkFlagCapture, checkFlagBaseline, checkNoValidMoves, checkWinCondition
+- 17 new unit tests (engine tests: 52 → 69 total)
+- game:over socket event emitted after every move with winner/reason/scores/board
+- rematchHandler: both-confirm rematch with 30s timeout, bot auto-confirm
+- reset-scores handler (host-only) with authorization check
+- All pieces revealed on game-over board
+
+**Decisions made:**
+- Flags excluded from playerHasValidMove (flags cannot move by game rules)
+- Room rematchRequests/rematchTimeout stored in-memory via module augmentation
+
+**Rule 1 fixes (auto):**
+1. playerHasValidMove skips flag pieces (flags can't move)
+2. makePiece duplicate ID issue in tests (use explicit unique IDs)
+3. 5 test expectations corrected to match actual game behavior
 
 ## Phase 03 Results (Plan 02 Complete)
 
