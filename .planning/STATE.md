@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T01:11:51Z"
+last_updated: "2026-03-19T01:19:20.918Z"
 progress:
   total_phases: 4
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 03 (Game Flow) — Plan 03-02 executed
+**Project Phase:** Phase 03 (Game Flow) — Plan 03-03 executed
 **Current Milestone:** gsd/phase-03-game-flow
 
 ---
@@ -24,7 +24,7 @@ progress:
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
-| 3 | Game Flow | ○ In Progress | 1/7 | 14% |
+| 3 | Game Flow | ○ In Progress | 3/7 | 43% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
 ---
@@ -36,8 +36,8 @@ progress:
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-03-game-flow
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-02
-- **Pending plans:** 03-01, 03-03, 03-04, 03-05, 03-06, 03-07
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03
+- **Pending plans:** 03-04, 03-05, 03-06, 03-07
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
 ---
@@ -178,3 +178,13 @@ After running verification on 02-01/02/03, 3 gaps identified:
 - gameStore: winner, winReason, setWinner, resetForRematch — client tracks game outcome and can reset for rematch
 - roomStore: scores, opponentWantsRematch, iWantRematch — client tracks session scores and rematch state from server
 - WinModal: absolute overlay with winner banner, reason text, scores panel, 2-click rematch + Leave buttons
+
+**Plan 03 (WinModal, Score Display & Rematch Socket Wiring) — Completed:** 2026-03-19
+**Requirements:** 4/4 (WIN-04, SES-01, SES-02, SES-03)
+**Commits:** 2 (socket handlers, score header + WinModal)
+**Key deliverables:**
+- 6 socket event handlers wired: game:over, scores:update, rematch:ready, rematch:timeout, rematch:confirmed, bot:auto-deploy
+- Score display always visible in game header (Red/Draws/Blue counts with colored indicators)
+- WinModal appears on game:over with winner banner, reason, scores panel, Rematch and Leave buttons
+- Rematch button emits socket 'rematch' event and sets iWantRematch state
+- All requirements from 03-02 wired into the game page

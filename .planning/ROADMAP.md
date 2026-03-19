@@ -132,7 +132,7 @@
 **Plan List:**
 - [ ] 03-01-PLAN.md — Server win engine + game:over + rematch handlers ✓ (2026-03-19)
 - [ ] 03-02-PLAN.md — Client stores + WinModal component ✓ (2026-03-19)
-- [ ] 03-03-PLAN.md — Game page integration (score display, WinModal, rematch wiring) ✓ (2026-03-19)
+- [x] 03-03-PLAN.md — Game page integration (score display, WinModal, rematch wiring) ✓ (2026-03-19)
 
 ---
 
