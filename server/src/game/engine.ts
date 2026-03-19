@@ -450,3 +450,42 @@ export function checkWinCondition(room: Room): WinResult {
   }
   return { gameOver: false, winner: null, reason: null };
 }
+
+/**
+ * Apply a move to the board IN-PLACE (mutates board), handles battle.
+ * Used by bot AI for move execution. Does NOT toggle turn — caller manages turn state.
+ * Returns the captured piece IDs for state tracking.
+ */
+export function applyBotMove(
+  board: (Piece | null)[][],
+  from: Position,
+  to: Position
+): { capturedPieceIds: string[]; battleOutcome: BattleOutcome | null } {
+  const piece = board[from.row][from.col];
+  if (!piece) return { capturedPieceIds: [], battleOutcome: null };
+
+  const target = board[to.row][to.col];
+  let battleOutcome: BattleOutcome | null = null;
+  const capturedPieceIds: string[] = [];
+
+  if (target) {
+    battleOutcome = resolveBattle(piece, target);
+    // Remove captured pieces from board
+    for (const capturedId of battleOutcome.capturedPieceIds) {
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (board[r][c]?.id === capturedId) {
+            board[r][c] = null;
+          }
+        }
+      }
+      capturedPieceIds.push(capturedId);
+    }
+  }
+
+  // Move piece
+  board[to.row][to.col] = piece;
+  board[from.row][from.col] = null;
+
+  return { capturedPieceIds, battleOutcome };
+}
