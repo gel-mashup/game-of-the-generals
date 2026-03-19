@@ -23,6 +23,7 @@ export function rematchHandler(io: Server, socket: Socket) {
    * Both confirmed = reset room for fresh deployment.
    */
   socket.on('rematch', () => {
+    console.log(`Rematch requested by ${socket.id}`);
     let room: Room | undefined;
     let roomId: string | undefined;
     for (const [id, r] of rooms.entries()) {
@@ -33,7 +34,12 @@ export function rematchHandler(io: Server, socket: Socket) {
       }
     }
 
-    if (!room || !roomId) return;
+    if (!room || !roomId) {
+      console.log(`Rematch: no room found for socket ${socket.id}`);
+      return;
+    }
+
+    console.log(`Rematch: room ${roomId}, isBot=${room.isBotGame}, requests=${room.rematchRequests?.size ?? 0}, botSide=${room.botSide}`);
 
     // Initialize rematch state if not present
     if (!room.rematchRequests) {
@@ -50,7 +56,10 @@ export function rematchHandler(io: Server, socket: Socket) {
       const botPlayer = room.players.find((p) => p.side !== humanPlayer?.side);
       if (botPlayer && !room.rematchRequests.has(botPlayer.id)) {
         room.rematchRequests.add(botPlayer.id);
+        console.log(`Rematch: bot auto-confirmed, total requests=${room.rematchRequests.size}`);
         io.to(roomId).emit('rematch:ready', { bothReady: true });
+      } else {
+        console.log(`Rematch: bot player not found or already confirmed. botPlayer=${botPlayer?.id}, has=${room.rematchRequests.has(botPlayer?.id ?? '')}`);
       }
     }
 
