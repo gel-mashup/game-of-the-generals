@@ -115,6 +115,19 @@ export default function GamePage() {
   useEffect(() => {
     if (!socket) return;
 
+    // Request current game state on mount (handles late join / missed events)
+    socket.emit('sync-game-state');
+
+    const handleGameStarted = (data: {
+      board: (Piece | null)[][];
+      currentTurn: 'red' | 'blue';
+      status: 'deploying';
+    }) => {
+      setBoard(data.board);
+      setGameStatus('deploying');
+      setTurn(data.currentTurn);
+    };
+
     const handlePieceDeployed = (data: { piece: Piece; row: number; col: number; deployedCount: number; board: (Piece | null)[][]; autoDeployComplete?: boolean }) => {
       setBoard(data.board);
       const counts: Record<string, number> = {};
@@ -135,6 +148,7 @@ export default function GamePage() {
       setBoard(data.board);
       setGameStatus('playing');
       setTurn(data.currentTurn);
+      setCountdownSeconds(null); // Clear countdown overlay after "Go!"
     };
 
     const handleMoveResult = (data: { move: { from: Position; to: Position }; outcome: any; attacker: Piece | null; defender: Piece | null; attackerPosition: Position; defenderPosition: Position; board: (Piece | null)[][]; currentTurn: 'red' | 'blue' }) => {
@@ -172,6 +186,7 @@ export default function GamePage() {
       clearRoom();
     };
 
+    socket.on('game:started', handleGameStarted);
     socket.on('piece:deployed', handlePieceDeployed);
     socket.on('player:ready', handlePlayerReady);
     socket.on('deploy:complete', handleDeployComplete);
@@ -241,6 +256,7 @@ export default function GamePage() {
     socket.on('bot:thinking-end', () => setBotThinking(false));
 
     return () => {
+      socket.off('game:started', handleGameStarted);
       socket.off('piece:deployed', handlePieceDeployed);
       socket.off('player:ready', handlePlayerReady);
       socket.off('deploy:complete', handleDeployComplete);
