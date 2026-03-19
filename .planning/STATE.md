@@ -3,18 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T01:39:31.308Z"
+last_updated: "2026-03-19T02:40:24.671Z"
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 12
-  completed_plans: 12
+  total_plans: 15
+  completed_plans: 13
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 03 (Game Flow) — Plan 03-04 executed
-**Current Milestone:** gsd/phase-03-game-flow
+**Project Phase:** Phase 04 (AI Opponent) — Plan 04-01 executed
+**Current Milestone:** gsd/phase-04-ai-opponent
 
 ---
 
@@ -24,8 +24,8 @@ progress:
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
-| 3 | Game Flow | ○ In Progress | 4/7 | 57% |
-| 4 | AI Opponent | ○ Pending | 0/4 | 0% |
+| 3 | Game Flow | ✓ Complete | 7/7 | 100% |
+| 4 | AI Opponent | ○ In Progress | 1/4 | 25% |
 
 ---
 
@@ -35,9 +35,9 @@ progress:
 - **Granularity:** Coarse
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
-- **Current branch:** gsd/phase-03-game-flow
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04
-- **Pending plans:** 03-05, 03-06, 03-07
+- **Current branch:** gsd/phase-04-ai-opponent
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01
+- **Pending plans:** 04-02, 04-03, 04-04
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
 ---
@@ -197,3 +197,25 @@ After running verification on 02-01/02/03, 3 gaps identified:
 - SES-02: WinModal shows "Opponent wants a rematch…" when opponent clicks Rematch (gap 2 fixed)
 - SES-03: Host sees Reset Scores button in game header, emits reset-scores socket event (gap 1 fixed)
 - rematch:ready handler now sets opponentWantsRematch=true when bothReady=false
+
+---
+
+## Phase 04 Results (Plan 01 Complete)
+
+**Plan 01 (Minimax Bot AI via TDD) — Completed:** 2026-03-19
+**Requirements:** 1/1 (AI-03)
+**Commits:** 2 (test scaffold RED, feat GREEN)
+**Key deliverables:**
+- botAI.ts: makeMove, unmakeMove, orderMoves, evaluateBoard, getAllMovesForPlayer, findBestMove, alphaBeta
+- 24 unit tests covering all core AI behaviors
+- Room type extended with rematchRequests/rematchTimeout fields
+- TypeScript compiles clean, all 101 tests pass
+
+**Decisions made:**
+- Bot plays as blue vs human red; MAX_DEPTH=3; MAX_TIME_MS=3000
+- WIN_BONUS=10000, LOSS_PENALTY=-10000 for terminal evaluation
+- Conservative piece values for hidden enemies (private=1)
+
+**Rule 2 fix (auto):** Room interface missing rematchRequests and rematchTimeout — added to types/index.ts
+**Rule 1 fixes (auto):** Multiple test board positions corrected for accurate mobility counts; terminal state test expectations corrected per actual engine behavior
+
