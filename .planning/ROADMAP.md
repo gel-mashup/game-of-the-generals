@@ -146,8 +146,8 @@
 **Plans:** 3 plans in 2 waves
 
 **Plan List:**
-- [ ] 04-ai-opponent-01-PLAN.md — Bot AI Core (TDD: Minimax, alpha-beta, evaluation)
-- [ ] 04-ai-opponent-02-PLAN.md — Bot Handler Integration (server-side bot wiring)
+- [x] 04-ai-opponent-01-PLAN.md — Bot AI Core (TDD: Minimax, alpha-beta, evaluation) ✓ (2026-03-19)
+- [x] 04-ai-opponent-02-PLAN.md — Bot Handler Integration (server-side bot wiring) ✓ (2026-03-19)
 - [ ] 04-ai-opponent-03-PLAN.md — Bot Thinking Indicator (client-side UI)
 
 **Success Criteria:**

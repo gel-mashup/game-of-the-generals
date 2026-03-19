@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T02:44:18.697Z"
+last_updated: "2026-03-19T02:45:11.914Z"
 progress:
   total_phases: 4
   completed_phases: 3
@@ -13,7 +13,7 @@ progress:
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 04 (AI Opponent) — Plan 04-03 executed
+**Project Phase:** Phase 04 (AI Opponent) — Plan 04-02 executed
 **Current Milestone:** gsd/phase-04-ai-opponent
 
 ---
@@ -36,8 +36,8 @@ progress:
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-04-ai-opponent
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-03
-- **Pending plans:** 04-02, 04-03, 04-04
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-02
+- **Pending plans:** 04-03, 04-04
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
 ---
@@ -221,10 +221,25 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 ## Phase 04 Results (Plan 02 Complete)
 
-**Plan 02 (Context Gathered — Bot Thinking Events):** 2026-03-19
-**Requirements:** AI-04 (bot thinking indicator UI)
-**Decisions captured:**
-- Bot thinking: text-only overlay with "Bot is thinking...", board-centered, non-blocking
+**Plan 02 (Bot Turn Integration) — Completed:** 2026-03-19
+**Requirements:** 3/3 (AI-01, AI-02, AI-03)
+**Commits:** 2 (applyBotMove helper, bot turn trigger)
+**Key deliverables:**
+- `applyBotMove` in-place board helper in engine.ts (no room clone for bot AI performance)
+- `triggerBotMove` function in gameHandler: Minimax AI computes best move, applies in-place, emits `move:result`
+- Bot auto-triggers after human moves via `currentTurn === botSide` check
+- `bot:thinking-start/end` socket events emitted during AI computation
+- Full game-over handling: scores update, all pieces revealed, `game:over` emitted
+
+**Decisions made:**
+- Captured `botSide` in local variable before `setImmediate` to satisfy TypeScript closure narrowing
+- Captured attacker/defender pieces BEFORE `applyBotMove` mutates board
+
+**Rule 1 fix (auto):** TypeScript error on `room.botSide` in closure — captured in local variable
+
+---
+
+## Phase 04 Results (Plan 03 Complete)
 
 **Plan 03 (Bot Thinking Indicator UI) — Completed:** 2026-03-19
 **Requirements:** 1/1 (AI-04)
