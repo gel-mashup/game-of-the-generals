@@ -33,10 +33,10 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
       handleCellClick(row, col);
       return;
     }
-    // Opponent piece — trigger red flash
+    // Opponent piece — pass to page handler (validates if it's an attack)
     if (piece.owner !== playerSide) {
       onOpponentPieceClick?.(row, col);
-      selectPiece(null);
+      handleCellClick(row, col);
       return;
     }
     // Own piece

@@ -111,11 +111,6 @@ export function canMove(
     return { valid: false, error: 'Cannot move to own piece' };
   }
 
-  // Flag cannot move
-  if (sourcePiece.type === 'flag') {
-    return { valid: false, error: 'Flag cannot move' };
-  }
-
   return { valid: true };
 }
 
@@ -326,9 +321,12 @@ export function applyMove(
     }
   }
 
-  // Move piece to new position
-  newRoom.board[to.row][to.col] = piece;
-  newRoom.board[from.row][from.col] = null;
+  // Move piece to new position (only if no battle or attacker won)
+  // On tie or defender win, both/attacker pieces were already removed by the loop above
+  if (!battleOutcome || battleOutcome.attackerWins) {
+    newRoom.board[to.row][to.col] = piece;
+    newRoom.board[from.row][from.col] = null;
+  }
 
   // Toggle turn
   newRoom.currentTurn = newRoom.currentTurn === 'red' ? 'blue' : 'red';
@@ -401,14 +399,12 @@ export function checkFlagBaseline(room: Room): 'red' | 'blue' | null {
 
 /**
  * Check if a player has any valid moves on the board.
- * Flags are excluded — they cannot move by game rules.
  */
 function playerHasValidMove(board: (Piece | null)[][], playerSide: 'red' | 'blue'): boolean {
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 9; c++) {
       const piece = board[r][c];
-      // Skip pieces that don't belong to this player or are flags (cannot move)
-      if (piece?.owner !== playerSide || piece.type === 'flag') continue;
+      if (piece?.owner !== playerSide) continue;
       const moves = getValidMoves(board, piece);
       if (moves.length > 0) return true;
     }
@@ -483,9 +479,12 @@ export function applyBotMove(
     }
   }
 
-  // Move piece
-  board[to.row][to.col] = piece;
-  board[from.row][from.col] = null;
+  // Move piece (only if no battle or attacker won)
+  // On tie or defender win, both/attacker pieces were already removed by the loop above
+  if (!battleOutcome || battleOutcome.attackerWins) {
+    board[to.row][to.col] = piece;
+    board[from.row][from.col] = null;
+  }
 
   return { capturedPieceIds, battleOutcome };
 }

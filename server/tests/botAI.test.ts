@@ -217,31 +217,15 @@ describe('botAI', () => {
       expect(moves).toEqual([]);
     });
 
-    it('should return empty array when only flags remain', () => {
-      const board = emptyBoard();
-      board[4][4] = makePiece('flag', 'blue', -3, 'flag-blue');
-      const moves = getAllMovesForPlayer(board, 'blue');
-      expect(moves).toEqual([]);
-    });
-
-    it('should return moves for all mobile pieces', () => {
-      const board = emptyBoard();
-      board[4][4] = makePiece('5-star', 'blue', 11, '5-star-blue');
-      board[4][3] = makePiece('colonel', 'blue', 6, 'colonel-blue');
-
-      const moves = getAllMovesForPlayer(board, 'blue');
-      expect(moves.length).toBeGreaterThan(0);
-      expect(moves.every((m: { from: { row: number; col: number } }) => m.from.row === 4 && (m.from.col === 4 || m.from.col === 3))).toBe(true);
-    });
-
-    it('should never return moves for flags', () => {
+    it('should include moves for mobile flags', () => {
       const board = emptyBoard();
       board[4][4] = makePiece('flag', 'blue', -3, 'flag-blue');
       board[3][4] = makePiece('private', 'blue', -1, 'private-blue');
 
       const moves = getAllMovesForPlayer(board, 'blue');
       const flagMoves = moves.filter((m: { from: { row: number; col: number } }) => board[m.from.row][m.from.col]?.type === 'flag');
-      expect(flagMoves).toEqual([]);
+      // Flag can move now — should have valid moves
+      expect(flagMoves.length).toBeGreaterThan(0);
     });
 
     it('should return opponent moves for red side', () => {
@@ -268,15 +252,6 @@ describe('botAI', () => {
       // All moves are captures, so any is acceptable
       expect(move).not.toBeNull();
       expect(move?.from).toEqual({ row: 4, col: 4 });
-    });
-
-    it('should return null when no moves available (flag cannot move)', () => {
-      const board = emptyBoard();
-      // Blue only has a flag — flags cannot move by game rules
-      board[4][4] = makePiece('flag', 'blue', -3, 'flag-blue');
-
-      const move = findBestMove(board, 'blue', 3000);
-      expect(move).toBeNull();
     });
 
     it('should complete within time limit', () => {
@@ -339,24 +314,6 @@ describe('botAI', () => {
       expect(win.winner).toBe('red'); // blue flag gone → red won
     });
 
-    it('should handle no valid moves scenario (bot has no moves, loses)', () => {
-      // Blue only has a flag — flag cannot move by game rules
-      // Red has only a flag at blue's baseline row 7 (blue's starting row)
-      // checkFlagBaseline: blue flag at row 0 (blue's baseline) → blue WINS
-      // Instead, place blue flag at row 6 (middle), no red flag on board
-      // Both flags missing → checkFlagCapture returns null
-      // Blue has no valid moves (flag can't move) → checkNoValidMoves returns 'blue' → winner='red'
-      const board = emptyBoard();
-      board[6][4] = makePiece('flag', 'blue', -3, 'flag-blue');
-      board[3][4] = makePiece('flag', 'red', -3, 'flag-red');
-      board[0][4] = makePiece('5-star', 'red', 11, '5-star-red');
-
-      const room = makeRoom({ board, currentTurn: 'blue' });
-      const win = checkWinCondition(room);
-      expect(win.gameOver).toBe(true);
-      // checkNoValidMoves: blue has no valid moves (flag can't move) → winner='red'
-      expect(win.winner).toBe('red');
-    });
   });
 
   describe('iterative deepening', () => {

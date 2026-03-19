@@ -4,6 +4,8 @@ import {
   canMove,
   getValidMoves,
   resolveBattle,
+  applyMove,
+  applyBotMove,
   generateAutoDeploy,
   checkFlagCapture,
   checkFlagBaseline,
@@ -208,12 +210,11 @@ describe('canMove', () => {
     expect(result.error).toContain('own piece');
   });
 
-  test('invalid: flag piece cannot move', () => {
+  test('valid: flag piece can move', () => {
     const room = makeRoom();
     room.board[0][4] = makePiece('flag', 'red', -3);
     const result = canMove(room, 'red', { row: 0, col: 4 }, { row: 1, col: 4 });
-    expect(result.valid).toBe(false);
-    expect(result.error).toContain('Flag');
+    expect(result.valid).toBe(true);
   });
 
   test('invalid: no piece at source', () => {
@@ -571,13 +572,6 @@ describe('checkNoValidMoves', () => {
     expect(checkNoValidMoves(room)).toBeNull();
   });
 
-  test('flag-only player has no valid moves (flag cannot move)', () => {
-    const room = makeRoom();
-    room.board[0][0] = makePiece('flag', 'red', -3);
-    room.board[7][8] = makePiece('5-star', 'blue', 11);
-    // Red only has flag (cannot move), blue can move
-    expect(checkNoValidMoves(room)).toBe('red');
-  });
 });
 
 // ============================================
@@ -643,5 +637,122 @@ describe('checkWinCondition', () => {
     // Red flag at row 0 (baseline scenario also true but capture takes priority)
     const result = checkWinCondition(room);
     expect(result.reason).toBe('flag_captured');
+  });
+});
+
+// ============================================
+// applyMove — battle board state
+// ============================================
+describe('applyMove', () => {
+  test('tie (equal rank): both pieces removed from board', () => {
+    const room = makeRoom();
+    const attacker = makePiece('colonel', 'red', 7, 'red-colonel-1');
+    const defender = makePiece('colonel', 'blue', 7, 'blue-colonel-1');
+    room.board[3][0] = attacker;
+    room.board[4][0] = defender;
+
+    const { room: result, battleOutcome } = applyMove(room, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBeNull();
+    expect(battleOutcome!.winner).toBe('tie');
+    // Both pieces must be gone
+    expect(result.board[3][0]).toBeNull();
+    expect(result.board[4][0]).toBeNull();
+  });
+
+  test('defender wins: attacker removed, defender stays', () => {
+    const room = makeRoom();
+    const attacker = makePiece('private', 'red', 1, 'red-private-1');
+    const defender = makePiece('major', 'blue', 6, 'blue-major-1');
+    room.board[3][0] = attacker;
+    room.board[4][0] = defender;
+
+    const { room: result, battleOutcome } = applyMove(room, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBe(false);
+    // Attacker must be gone from origin, must NOT have moved to destination
+    expect(result.board[3][0]).toBeNull();
+    // Defender stays at its position
+    expect(result.board[4][0]).toEqual(expect.objectContaining({ id: 'blue-major-1' }));
+  });
+
+  test('attacker wins: defender removed, attacker moves to destination', () => {
+    const room = makeRoom();
+    const attacker = makePiece('major', 'red', 6, 'red-major-1');
+    const defender = makePiece('private', 'blue', 1, 'blue-private-1');
+    room.board[3][0] = attacker;
+    room.board[4][0] = defender;
+
+    const { room: result, battleOutcome } = applyMove(room, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBe(true);
+    expect(result.board[4][0]).toEqual(expect.objectContaining({ id: 'red-major-1' }));
+    expect(result.board[3][0]).toBeNull();
+  });
+
+  test('no battle: piece moves to empty cell', () => {
+    const room = makeRoom();
+    const piece = makePiece('sergeant', 'red', 2, 'red-sergeant-1');
+    room.board[3][0] = piece;
+
+    const { room: result, battleOutcome } = applyMove(room, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).toBeNull();
+    expect(result.board[4][0]).toEqual(expect.objectContaining({ id: 'red-sergeant-1' }));
+    expect(result.board[3][0]).toBeNull();
+  });
+});
+
+// ============================================
+// applyBotMove — battle board state
+// ============================================
+describe('applyBotMove', () => {
+  test('tie (equal rank): both pieces removed from board', () => {
+    const board = emptyBoard();
+    const attacker = makePiece('colonel', 'red', 7, 'red-colonel-1');
+    const defender = makePiece('colonel', 'blue', 7, 'blue-colonel-1');
+    board[3][0] = attacker;
+    board[4][0] = defender;
+
+    const { battleOutcome } = applyBotMove(board, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBeNull();
+    expect(board[3][0]).toBeNull();
+    expect(board[4][0]).toBeNull();
+  });
+
+  test('defender wins: attacker removed, defender stays', () => {
+    const board = emptyBoard();
+    const attacker = makePiece('private', 'red', 1, 'red-private-1');
+    const defender = makePiece('major', 'blue', 6, 'blue-major-1');
+    board[3][0] = attacker;
+    board[4][0] = defender;
+
+    const { battleOutcome } = applyBotMove(board, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBe(false);
+    expect(board[3][0]).toBeNull();
+    // Defender stays
+    expect(board[4][0]).toEqual(expect.objectContaining({ id: 'blue-major-1' }));
+  });
+
+  test('attacker wins: attacker moves to destination', () => {
+    const board = emptyBoard();
+    const attacker = makePiece('major', 'red', 6, 'red-major-1');
+    const defender = makePiece('private', 'blue', 1, 'blue-private-1');
+    board[3][0] = attacker;
+    board[4][0] = defender;
+
+    const { battleOutcome } = applyBotMove(board, { row: 3, col: 0 }, { row: 4, col: 0 });
+
+    expect(battleOutcome).not.toBeNull();
+    expect(battleOutcome!.attackerWins).toBe(true);
+    expect(board[4][0]).toEqual(expect.objectContaining({ id: 'red-major-1' }));
+    expect(board[3][0]).toBeNull();
   });
 });

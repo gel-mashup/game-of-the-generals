@@ -62,7 +62,6 @@ export function getAllMovesForPlayer(board: (Piece | null)[][], playerSide: 'red
     for (let c = 0; c < 9; c++) {
       const piece = board[r][c];
       if (piece?.owner !== playerSide) continue;
-      if (piece.type === 'flag') continue;
       const destinations = getValidMoves(board, piece);
       for (const dest of destinations) {
         moves.push({ from: { row: r, col: c }, to: dest });

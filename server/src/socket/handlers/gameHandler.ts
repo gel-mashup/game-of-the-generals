@@ -29,6 +29,29 @@ function triggerBotMove(io: Server, room: Room, roomId: string) {
     const move = findBestMove(room.board, botSide, 3000);
 
     if (!move) {
+      // Bot has no valid moves — check if game should end
+      const winResult = checkWinCondition(room);
+      if (winResult.gameOver) {
+        room.status = 'finished';
+        room.scores.gamesPlayed++;
+        if (winResult.winner === 'red') room.scores.red++;
+        else if (winResult.winner === 'blue') room.scores.blue++;
+        else room.scores.draws++;
+
+        // Reveal all pieces on game over
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 9; c++) {
+            if (room.board[r][c]) room.board[r][c]!.revealed = true;
+          }
+        }
+
+        io.to(roomId).emit('game:over', {
+          winner: winResult.winner,
+          reason: winResult.reason,
+          board: room.board,
+          scores: room.scores,
+        });
+      }
       io.to(roomId).emit('bot:thinking-end', {});
       return;
     }
