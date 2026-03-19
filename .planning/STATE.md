@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T01:25:15.859Z"
+last_updated: "2026-03-19T01:35:08.990Z"
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 12
+  completed_plans: 12
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 03 (Game Flow) — Plan 03-03 executed
+**Project Phase:** Phase 03 (Game Flow) — Plan 03-04 executed
 **Current Milestone:** gsd/phase-03-game-flow
 
 ---
@@ -24,7 +24,7 @@ progress:
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
-| 3 | Game Flow | ○ In Progress | 3/7 | 43% |
+| 3 | Game Flow | ○ In Progress | 4/7 | 57% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
 ---
@@ -36,8 +36,8 @@ progress:
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-03-game-flow
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03
-- **Pending plans:** 03-04, 03-05, 03-06, 03-07
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04
+- **Pending plans:** 03-05, 03-06, 03-07
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
 ---
@@ -59,6 +59,7 @@ progress:
 - **12:** Capture attacker and defender pieces from board BEFORE applyMove (applyMove modifies board in-place)
 
 ---
+- [Phase 03-game-flow]: SES-02/SES-03 gap closure: rematch:ready handler sets opponentWantsRematch=true when bothReady=false; Reset Scores button emits reset-scores socket event for host
 
 ## Phase 01 Results
 
@@ -188,3 +189,11 @@ After running verification on 02-01/02/03, 3 gaps identified:
 - WinModal appears on game:over with winner banner, reason, scores panel, Rematch and Leave buttons
 - Rematch button emits socket 'rematch' event and sets iWantRematch state
 - All requirements from 03-02 wired into the game page
+
+**Plan 04 (Gap Closure: SES-02 + SES-03) — Completed:** 2026-03-19
+**Requirements:** 2/2 (SES-02, SES-03)
+**Commits:** 1 (feat: rematch prompt + reset scores button)
+**Key deliverables:**
+- SES-02: WinModal shows "Opponent wants a rematch…" when opponent clicks Rematch (gap 2 fixed)
+- SES-03: Host sees Reset Scores button in game header, emits reset-scores socket event (gap 1 fixed)
+- rematch:ready handler now sets opponentWantsRematch=true when bothReady=false
