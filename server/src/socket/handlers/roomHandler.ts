@@ -37,6 +37,8 @@ export function roomHandler(io: Server, socket: Socket) {
       scores: { red: 0, blue: 0, draws: 0, gamesPlayed: 0 },
       deployedPieces: { red: new Set<string>(), blue: new Set<string>() },
       readyPlayers: new Set<string>(),
+      rematchRequests: new Set<string>(),
+      rematchTimeout: null,
     };
 
     rooms.set(roomId, room);
