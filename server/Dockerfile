@@ -1,14 +1,14 @@
 # Stage 1 — dependencies
 FROM node:18-alpine AS deps
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
 # Stage 2 — build
 FROM deps AS build
 COPY src ./src
 COPY tsconfig.json ./
-RUN npm run build
+RUN yarn build
 
 # Stage 3 — runner
 FROM node:18-alpine AS runner
