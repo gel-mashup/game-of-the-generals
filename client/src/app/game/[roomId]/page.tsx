@@ -38,6 +38,7 @@ export default function GamePage() {
   const [deployedCounts, setDeployedCounts] = useState<Record<string, number>>({});
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [botThinking, setBotThinking] = useState(false);
 
   // Compute deployed counts from board
   useEffect(() => {
@@ -89,17 +90,13 @@ export default function GamePage() {
       const state = useGameStore.getState();
       const { board: currentBoard, validMoves, selectedPiece } = state;
       const target = currentBoard[row][col];
-      // Clicking opponent piece — deselect
-      if (target && target.owner !== playerSide) {
-        selectPiece(null);
-        return;
-      }
+
       // Clicking own piece — select
       if (target && target.owner === playerSide) {
         selectPiece({ row, col });
         return;
       }
-      // Clicking empty valid-move square — make move
+      // Clicking valid move square — make move (includes attacks on enemy pieces)
       if (selectedPiece && validMoves.some((m) => m.row === row && m.col === col)) {
         makeMove(selectedPiece, { row, col });
         socket?.emit('make-move', { from: selectedPiece, to: { row, col } });
@@ -113,6 +110,19 @@ export default function GamePage() {
   // Socket listeners
   useEffect(() => {
     if (!socket) return;
+
+    // Request current game state on mount (handles late join / missed events)
+    socket.emit('sync-game-state');
+
+    const handleGameStarted = (data: {
+      board: (Piece | null)[][];
+      currentTurn: 'red' | 'blue';
+      status: 'deploying';
+    }) => {
+      setBoard(data.board);
+      setGameStatus('deploying');
+      setTurn(data.currentTurn);
+    };
 
     const handlePieceDeployed = (data: { piece: Piece; row: number; col: number; deployedCount: number; board: (Piece | null)[][]; autoDeployComplete?: boolean }) => {
       setBoard(data.board);
@@ -134,6 +144,7 @@ export default function GamePage() {
       setBoard(data.board);
       setGameStatus('playing');
       setTurn(data.currentTurn);
+      setCountdownSeconds(null); // Clear countdown overlay after "Go!"
     };
 
     const handleMoveResult = (data: { move: { from: Position; to: Position }; outcome: any; attacker: Piece | null; defender: Piece | null; attackerPosition: Position; defenderPosition: Position; board: (Piece | null)[][]; currentTurn: 'red' | 'blue' }) => {
@@ -171,6 +182,7 @@ export default function GamePage() {
       clearRoom();
     };
 
+    socket.on('game:started', handleGameStarted);
     socket.on('piece:deployed', handlePieceDeployed);
     socket.on('player:ready', handlePlayerReady);
     socket.on('deploy:complete', handleDeployComplete);
@@ -235,7 +247,12 @@ export default function GamePage() {
       socket.emit('auto-deploy');
     });
 
+    // AI-04: Bot thinking indicator
+    socket.on('bot:thinking-start', () => setBotThinking(true));
+    socket.on('bot:thinking-end', () => setBotThinking(false));
+
     return () => {
+      socket.off('game:started', handleGameStarted);
       socket.off('piece:deployed', handlePieceDeployed);
       socket.off('player:ready', handlePlayerReady);
       socket.off('deploy:complete', handleDeployComplete);
@@ -249,11 +266,14 @@ export default function GamePage() {
       socket.off('rematch:timeout');
       socket.off('rematch:confirmed');
       socket.off('bot:auto-deploy');
+      socket.off('bot:thinking-start');
+      socket.off('bot:thinking-end');
     };
   }, [
     socket, clearRoom, setBoard, setGameStatus, setTurn,
     setOpponentReady, setCountdownSeconds, setBattleOutcome,
     setWinner, resetForRematch, setScores, setOpponentWantsRematch, setIWantRematch,
+    setBotThinking,
   ]);
 
   const handleAutoDeploy = () => {
@@ -403,6 +423,15 @@ export default function GamePage() {
             onLeave={handleLeave}
             opponentWantsRematch={opponentWantsRematch}
           />
+        )}
+
+        {/* AI-04: Bot thinking indicator — board overlay */}
+        {botThinking && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm z-40 pointer-events-none">
+            <p className="text-white text-xl font-medium animate-pulse">
+              Bot is thinking...
+            </p>
+          </div>
         )}
       </div>
 

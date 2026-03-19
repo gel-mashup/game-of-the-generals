@@ -48,6 +48,8 @@ export interface Room {
   scores: { red: number; blue: number; draws: number; gamesPlayed: number };
   deployedPieces: { red: Set<string>; blue: Set<string> };
   readyPlayers: Set<string>;
+  rematchRequests: Set<string>;
+  rematchTimeout: NodeJS.Timeout | null;
 }
 
 export interface BattleOutcome {

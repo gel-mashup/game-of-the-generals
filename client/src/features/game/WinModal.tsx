@@ -117,7 +117,7 @@ export default function WinModal({
           </div>
         ) : !showConfirm ? (
           <button
-            onClick={() => setShowConfirm(true)}
+            onClick={() => { setShowConfirm(true); onRematch(); }}
             className="w-full py-3 bg-[#d4a847] hover:bg-[#c49a3f] active:bg-[#b08a35] text-white font-bold rounded-lg mb-3 transition-colors"
           >
             Rematch

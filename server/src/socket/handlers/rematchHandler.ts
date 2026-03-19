@@ -1,6 +1,8 @@
 import { Server, Socket } from 'socket.io';
 import { rooms } from '../rooms';
-import type { Room, Piece } from '../../types';
+import type { Room, Player, Piece } from '../../types';
+import { generateAutoDeploy } from '../../game/engine';
+import { PIECE_CONFIG } from '../../types';
 
 // Extend Room interface for rematch state (in-memory only, not persisted)
 declare module '../../types' {
@@ -21,6 +23,7 @@ export function rematchHandler(io: Server, socket: Socket) {
    * Both confirmed = reset room for fresh deployment.
    */
   socket.on('rematch', () => {
+    console.log(`Rematch requested by ${socket.id}`);
     let room: Room | undefined;
     let roomId: string | undefined;
     for (const [id, r] of rooms.entries()) {
@@ -31,7 +34,12 @@ export function rematchHandler(io: Server, socket: Socket) {
       }
     }
 
-    if (!room || !roomId) return;
+    if (!room || !roomId) {
+      console.log(`Rematch: no room found for socket ${socket.id}`);
+      return;
+    }
+
+    console.log(`Rematch: room ${roomId}, isBot=${room.isBotGame}, requests=${room.rematchRequests?.size ?? 0}, botSide=${room.botSide}`);
 
     // Initialize rematch state if not present
     if (!room.rematchRequests) {
@@ -48,7 +56,10 @@ export function rematchHandler(io: Server, socket: Socket) {
       const botPlayer = room.players.find((p) => p.side !== humanPlayer?.side);
       if (botPlayer && !room.rematchRequests.has(botPlayer.id)) {
         room.rematchRequests.add(botPlayer.id);
+        console.log(`Rematch: bot auto-confirmed, total requests=${room.rematchRequests.size}`);
         io.to(roomId).emit('rematch:ready', { bothReady: true });
+      } else {
+        console.log(`Rematch: bot player not found or already confirmed. botPlayer=${botPlayer?.id}, has=${room.rematchRequests.has(botPlayer?.id ?? '')}`);
       }
     }
 
@@ -83,13 +94,33 @@ export function rematchHandler(io: Server, socket: Socket) {
         scores: room.scores,
       });
 
-      // For bot games: trigger bot auto-deploy
+      // For bot games: deploy bot pieces server-side directly
       if (room.isBotGame && room.botSide) {
-        const botPlayer = room.players.find((p) => p.side === room.botSide);
-        if (botPlayer) {
-          setTimeout(() => {
-            io.to(roomId!).emit('bot:auto-deploy', {});
-          }, 500);
+        const botPositions = generateAutoDeploy(room.botSide);
+        for (const [typeKey, position] of botPositions) {
+          const pieceType = typeKey.replace(/-\d+$/, '');
+          const config = PIECE_CONFIG.find((p) => p.type === pieceType);
+          if (!config) continue;
+
+          const piece: Piece = {
+            id: `${typeKey}-bot-${Math.random().toString(36).slice(2, 8)}`,
+            type: pieceType as Piece['type'],
+            owner: room.botSide,
+            rank: config.rank as Piece['rank'],
+            revealed: false,
+          };
+
+          room.board[position.row][position.col] = piece;
+          room.deployedPieces[room.botSide].add(piece.id);
+
+          io.to(roomId!).emit('piece:deployed', {
+            piece,
+            row: position.row,
+            col: position.col,
+            deployedCount: room.deployedPieces[room.botSide].size,
+            board: room.board,
+            autoDeployComplete: room.deployedPieces[room.botSide].size === 21,
+          });
         }
       }
 
