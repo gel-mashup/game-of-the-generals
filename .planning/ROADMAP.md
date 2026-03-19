@@ -1,7 +1,7 @@
 # Roadmap: Game of the Generals
 
 **Created:** 2026-03-18
-**Granularity:** Coarse (4 phases)
+**Granularity:** Coarse (5 phases)
 **Mode:** YOLO
 
 ---
@@ -13,7 +13,8 @@
 | 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8/8 ✓ |
 | 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 3/15 ✓ |
 | 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 0/7 |
-| 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 0/4 |
+| 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 4/4 ✓ |
+| 5 | Dockerize | Production Docker setup | DOCK-01, DOCK-02, DOCK-03, DOCK-04 | 0/4 |
 
 ---
 
@@ -133,7 +134,7 @@
 - [x] 03-01-PLAN.md — Server win engine + game:over + rematch handlers ✓ (2026-03-19)
 - [x] 03-02-PLAN.md — Client stores + WinModal component ✓ (2026-03-19)
 - [x] 03-03-PLAN.md — Game page integration (score display, WinModal, rematch wiring) ✓ (2026-03-19)
-- [ ] 03-04-PLAN.md — Fix rematch prompt + host reset scores (gap closure)
+- [x] 03-04-PLAN.md — Fix rematch prompt + host reset scores (gap closure) ✓ (2026-03-19)
 
 ---
 
@@ -149,7 +150,7 @@
 - [x] 04-ai-opponent-01-PLAN.md — Bot AI Core (TDD: Minimax, alpha-beta, evaluation) ✓ (2026-03-19)
 - [x] 04-ai-opponent-02-PLAN.md — Bot Handler Integration (server-side bot wiring) ✓ (2026-03-19)
 - [x] 04-ai-opponent-03-PLAN.md — Bot Thinking Indicator (client-side UI) ✓ (2026-03-19)
-- [ ] 04-ai-opponent-04-PLAN.md — Fix bot game startup (gap closure: game:started never emits)
+- [x] 04-ai-opponent-04-PLAN.md — Fix bot game startup (gap closure: game:started never emits) ✓ (2026-03-19)
 
 **Success Criteria:**
 1. User can start game with AI opponent (lobby already has bot mode)
@@ -175,6 +176,29 @@
 |-----------|-------|----------|
 | MVP | Phase 3 | Two humans can play complete game |
 | AI Mode | Phase 4 | Human vs AI playable |
+| Deploy Ready | Phase 5 | Production Docker build runs |
+
+---
+
+## Phase 5: Dockerize
+
+**Goal:** Production-ready Docker containers and compose setup for deployment
+
+**Requirements:** DOCK-01, DOCK-02, DOCK-03, DOCK-04
+
+**Plans:** 1 plan
+
+**Plan List:**
+- [ ] 05-dockerize-01-PLAN.md — Production server Dockerfile, docker-compose prod config, env handling, build verification
+
+**Success Criteria:**
+1. Server Dockerfile multi-stage build (deps → build → runner) with non-root user
+2. Production docker-compose with health checks, restart policies, env file support
+3. `.env.example` documents all required environment variables
+4. `docker compose build` succeeds for both services
+5. `docker compose up` starts both services with correct networking
+
+**Status:** ○ Not Started
 
 ---
 

@@ -60,6 +60,13 @@
 - [x] **SES-02**: User can request rematch after game ends
 - [x] **SES-03**: Host can reset scores
 
+### Deployment
+
+- [ ] **DOCK-01**: Server Dockerfile uses multi-stage build (deps → build → runner) with non-root user
+- [ ] **DOCK-02**: Production docker-compose includes health checks, restart policies, and env file support
+- [ ] **DOCK-03**: All environment variables documented in `.env.example`
+- [ ] **DOCK-04**: `docker compose build && docker compose up` produces working app on ports 3000/3001
+
 ## v2 Requirements
 
 ### UX Enhancements
@@ -121,12 +128,19 @@
 | SES-01 | Phase 3 | Complete |
 | SES-02 | Phase 3 | Complete |
 | SES-03 | Phase 3 | Complete |
+| DOCK-01 | Phase 5 | Pending |
+| DOCK-02 | Phase 5 | Pending |
+| DOCK-03 | Phase 5 | Pending |
+| DOCK-04 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 30 total
-- Phase 1 complete: 8/30
+- v1 requirements: 34 total
+- Phase 1 complete: 8/34
 - Phase 2 complete: 9/15
-- Mapped to phases: 30
+- Phase 3 complete: 7/7
+- Phase 4 complete: 4/4
+- Phase 5 pending: 0/4
+- Mapped to phases: 34
 - Unmapped: 0 ✓
 
 ---
