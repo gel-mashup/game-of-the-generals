@@ -22,6 +22,8 @@ interface GameState {
   opponentReady: boolean;
   countdownSeconds: number | null;
   battleOutcome: BattleOutcome | null;
+  winner: 'red' | 'blue' | null;
+  winReason: 'flag_captured' | 'flag_baseline' | 'no_moves' | null;
   setBoard: (board: (Piece | null)[][]) => void;
   selectPiece: (pos: Position | null) => void;
   setTurn: (turn: 'red' | 'blue') => void;
@@ -33,6 +35,8 @@ interface GameState {
   setCountdownSeconds: (seconds: number | null) => void;
   setBattleOutcome: (outcome: BattleOutcome | null) => void;
   clearBattleOutcome: () => void;
+  setWinner: (winner: 'red' | 'blue' | null, reason: 'flag_captured' | 'flag_baseline' | 'no_moves' | null) => void;
+  resetForRematch: () => void;
 }
 
 function createEmptyBoard(): (Piece | null)[][] {
@@ -56,6 +60,9 @@ export const useGameStore = create<GameState>((set) => ({
   opponentReady: false,
   countdownSeconds: null,
   battleOutcome: null,
+
+  winner: null,
+  winReason: null,
 
   setBoard: (board) => set({ board }),
 
@@ -130,4 +137,22 @@ export const useGameStore = create<GameState>((set) => ({
   setBattleOutcome: (outcome) => set({ battleOutcome: outcome }),
 
   clearBattleOutcome: () => set({ battleOutcome: null }),
+
+  setWinner: (winner, reason) => set({ winner, winReason: reason }),
+
+  resetForRematch: () =>
+    set({
+      board: createEmptyBoard(),
+      currentTurn: 'red',
+      gameStatus: 'deploying',
+      selectedPiece: null,
+      deployedPieces: { red: 0, blue: 0 },
+      validMoves: [],
+      playerReady: false,
+      opponentReady: false,
+      countdownSeconds: null,
+      battleOutcome: null,
+      winner: null,
+      winReason: null,
+    }),
 }));

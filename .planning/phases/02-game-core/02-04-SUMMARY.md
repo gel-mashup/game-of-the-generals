@@ -78,9 +78,12 @@ None
 None - no external service configuration required.
 
 ## Next Phase Readiness
-- DEP-01 (manual deployment syncs to server) and DEP-04 (second player sees deployed pieces) unblocked
-- Ready button will now work after 21 manual placements since deployedPieces is populated on server
-- Ready for gap closure plans 02-05 and 02-06
+- DEP-01 and DEP-04 fully unblocked
+- Ready for gap closure plans 02-05 (battleOutcome payload) and 02-06 (dead code removal)
+
+## Self-Check: PASSED
+
+All files exist on disk, both commits verified in git history.
 
 ---
 *Phase: 02-game-core*
