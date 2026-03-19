@@ -10,13 +10,19 @@ import Board from '@/features/game/Board';
 import DeploymentZone from '@/features/game/DeploymentZone';
 import PiecePalette from '@/features/game/PiecePalette';
 import BattleReveal from '@/features/game/BattleReveal';
+import WinModal from '@/features/game/WinModal';
 import type { Piece, PieceType, Position } from '@/types';
 
 export default function GamePage() {
   const params = useParams();
   const roomId = params.roomId as string;
   const { socket } = useSocket();
-  const { players, isBotGame, playerSide, clearRoom } = useRoomStore();
+  const {
+    players, isBotGame, playerSide, clearRoom,
+    scores, setScores,
+    opponentWantsRematch, setOpponentWantsRematch,
+    iWantRematch, setIWantRematch,
+  } = useRoomStore();
   const {
     gameStatus, board, setBoard, deployPiece,
     selectPiece, makeMove, setGameStatus, setTurn,
@@ -24,6 +30,7 @@ export default function GamePage() {
     countdownSeconds, setCountdownSeconds,
     battleOutcome, setBattleOutcome, clearBattleOutcome,
     setReady,
+    winner, winReason, setWinner, resetForRematch,
   } = useGameStore();
 
   const [selectedPieceType, setSelectedPieceType] = useState<PieceType | null>(null);
@@ -171,6 +178,59 @@ export default function GamePage() {
     socket.on('error', handleError);
     socket.on('player:left', handlePlayerLeft);
 
+    // WIN-04: Game over — winner announcement
+    socket.on('game:over', (data: {
+      winner: 'red' | 'blue' | null;
+      reason: 'flag_captured' | 'flag_baseline' | 'no_moves';
+      scores: { red: number; blue: number; draws: number; gamesPlayed: number };
+      board: (Piece | null)[][];
+    }) => {
+      setBoard(data.board);
+      setScores(data.scores);
+      setWinner(data.winner, data.reason);
+      setGameStatus('finished');
+      // Clear any rematch state from previous game
+      setOpponentWantsRematch(false);
+      setIWantRematch(false);
+    });
+
+    // SES-01: Score update from server
+    socket.on('scores:update', (data: {
+      scores: { red: number; blue: number; draws: number; gamesPlayed: number };
+    }) => {
+      setScores(data.scores);
+    });
+
+    // SES-02: Rematch state from server
+    socket.on('rematch:ready', (data: { bothReady: boolean }) => {
+      if (data.bothReady) {
+        // Both confirmed — server will send rematch:confirmed next
+        setOpponentWantsRematch(false);
+      }
+    });
+
+    socket.on('rematch:timeout', () => {
+      setOpponentWantsRematch(false);
+      setIWantRematch(false);
+    });
+
+    socket.on('rematch:confirmed', (data: {
+      board: (Piece | null)[][];
+      scores: { red: number; blue: number; draws: number; gamesPlayed: number };
+    }) => {
+      setScores(data.scores);
+      resetForRematch();
+      setBoard(data.board);
+      setOpponentWantsRematch(false);
+      setIWantRematch(false);
+      setWinner(null, null);
+    });
+
+    // Bot auto-deploy trigger
+    socket.on('bot:auto-deploy', () => {
+      socket.emit('auto-deploy');
+    });
+
     return () => {
       socket.off('piece:deployed', handlePieceDeployed);
       socket.off('player:ready', handlePlayerReady);
@@ -179,8 +239,18 @@ export default function GamePage() {
       socket.off('countdown:update', handleCountdownUpdate);
       socket.off('error', handleError);
       socket.off('player:left', handlePlayerLeft);
+      socket.off('game:over');
+      socket.off('scores:update');
+      socket.off('rematch:ready');
+      socket.off('rematch:timeout');
+      socket.off('rematch:confirmed');
+      socket.off('bot:auto-deploy');
     };
-  }, [socket, clearRoom, setBoard, setGameStatus, setTurn, setOpponentReady, setCountdownSeconds, setBattleOutcome]);
+  }, [
+    socket, clearRoom, setBoard, setGameStatus, setTurn,
+    setOpponentReady, setCountdownSeconds, setBattleOutcome,
+    setWinner, resetForRematch, setScores, setOpponentWantsRematch, setIWantRematch,
+  ]);
 
   const handleAutoDeploy = () => {
     if (!socket || !playerSide) return;
