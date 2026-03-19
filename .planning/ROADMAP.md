@@ -11,8 +11,8 @@
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|-------------|------------------|
 | 1 | Foundation | Room system, landing page, board setup | AUTH-01, AUTH-02, AUTH-03, AUTH-04, GS-01, GS-02, GS-03, GS-04 | 8/8 ✓ |
-| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 3/15 ✓ |
-| 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 0/7 |
+| 2 | Game Core | Deployment, movement, battle resolution | DEP-01, DEP-02, DEP-03, DEP-04, DEP-05, GAME-01, GAME-02, GAME-03, GAME-04, GAME-05, GAME-06, GAME-07, GAME-08, GAME-09, GAME-10 | 15/15 ✓ |
+| 3 | Game Flow | Win conditions, scores, rematch | WIN-01, WIN-02, WIN-03, WIN-04, SES-01, SES-02, SES-03 | 7/7 ✓ |
 | 4 | AI Opponent | Minimax bot integration | AI-01, AI-02, AI-03, AI-04 | 4/4 ✓ |
 | 5 | Dockerize | Production Docker setup | DOCK-01, DOCK-02, DOCK-03, DOCK-04 | 0/4 |
 
