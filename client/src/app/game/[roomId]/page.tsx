@@ -22,6 +22,7 @@ export default function GamePage() {
     scores, setScores,
     opponentWantsRematch, setOpponentWantsRematch,
     iWantRematch, setIWantRematch,
+    isHost,
   } = useRoomStore();
   const {
     gameStatus, board, setBoard, deployPiece,
@@ -206,6 +207,9 @@ export default function GamePage() {
       if (data.bothReady) {
         // Both confirmed — server will send rematch:confirmed next
         setOpponentWantsRematch(false);
+      } else {
+        // Opponent wants rematch — show prompt
+        setOpponentWantsRematch(true);
       }
     });
 
@@ -268,6 +272,11 @@ export default function GamePage() {
     socket.emit('leave-room');
     clearRoom();
     window.location.href = '/';
+  };
+
+  const handleResetScores = () => {
+    if (!socket || !isHost) return;
+    socket.emit('reset-scores');
   };
 
   return (
@@ -336,6 +345,16 @@ export default function GamePage() {
               ✕
             </button>
           </div>
+        )}
+
+        {/* Reset Scores button — host only */}
+        {isHost && (
+          <button
+            onClick={handleResetScores}
+            className="flex-shrink-0 ml-2 px-3 py-2 bg-yellow-600/80 hover:bg-yellow-600 text-white text-sm font-medium rounded-lg transition-colors"
+          >
+            Reset Scores
+          </button>
         )}
       </div>
 
