@@ -3,12 +3,12 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T02:45:11.914Z"
+last_updated: "2026-03-19T03:21:53.371Z"
 progress:
   total_phases: 4
-  completed_phases: 3
-  total_plans: 15
-  completed_plans: 14
+  completed_phases: 4
+  total_plans: 16
+  completed_plans: 16
 ---
 
 # State: Game of the Generals
@@ -60,6 +60,7 @@ progress:
 
 ---
 - [Phase 03-game-flow]: SES-02/SES-03 gap closure: rematch:ready handler sets opponentWantsRematch=true when bothReady=false; Reset Scores button emits reset-scores socket event for host
+- [Phase 04-ai-opponent]: Synthetic bot player added to room.players (id: bot-${roomId}, side: blue) so existing ready handler can find it by side
 
 ## Phase 01 Results
 
