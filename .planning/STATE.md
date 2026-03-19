@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: active
-last_updated: "2026-03-19T05:30:00.000Z"
+status: unknown
+last_updated: "2026-03-19T03:57:35.511Z"
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 17
-  completed_plans: 16
+  completed_plans: 17
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 05 (Dockerize) — not started
+**Project Phase:** Phase 05 (Dockerize) — ✓ Complete
 **Current Milestone:** gsd/phase-05-dockerize
 
 ---
@@ -26,7 +26,7 @@ progress:
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
 | 3 | Game Flow | ✓ Complete | 7/7 | 100% |
 | 4 | AI Opponent | ✓ Complete | 4/4 | 100% |
-| 5 | Dockerize | ○ Not Started | 0/1 | 0% |
+| 5 | Dockerize | ✓ Complete | 1/1 | 100% |
 
 ---
 
@@ -36,10 +36,10 @@ progress:
 - **Granularity:** Coarse
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
-- **Current branch:** gsd/phase-04-ai-opponent
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-02, 04-03, 04-04
-- **Pending plans:** 05-01 (production Docker setup)
-- **Verification status:** Phase 04 fully verified, Phase 05 not started
+- **Current branch:** gsd/phase-05-dockerize
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-02, 04-03, 04-04, 05-01
+- **Pending plans:** None — all 17 plans complete
+- **Verification status:** All phases fully verified
 
 ---
 
@@ -60,6 +60,9 @@ progress:
 - **12:** Capture attacker and defender pieces from board BEFORE applyMove (applyMove modifies board in-place)
 
 ---
+- **13:** Multi-stage server Dockerfile: deps (npm ci) → build (tsc) → runner (node dist/index.js) with non-root user
+- **14:** docker-compose uses env_file for env vars, healthcheck via wget --spider, restart unless-stopped
+
 - [Phase 03-game-flow]: SES-02/SES-03 gap closure: rematch:ready handler sets opponentWantsRematch=true when bothReady=false; Reset Scores button emits reset-scores socket event for host
 - [Phase 04-ai-opponent]: Synthetic bot player added to room.players (id: bot-${roomId}, side: blue) so existing ready handler can find it by side
 
@@ -251,4 +254,25 @@ After running verification on 02-01/02/03, 3 gaps identified:
 - Board-centered overlay with pulsing text, semi-transparent dark background
 - Overlay is non-blocking (pointer-events-none) with z-40 layering
 - Socket listeners registered and cleaned up in useEffect
+
+---
+
+## Phase 05 Results (Plan 01 Complete)
+
+**Plan 01 (Production Docker Setup) — Completed:** 2026-03-19
+**Requirements:** 4/4 (DOCK-01, DOCK-02, DOCK-03, DOCK-04)
+**Commits:** 4 (server Dockerfile, docker-compose, .env.example, nanoid fix)
+**Key deliverables:**
+- server/Dockerfile: 3-stage multi-stage build (deps → build → runner), non-root user serverjs
+- docker-compose.yml: env_file, healthchecks (wget --spider), restart: unless-stopped on both services
+- .env.example: Documents PORT, CORS_ORIGIN, NODE_ENV, NEXT_PUBLIC_API_URL
+- Both images build and start successfully on gotg-network
+
+**Decisions made:**
+- Used wget --spider for healthcheck (Alpine ships wget, no nc fallback needed)
+- Removed deprecated version: '3.8' from docker-compose.yml
+- Downgraded nanoid to v3 (v5 ESM-only, incompatible with tsconfig commonjs output)
+
+**Rule 1 fix (auto):** nanoid v5 ESM incompatibility — server crashes with ERR_REQUIRE_ESM in Docker container — downgraded to v3
+**Rule 3 fix (auto):** Missing client/public directory — Next.js standalone build failed — created client/public/ directory
 

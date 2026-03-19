@@ -62,10 +62,10 @@
 
 ### Deployment
 
-- [ ] **DOCK-01**: Server Dockerfile uses multi-stage build (deps → build → runner) with non-root user
-- [ ] **DOCK-02**: Production docker-compose includes health checks, restart policies, and env file support
-- [ ] **DOCK-03**: All environment variables documented in `.env.example`
-- [ ] **DOCK-04**: `docker compose build && docker compose up` produces working app on ports 3000/3001
+- [x] **DOCK-01**: Server Dockerfile uses multi-stage build (deps → build → runner) with non-root user
+- [x] **DOCK-02**: Production docker-compose includes health checks, restart policies, and env file support
+- [x] **DOCK-03**: All environment variables documented in `.env.example`
+- [x] **DOCK-04**: `docker compose build && docker compose up` produces working app on ports 3000/3001
 
 ## v2 Requirements
 
@@ -128,10 +128,10 @@
 | SES-01 | Phase 3 | Complete |
 | SES-02 | Phase 3 | Complete |
 | SES-03 | Phase 3 | Complete |
-| DOCK-01 | Phase 5 | Pending |
-| DOCK-02 | Phase 5 | Pending |
-| DOCK-03 | Phase 5 | Pending |
-| DOCK-04 | Phase 5 | Pending |
+| DOCK-01 | Phase 5 | Complete |
+| DOCK-02 | Phase 5 | Complete |
+| DOCK-03 | Phase 5 | Complete |
+| DOCK-04 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 34 total
