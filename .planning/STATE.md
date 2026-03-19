@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-19T02:40:24.671Z"
+last_updated: "2026-03-19T02:44:18.697Z"
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 04 (AI Opponent) — Plan 04-01 executed
+**Project Phase:** Phase 04 (AI Opponent) — Plan 04-03 executed
 **Current Milestone:** gsd/phase-04-ai-opponent
 
 ---
@@ -25,7 +25,7 @@ progress:
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
 | 3 | Game Flow | ✓ Complete | 7/7 | 100% |
-| 4 | AI Opponent | ○ In Progress | 1/4 | 25% |
+| 4 | AI Opponent | ○ In Progress | 2/4 | 50% |
 
 ---
 
@@ -36,7 +36,7 @@ progress:
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
 - **Current branch:** gsd/phase-04-ai-opponent
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-01, 03-02, 03-03, 03-04, 04-01, 04-03
 - **Pending plans:** 04-02, 04-03, 04-04
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
@@ -218,4 +218,20 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 **Rule 2 fix (auto):** Room interface missing rematchRequests and rematchTimeout — added to types/index.ts
 **Rule 1 fixes (auto):** Multiple test board positions corrected for accurate mobility counts; terminal state test expectations corrected per actual engine behavior
+
+## Phase 04 Results (Plan 02 Complete)
+
+**Plan 02 (Context Gathered — Bot Thinking Events):** 2026-03-19
+**Requirements:** AI-04 (bot thinking indicator UI)
+**Decisions captured:**
+- Bot thinking: text-only overlay with "Bot is thinking...", board-centered, non-blocking
+
+**Plan 03 (Bot Thinking Indicator UI) — Completed:** 2026-03-19
+**Requirements:** 1/1 (AI-04)
+**Commits:** 1 (feat: bot thinking indicator UI)
+**Key deliverables:**
+- `botThinking` state toggled by socket events `bot:thinking-start` and `bot:thinking-end`
+- Board-centered overlay with pulsing text, semi-transparent dark background
+- Overlay is non-blocking (pointer-events-none) with z-40 layering
+- Socket listeners registered and cleaned up in useEffect
 

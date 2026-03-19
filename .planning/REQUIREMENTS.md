@@ -52,7 +52,7 @@
 - [ ] **AI-01**: User can start game against AI opponent
 - [ ] **AI-02**: AI uses Minimax algorithm with alpha-beta pruning
 - [x] **AI-03**: AI responds within 3 seconds
-- [ ] **AI-04**: Bot is thinking indicator shown during AI turn
+- [x] **AI-04**: Bot is thinking indicator shown during AI turn
 
 ### Session Management
 
@@ -117,7 +117,7 @@
 | AI-01 | Phase 4 | Pending |
 | AI-02 | Phase 4 | Pending |
 | AI-03 | Phase 4 | Complete |
-| AI-04 | Phase 4 | Pending |
+| AI-04 | Phase 4 | Complete |
 | SES-01 | Phase 3 | Complete |
 | SES-02 | Phase 3 | Complete |
 | SES-03 | Phase 3 | Complete |
