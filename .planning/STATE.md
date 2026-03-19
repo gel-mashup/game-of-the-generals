@@ -3,28 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-last_updated: "2026-03-18T23:36:07.471Z"
+last_updated: "2026-03-19T00:45:38.427Z"
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 9
 ---
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 03 (Game Flow) — Context Gathered
+**Project Phase:** Phase 03 (Game Flow) — Plan 03-02 executed
 **Current Milestone:** gsd/phase-03-game-flow
-
----
-
-## Project Reference
-
-See: .planning/PROJECT.md (updated 2026-03-18)
-
-**Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
-
-**Current focus:** Phase 03 (Game Flow) — Context gathered. Ready for planning.
 
 ---
 
@@ -34,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
-| 3 | Game Flow | ○ In Progress | 0/7 | 0% |
+| 3 | Game Flow | ○ In Progress | 1/7 | 14% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
 ---
@@ -45,9 +35,9 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 - **Granularity:** Coarse
 - **Parallelization:** true
 - **Last advance:** 2026-03-19
-- **Current branch:** gsd/phase-02-game-core
-- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06
-- **Pending plans:** (none)
+- **Current branch:** gsd/phase-03-game-flow
+- **Completed plans:** 01-01, 01-02, 02-01, 02-02, 02-03, 02-04, 02-05, 02-06, 03-02
+- **Pending plans:** 03-01, 03-03, 03-04, 03-05, 03-06, 03-07
 - **Verification status:** All gaps from 02-VERIFICATION.md resolved
 
 ---
@@ -150,7 +140,7 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 *State updated: 2026-03-19 after Phase 03 context gathered*
 
-## Phase 03 Results (Context Gathered)
+## Phase 03 Results (Plan 02 Complete)
 
 **Context gathered:** 2026-03-19
 **Decisions captured:**
@@ -158,3 +148,11 @@ After running verification on 02-01/02/03, 3 gaps identified:
 - Game over board: Board freezes, all pieces revealed, no board indicators, empty squares for eliminated
 - Rematch: Both must confirm, scores persist, fresh deployment, 30s timeout
 - Score display: Always in header, full format, room-scoped (no explicit reset button)
+
+**Plan 02 (Client Win/Scores/Rematch State & WinModal) — Completed:** 2026-03-19
+**Requirements:** 3/3 (WIN-04, SES-01, SES-02)
+**Commits:** 3 (gameStore extension, roomStore extension, WinModal)
+**Key deliverables:**
+- gameStore: winner, winReason, setWinner, resetForRematch — client tracks game outcome and can reset for rematch
+- roomStore: scores, opponentWantsRematch, iWantRematch — client tracks session scores and rematch state from server
+- WinModal: absolute overlay with winner banner, reason text, scores panel, 2-click rematch + Leave buttons

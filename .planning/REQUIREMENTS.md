@@ -45,7 +45,7 @@
 - [ ] **WIN-01**: Game ends when flag is captured
 - [ ] **WIN-02**: Game ends when flag reaches opposite baseline with no adjacent enemies
 - [ ] **WIN-03**: Game ends when player has no valid moves
-- [ ] **WIN-04**: Winner is announced with reason
+- [x] **WIN-04**: Winner is announced with reason
 
 ### AI Opponent
 
@@ -56,8 +56,8 @@
 
 ### Session Management
 
-- [ ] **SES-01**: Session scores track wins/losses/draws
-- [ ] **SES-02**: User can request rematch after game ends
+- [x] **SES-01**: Session scores track wins/losses/draws
+- [x] **SES-02**: User can request rematch after game ends
 - [ ] **SES-03**: Host can reset scores
 
 ## v2 Requirements
@@ -113,13 +113,13 @@
 | WIN-01 | Phase 3 | Pending |
 | WIN-02 | Phase 3 | Pending |
 | WIN-03 | Phase 3 | Pending |
-| WIN-04 | Phase 3 | Pending |
+| WIN-04 | Phase 3 | Complete |
 | AI-01 | Phase 4 | Pending |
 | AI-02 | Phase 4 | Pending |
 | AI-03 | Phase 4 | Pending |
 | AI-04 | Phase 4 | Pending |
-| SES-01 | Phase 3 | Pending |
-| SES-02 | Phase 3 | Pending |
+| SES-01 | Phase 3 | Complete |
+| SES-02 | Phase 3 | Complete |
 | SES-03 | Phase 3 | Pending |
 
 **Coverage:**
