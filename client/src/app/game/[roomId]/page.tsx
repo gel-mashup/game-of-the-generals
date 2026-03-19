@@ -280,39 +280,35 @@ export default function GamePage() {
       )}
 
       {/* Game Header */}
-      <div className="w-full max-w-3xl bg-[#2d4a2d] rounded-lg p-4 flex items-center justify-between">
+      <div className="w-full max-w-3xl bg-[#2d4a2d] rounded-lg p-4 flex items-center justify-between gap-4">
         {/* Room Code */}
-        <div>
+        <div className="flex-shrink-0">
           <p className="text-gray-400 text-xs">Room</p>
           <p className="font-mono font-bold text-[#d4a847] text-sm">{roomId}</p>
         </div>
 
-        {/* Players */}
-        <div className="flex items-center gap-3">
-          {players.map((player) => (
-            <div
-              key={player.id}
-              className={`px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1 ${
-                player.side === 'red'
-                  ? 'bg-red-600 text-white'
-                  : 'bg-blue-600 text-white'
-              }`}
-            >
-              {player.name}
-              {opponentReady && player.side !== playerSide && (
-                <span className="ml-1 text-xs">✓</span>
-              )}
+        {/* Score display — always visible */}
+        <div className="flex-1 flex justify-center">
+          <div className="flex items-center gap-3 text-sm">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-red-500" />
+              <span className="text-red-400 font-medium">Red: {scores.red}</span>
             </div>
-          ))}
-          {isBotGame && (
-            <div className="px-3 py-1 rounded-full text-sm font-medium bg-green-600/20 text-green-400">
-              Bot
+            <span className="text-gray-500">|</span>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-gray-500" />
+              <span className="text-gray-400">Draws: {scores.draws}</span>
             </div>
-          )}
+            <span className="text-gray-500">|</span>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-blue-500" />
+              <span className="text-blue-400 font-medium">Blue: {scores.blue}</span>
+            </div>
+          </div>
         </div>
 
         {/* Status */}
-        <div className="text-right">
+        <div className="flex-shrink-0 text-right">
           <p className="text-gray-400 text-xs">Status</p>
           <p className="font-medium text-sm capitalize">{gameStatus}</p>
         </div>
@@ -321,12 +317,12 @@ export default function GamePage() {
         {!showLeaveConfirm ? (
           <button
             onClick={() => setShowLeaveConfirm(true)}
-            className="ml-4 px-3 py-2 bg-red-600/80 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors"
+            className="flex-shrink-0 ml-2 px-3 py-2 bg-red-600/80 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Leave
           </button>
         ) : (
-          <div className="ml-4 flex items-center gap-2">
+          <div className="flex-shrink-0 ml-2 flex items-center gap-2">
             <button
               onClick={handleLeave}
               className="px-3 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-medium rounded-lg transition-colors"
@@ -372,6 +368,22 @@ export default function GamePage() {
               onComplete={clearBattleOutcome}
             />
           </div>
+        )}
+
+        {/* Win Modal overlay — shown when game is finished */}
+        {gameStatus === 'finished' && winner !== null && (
+          <WinModal
+            winner={winner}
+            reason={winReason ?? 'flag_captured'}
+            scores={scores}
+            onRematch={() => {
+              if (!socket) return;
+              setIWantRematch(true);
+              socket.emit('rematch');
+            }}
+            onLeave={handleLeave}
+            opponentWantsRematch={opponentWantsRematch}
+          />
         )}
       </div>
 
