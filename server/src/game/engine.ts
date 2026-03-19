@@ -335,3 +335,117 @@ export function applyMove(
 
   return { room: newRoom, battleOutcome };
 }
+
+export interface WinResult {
+  gameOver: boolean;
+  winner: 'red' | 'blue' | null;
+  reason: 'flag_captured' | 'flag_baseline' | 'no_moves' | null;
+}
+
+/**
+ * WIN-01: Check if either flag has been captured.
+ * Returns the opponent of the player whose flag is missing.
+ */
+export function checkFlagCapture(room: Room): 'red' | 'blue' | null {
+  let redHasFlag = false;
+  let blueHasFlag = false;
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 9; c++) {
+      const piece = room.board[r][c];
+      if (piece?.type === 'flag') {
+        if (piece.owner === 'red') redHasFlag = true;
+        else blueHasFlag = true;
+      }
+    }
+  }
+  if (!redHasFlag) return 'blue';   // blue captured red's flag
+  if (!blueHasFlag) return 'red';   // red captured blue's flag
+  return null;
+}
+
+/**
+ * Check if a position has an adjacent enemy piece.
+ */
+function hasAdjacentEnemy(board: (Piece | null)[][], row: number, col: number, enemySide: 'red' | 'blue'): boolean {
+  const directions: [number, number][] = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  for (const [dr, dc] of directions) {
+    const nr = row + dr;
+    const nc = col + dc;
+    if (nr < 0 || nr >= 8 || nc < 0 || nc >= 9) continue;
+    const occupant = board[nr][nc];
+    if (occupant?.owner === enemySide) return true;
+  }
+  return false;
+}
+
+/**
+ * WIN-02: Check if a flag has reached the opposite baseline with no adjacent enemies.
+ * Red flag at row 7 = red wins. Blue flag at row 0 = blue wins.
+ */
+export function checkFlagBaseline(room: Room): 'red' | 'blue' | null {
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 9; c++) {
+      const piece = room.board[r][c];
+      if (piece?.type === 'flag') {
+        if (piece.owner === 'red' && r === 7) {
+          if (!hasAdjacentEnemy(room.board, r, c, 'blue')) return 'red';
+        }
+        if (piece.owner === 'blue' && r === 0) {
+          if (!hasAdjacentEnemy(room.board, r, c, 'red')) return 'blue';
+        }
+      }
+    }
+  }
+  return null;
+}
+
+/**
+ * Check if a player has any valid moves on the board.
+ */
+function playerHasValidMove(board: (Piece | null)[][], playerSide: 'red' | 'blue'): boolean {
+  for (let r = 0; r < 8; r++) {
+    for (let c = 0; c < 9; c++) {
+      const piece = board[r][c];
+      if (piece?.owner === playerSide) {
+        const moves = getValidMoves(board, piece);
+        if (moves.length > 0) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * WIN-03: Check if a player has no valid moves.
+ * Returns the player who has no moves (they lose — opponent wins).
+ */
+export function checkNoValidMoves(room: Room): 'red' | 'blue' | null {
+  for (const player of ['red', 'blue'] as const) {
+    if (!playerHasValidMove(room.board, player)) return player;
+  }
+  return null;
+}
+
+/**
+ * Master win condition checker — call after every move.
+ * Priority: flag capture > flag baseline > no valid moves.
+ */
+export function checkWinCondition(room: Room): WinResult {
+  // WIN-01: Flag capture
+  const flagWinner = checkFlagCapture(room);
+  if (flagWinner) {
+    return { gameOver: true, winner: flagWinner, reason: 'flag_captured' };
+  }
+  // WIN-02: Flag at baseline
+  const baselineWinner = checkFlagBaseline(room);
+  if (baselineWinner) {
+    return { gameOver: true, winner: baselineWinner, reason: 'flag_baseline' };
+  }
+  // WIN-03: No valid moves
+  const noMovesPlayer = checkNoValidMoves(room);
+  if (noMovesPlayer) {
+    const winner = noMovesPlayer === 'red' ? 'blue' : 'red';
+    return { gameOver: true, winner, reason: 'no_moves' };
+  }
+  return { gameOver: false, winner: null, reason: null };
+}
