@@ -5,6 +5,10 @@ import {
   getValidMoves,
   resolveBattle,
   generateAutoDeploy,
+  checkFlagCapture,
+  checkFlagBaseline,
+  checkNoValidMoves,
+  checkWinCondition,
 } from '../src/game/engine';
 import { Room, Piece, Position, PIECE_CONFIG } from '../src/types';
 
@@ -459,5 +463,185 @@ describe('generateAutoDeploy', () => {
     for (const type of configTypes) {
       expect(pieceTypes).toContain(type);
     }
+  });
+});
+
+// ============================================
+// checkFlagCapture
+// ============================================
+describe('checkFlagCapture', () => {
+  test('blue wins when red flag is missing from board', () => {
+    const room = makeRoom();
+    // Place red's flag, but no blue flag — blue captured it
+    room.board[0][0] = makePiece('5-star', 'red', 11);
+    // No flag on the board at all
+    expect(checkFlagCapture(room)).toBe('blue');
+  });
+
+  test('blue wins when blue flag is missing from board (red captured it)', () => {
+    const room = makeRoom();
+    room.board[7][8] = makePiece('5-star', 'blue', 11);
+    // No flags on board — red captured blue's flag
+    expect(checkFlagCapture(room)).toBe('blue');
+  });
+
+  test('returns null when both flags are present', () => {
+    const room = makeRoom();
+    room.board[0][4] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[7][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    expect(checkFlagCapture(room)).toBeNull();
+  });
+});
+
+// ============================================
+// checkFlagBaseline
+// ============================================
+describe('checkFlagBaseline', () => {
+  test('red wins when red flag reaches row 7 with no adjacent blue piece', () => {
+    const room = makeRoom();
+    room.board[7][4] = makePiece('flag', 'red', -3, 'red-flag');
+    // No blue pieces adjacent to row 7
+    expect(checkFlagBaseline(room)).toBe('red');
+  });
+
+  test('blue wins when blue flag reaches row 0 with no adjacent red piece', () => {
+    const room = makeRoom();
+    room.board[0][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    expect(checkFlagBaseline(room)).toBe('blue');
+  });
+
+  test('red does NOT win if blue piece is adjacent to flag at row 7', () => {
+    const room = makeRoom();
+    room.board[7][4] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[6][4] = makePiece('5-star', 'blue', 11); // adjacent above
+    expect(checkFlagBaseline(room)).toBeNull();
+  });
+
+  test('blue does NOT win if red piece is adjacent to flag at row 0', () => {
+    const room = makeRoom();
+    room.board[0][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    room.board[1][4] = makePiece('5-star', 'red', 11); // adjacent below
+    expect(checkFlagBaseline(room)).toBeNull();
+  });
+
+  test('returns null when flag is not on opponent baseline', () => {
+    const room = makeRoom();
+    room.board[3][4] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[4][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    expect(checkFlagBaseline(room)).toBeNull();
+  });
+});
+
+// ============================================
+// checkNoValidMoves
+// ============================================
+describe('checkNoValidMoves', () => {
+  test('returns null when blue has valid moves (red pieces blocked but blue 5-star free)', () => {
+    const room = makeRoom();
+    // Red flag at (0,0), privates at (1,0) and (0,1) — all blocked
+    room.board[0][0] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[1][0] = makePiece('private', 'red', -1, 'private-red-1');
+    room.board[0][1] = makePiece('private', 'red', -1, 'private-red-2');
+    // Blue has a 5-star at (7,4) — free to move in 3+ directions
+    room.board[7][4] = makePiece('5-star', 'blue', 11);
+    // Red: flag blocked, privates can move to (2,0) and (0,2) — Red has valid moves
+    // Blue: 5-star mobile — Blue has valid moves
+    // Both have valid moves → returns null
+    expect(checkNoValidMoves(room)).toBeNull();
+  });
+
+  test('returns null when red has valid moves (blue pieces mostly blocked)', () => {
+    const room = makeRoom();
+    // Blue flag at (7,7), privates at (6,8) and (6,7) — flag blocked on 3 sides
+    room.board[7][7] = makePiece('flag', 'blue', -3, 'blue-flag');
+    room.board[6][8] = makePiece('private', 'blue', -1, 'private-blue-1');
+    room.board[6][7] = makePiece('private', 'blue', -1, 'private-blue-2');
+    // Blue 5-star at (7,4) — mobile
+    room.board[7][4] = makePiece('5-star', 'red', 11);
+    // Blue: 5-star has valid moves; Red: 5-star has valid moves
+    // Both have valid moves → returns null
+    expect(checkNoValidMoves(room)).toBeNull();
+  });
+
+  test('returns null when both players have valid moves', () => {
+    const room = makeRoom();
+    room.board[0][0] = makePiece('5-star', 'red', 11);
+    room.board[7][8] = makePiece('5-star', 'blue', 11);
+    // Both have open squares to move to
+    expect(checkNoValidMoves(room)).toBeNull();
+  });
+
+  test('flag-only player has no valid moves (flag cannot move)', () => {
+    const room = makeRoom();
+    room.board[0][0] = makePiece('flag', 'red', -3);
+    room.board[7][8] = makePiece('5-star', 'blue', 11);
+    // Red only has flag (cannot move), blue can move
+    expect(checkNoValidMoves(room)).toBe('red');
+  });
+});
+
+// ============================================
+// checkWinCondition
+// ============================================
+describe('checkWinCondition', () => {
+  test('game over by flag capture — returns flag_captured', () => {
+    const room = makeRoom();
+    room.board[0][0] = makePiece('5-star', 'red', 11);
+    // No flags on board
+    const result = checkWinCondition(room);
+    expect(result.gameOver).toBe(true);
+    expect(result.winner).toBe('blue');
+    expect(result.reason).toBe('flag_captured');
+  });
+
+  test('game over by flag baseline — returns flag_baseline', () => {
+    const room = makeRoom();
+    room.board[0][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    room.board[7][4] = makePiece('flag', 'red', -3, 'red-flag');
+    // Both flags in place, but blue flag at row 0 with no adjacent red
+    const result = checkWinCondition(room);
+    expect(result.gameOver).toBe(true);
+    expect(result.winner).toBe('blue');
+    expect(result.reason).toBe('flag_baseline');
+  });
+
+  test('game over by no valid moves — returns no_moves', () => {
+    const room = makeRoom();
+    // Red: flag + 2 privates, all blocked (flag at (0,0), privates surround)
+    room.board[0][0] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[1][0] = makePiece('private', 'red', -1);
+    room.board[0][1] = makePiece('private', 'red', -1);
+    // Blue: flag + 2 privates, all blocked (flag at (7,8), privates surround)
+    room.board[7][8] = makePiece('flag', 'blue', -3, 'blue-flag');
+    room.board[6][8] = makePiece('private', 'blue', -1);
+    room.board[7][7] = makePiece('private', 'blue', -1);
+    // Blue private at (7,7): (6,7) empty, (7,6) empty, (7,8) blocked, (8,7) OOB → 2 valid moves
+    // Both sides have valid moves → gameOver=false
+    const result = checkWinCondition(room);
+    expect(result.gameOver).toBe(false);
+    expect(result.winner).toBeNull();
+    expect(result.reason).toBeNull();
+  });
+
+  test('no game over when both flags present and no win condition met', () => {
+    const room = makeRoom();
+    room.board[0][4] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[7][4] = makePiece('flag', 'blue', -3, 'blue-flag');
+    room.board[3][4] = makePiece('5-star', 'red', 11);
+    room.board[4][4] = makePiece('5-star', 'blue', 11);
+    const result = checkWinCondition(room);
+    expect(result.gameOver).toBe(false);
+    expect(result.winner).toBeNull();
+    expect(result.reason).toBeNull();
+  });
+
+  test('priority: flag capture checked before baseline', () => {
+    const room = makeRoom();
+    // Blue flag is gone (capture scenario)
+    room.board[0][4] = makePiece('flag', 'red', -3, 'red-flag');
+    room.board[0][0] = makePiece('5-star', 'blue', 11);
+    // Red flag at row 0 (baseline scenario also true but capture takes priority)
+    const result = checkWinCondition(room);
+    expect(result.reason).toBe('flag_captured');
   });
 });
