@@ -7,6 +7,7 @@ import {
   canMove,
   applyMove,
   generateAutoDeploy,
+  checkWinCondition,
 } from '../../game/engine';
 
 function getPlayerSide(socketId: string, room: Room): 'red' | 'blue' | null {
@@ -340,6 +341,39 @@ export function gameHandler(io: Server, socket: Socket) {
     room.board = updatedRoom.board;
     room.currentTurn = updatedRoom.currentTurn;
     room.deployedPieces = updatedRoom.deployedPieces;
+
+    // Check win conditions after the move
+    const winResult = checkWinCondition(room);
+
+    if (winResult.gameOver) {
+      // Update scores
+      room.status = 'finished';
+      room.scores.gamesPlayed++;
+      if (winResult.winner === 'red') room.scores.red++;
+      else if (winResult.winner === 'blue') room.scores.blue++;
+      else room.scores.draws++;
+
+      // Reveal all pieces on the board
+      for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 9; c++) {
+          if (room.board[r][c]) {
+            room.board[r][c]!.revealed = true;
+          }
+        }
+      }
+
+      // Emit game:over FIRST — return early, do NOT emit move:result
+      io.to(roomId!).emit('game:over', {
+        winner: winResult.winner,
+        reason: winResult.reason,
+        scores: room.scores,
+        board: room.board,
+      });
+      io.to(roomId!).emit('scores:update', { scores: room.scores });
+
+      console.log(`Game over in room ${roomId}: ${winResult.winner} wins by ${winResult.reason}`);
+      return;
+    }
 
     // Broadcast move result to ALL in room — includes attacker/defender for BattleReveal
     io.to(roomId).emit('move:result', {
