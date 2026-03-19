@@ -85,6 +85,17 @@ None - no external service configuration required.
 - SES-03: Host sees Reset Scores button in game header; clicking it resets scores visible to both players ✓
 - Ready for next plans in Phase 03
 
+## Self-Check: PASSED
+
+- `setOpponentWantsRematch(true)` found at line 212 ✓
+- `reset-scores` socket emit found at line 279 ✓
+- `Reset Scores` button found at line 356 ✓
+- `isHost` destructuring found at line 25 ✓
+- TypeScript compilation: clean (0 errors) ✓
+- Commit `80c0ad2` exists ✓
+- Commit `161f781` (SUMMARY metadata) exists ✓
+- SUMMARY.md created at correct path ✓
+
 ---
 *Phase: 03-game-flow*
 *Completed: 2026-03-19*
