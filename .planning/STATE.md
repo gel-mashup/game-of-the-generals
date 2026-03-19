@@ -13,8 +13,8 @@ progress:
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 02 (Game Core) — In Progress
-**Current Milestone:** gsd/phase-02-game-core
+**Project Phase:** Phase 03 (Game Flow) — Context Gathered
+**Current Milestone:** gsd/phase-03-game-flow
 
 ---
 
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 
 **Core Value:** A playable two-player strategy game with real-time multiplayer and AI opponent, capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
-**Current focus:** Phase 02 (Game Core) — Complete. Ready for Phase 03 (Game Flow).
+**Current focus:** Phase 03 (Game Flow) — Context gathered. Ready for planning.
 
 ---
 
@@ -34,7 +34,7 @@ See: .planning/PROJECT.md (updated 2026-03-18)
 |---|-------|--------|-------|----------|
 | 1 | Foundation | ✓ Complete | 2/2 | 100% |
 | 2 | Game Core | ✓ Complete | 6/6 | 100% |
-| 3 | Game Flow | ○ Pending | 0/7 | 0% |
+| 3 | Game Flow | ○ In Progress | 0/7 | 0% |
 | 4 | AI Opponent | ○ Pending | 0/4 | 0% |
 
 ---
@@ -148,4 +148,13 @@ After running verification on 02-01/02/03, 3 gaps identified:
 
 ---
 
-*State updated: 2026-03-18 after completing 02-06 (dead code removal confirmation)*
+*State updated: 2026-03-19 after Phase 03 context gathered*
+
+## Phase 03 Results (Context Gathered)
+
+**Context gathered:** 2026-03-19
+**Decisions captured:**
+- Win announcement: Modal overlay, shows winner+reason+scores, Rematch+Leave buttons, tasteful celebration style
+- Game over board: Board freezes, all pieces revealed, no board indicators, empty squares for eliminated
+- Rematch: Both must confirm, scores persist, fresh deployment, 30s timeout
+- Score display: Always in header, full format, room-scoped (no explicit reset button)
