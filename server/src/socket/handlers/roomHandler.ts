@@ -1,7 +1,9 @@
 import { Server, Socket } from 'socket.io';
 import { customAlphabet } from 'nanoid';
 import { rooms } from '../rooms';
-import type { Room, Player } from '../../types';
+import type { Room, Player, Piece } from '../../types';
+import { generateAutoDeploy } from '../../game/engine';
+import { PIECE_CONFIG } from '../../types';
 
 // 6-character alphanumeric room code (excludes ambiguous chars: I, l, O, 0)
 const generateRoomCode = customAlphabet(
@@ -51,8 +53,53 @@ export function roomHandler(io: Server, socket: Socket) {
       isBotGame: room.isBotGame,
     });
 
-    console.log(`Room ${roomId} created by ${hostName} (${socket.id}), bot mode: ${room.isBotGame}`);
-  });
+      console.log(`Room ${roomId} created by ${hostName} (${socket.id}), bot mode: ${room.isBotGame}`);
+
+      // For bot games: add synthetic bot player, auto-deploy bot, start game
+      if (room.isBotGame) {
+        // Add synthetic bot player to room (needed by ready handler to find bot)
+        const botPlayer: Player = { id: `bot-${roomId}`, name: 'Bot', side: 'blue' };
+        room.players.push(botPlayer);
+
+        // Bot auto-deploys: generate positions and emit piece:deployed for each piece
+        const botPositions = generateAutoDeploy('blue');
+        for (const [typeKey, position] of botPositions) {
+          const pieceType = typeKey.replace(/-\d+$/, '');
+          const config = PIECE_CONFIG.find((p) => p.type === pieceType);
+          if (!config) continue;
+
+          const piece: Piece = {
+            id: `${typeKey}-bot-${Math.random().toString(36).slice(2, 8)}`,
+            type: pieceType as Piece['type'],
+            owner: 'blue',
+            rank: config.rank as Piece['rank'],
+            revealed: false,
+          };
+
+          room.board[position.row][position.col] = piece;
+          room.deployedPieces.blue.add(piece.id);
+
+          io.to(roomId).emit('piece:deployed', {
+            piece,
+            row: position.row,
+            col: position.col,
+            deployedCount: room.deployedPieces.blue.size,
+            board: room.board,
+            autoDeployComplete: room.deployedPieces.blue.size === 21,
+          });
+        }
+
+        // Transition to deploying and emit game:started
+        room.status = 'deploying';
+        io.to(roomId).emit('game:started', {
+          board: room.board,
+          currentTurn: 'red',
+          status: 'deploying',
+        });
+
+        console.log(`Bot game ${roomId}: bot auto-deployed, game started in deploying phase`);
+      }
+    });
 
   socket.on('join-room', ({ roomId, playerName }: { roomId: string; playerName: string }) => {
     const room = rooms.get(roomId);
