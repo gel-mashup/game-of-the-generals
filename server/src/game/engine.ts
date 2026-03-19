@@ -401,15 +401,16 @@ export function checkFlagBaseline(room: Room): 'red' | 'blue' | null {
 
 /**
  * Check if a player has any valid moves on the board.
+ * Flags are excluded — they cannot move by game rules.
  */
 function playerHasValidMove(board: (Piece | null)[][], playerSide: 'red' | 'blue'): boolean {
   for (let r = 0; r < 8; r++) {
     for (let c = 0; c < 9; c++) {
       const piece = board[r][c];
-      if (piece?.owner === playerSide) {
-        const moves = getValidMoves(board, piece);
-        if (moves.length > 0) return true;
-      }
+      // Skip pieces that don't belong to this player or are flags (cannot move)
+      if (piece?.owner !== playerSide || piece.type === 'flag') continue;
+      const moves = getValidMoves(board, piece);
+      if (moves.length > 0) return true;
     }
   }
   return false;
