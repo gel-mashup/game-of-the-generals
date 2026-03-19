@@ -139,14 +139,21 @@
 
 ## Phase 4: AI Opponent
 
-**Goal:** AI opponent using Minimax algorithm
+**Goal:** AI opponent using Minimax algorithm with alpha-beta pruning
 
 **Requirements:** AI-01, AI-02, AI-03, AI-04
 
+**Plans:** 3 plans in 2 waves
+
+**Plan List:**
+- [ ] 04-ai-opponent-01-PLAN.md — Bot AI Core (TDD: Minimax, alpha-beta, evaluation)
+- [ ] 04-ai-opponent-02-PLAN.md — Bot Handler Integration (server-side bot wiring)
+- [ ] 04-ai-opponent-03-PLAN.md — Bot Thinking Indicator (client-side UI)
+
 **Success Criteria:**
-1. User can start game with AI opponent
-2. AI makes valid moves using Minimax + alpha-beta
-3. AI responds within 3 seconds
+1. User can start game with AI opponent (lobby already has bot mode)
+2. AI makes valid moves using Minimax + alpha-beta (depth 1→3)
+3. AI responds within 3 seconds (iterative deepening)
 4. "Bot is thinking" indicator shown during AI turn
 
 **Tasks:**
