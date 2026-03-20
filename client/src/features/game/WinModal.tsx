@@ -69,7 +69,7 @@ export default function WinModal({
     );
   }
 
-  const winnerName = winner === null ? 'Draw' : winner === 'red' ? 'Red' : 'Blue';
+  const winnerName = winner === null ? 'Draw' : winner === 'red' ? 'Player 1' : 'Player 2';
   const winnerColor = winner === 'red' ? 'text-red-400' : winner === 'blue' ? 'text-emerald-400' : 'text-gray-400';
   const winnerBg = winner === 'red' ? 'bg-red-600/20 border-red-500' : winner === 'blue' ? 'bg-emerald-600/20 border-emerald-500' : 'bg-gray-600/20 border-gray-500';
 
@@ -111,7 +111,7 @@ export default function WinModal({
         <div className={`rounded-lg p-4 mb-6 ${winnerBg}`}>
           <div className="flex justify-between items-center text-sm">
             <div className="flex-1 text-center">
-              <div className="text-red-400 font-semibold">Red</div>
+              <div className="text-red-400 font-semibold">Player 1</div>
               <div className="text-lg font-bold text-red-300">{scores.red}</div>
             </div>
             <div className="flex-1 text-center">
@@ -119,7 +119,7 @@ export default function WinModal({
               <div className="text-lg font-bold text-gray-300">{scores.draws}</div>
             </div>
             <div className="flex-1 text-center">
-              <div className="text-emerald-400 font-semibold">Blue</div>
+              <div className="text-emerald-400 font-semibold">Player 2</div>
               <div className="text-lg font-bold text-emerald-300">{scores.blue}</div>
             </div>
           </div>

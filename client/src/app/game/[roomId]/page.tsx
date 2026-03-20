@@ -330,7 +330,7 @@ export default function GamePage() {
           <div className="flex items-center gap-3 text-sm">
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-full bg-red-500" />
-              <span className="text-red-400 font-medium">Red: {scores.red}</span>
+              <span className="text-red-400 font-medium">Player 1: {scores.red}</span>
             </div>
             <span className="text-gray-500">|</span>
             <div className="flex items-center gap-1">
@@ -340,7 +340,7 @@ export default function GamePage() {
             <span className="text-gray-500">|</span>
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <span className="text-emerald-400 font-medium">Blue: {scores.blue}</span>
+              <span className="text-emerald-400 font-medium">Player 2: {scores.blue}</span>
             </div>
           </div>
         </div>
