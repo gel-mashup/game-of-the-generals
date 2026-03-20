@@ -25,7 +25,7 @@
 
 </details>
 
-### ✅ v1.1 UI Redesign (Complete)
+### ✅ v1.1 UI Redesign (SHIPPED 2026-03-20)
 
 **Milestone Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
 
