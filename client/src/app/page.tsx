@@ -28,7 +28,7 @@ export default function LandingPage() {
 
         <button
           onClick={() => router.push('/lobby?mode=online')}
-          className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg transition-colors text-lg"
+          className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg transition-colors text-lg"
         >
           Play Online
         </button>

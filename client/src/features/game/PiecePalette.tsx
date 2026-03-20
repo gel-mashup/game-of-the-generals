@@ -49,7 +49,7 @@ export default function PiecePalette({
               >
                 <span className={`
                   w-8 h-8 flex items-center justify-center rounded-full shadow text-xs font-bold text-white
-                  ${playerSide === 'red' ? 'bg-red-600' : 'bg-blue-600'}
+                  ${playerSide === 'red' ? 'bg-red-600' : 'bg-emerald-600'}
                 `}>
                   {getSymbol(type)}
                 </span>

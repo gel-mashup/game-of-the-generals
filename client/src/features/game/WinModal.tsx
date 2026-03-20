@@ -70,8 +70,8 @@ export default function WinModal({
   }
 
   const winnerName = winner === null ? 'Draw' : winner === 'red' ? 'Red' : 'Blue';
-  const winnerColor = winner === 'red' ? 'text-red-400' : winner === 'blue' ? 'text-blue-400' : 'text-gray-400';
-  const winnerBg = winner === 'red' ? 'bg-red-600/20 border-red-500' : winner === 'blue' ? 'bg-blue-600/20 border-blue-500' : 'bg-gray-600/20 border-gray-500';
+  const winnerColor = winner === 'red' ? 'text-red-400' : winner === 'blue' ? 'text-emerald-400' : 'text-gray-400';
+  const winnerBg = winner === 'red' ? 'bg-red-600/20 border-red-500' : winner === 'blue' ? 'bg-emerald-600/20 border-emerald-500' : 'bg-gray-600/20 border-gray-500';
 
   return (
     <div
@@ -119,8 +119,8 @@ export default function WinModal({
               <div className="text-lg font-bold text-gray-300">{scores.draws}</div>
             </div>
             <div className="flex-1 text-center">
-              <div className="text-blue-400 font-semibold">Blue</div>
-              <div className="text-lg font-bold text-blue-300">{scores.blue}</div>
+              <div className="text-emerald-400 font-semibold">Blue</div>
+              <div className="text-lg font-bold text-emerald-300">{scores.blue}</div>
             </div>
           </div>
         </div>

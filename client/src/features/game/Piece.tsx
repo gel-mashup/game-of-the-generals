@@ -55,7 +55,7 @@ export default function Piece({ piece, position, onClick, isSelected, onInvalidC
         w-full h-full flex items-center justify-center p-2
         rounded-lg shadow-lg
         transition-all duration-150
-        ${piece.owner === 'red' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'}
+        ${piece.owner === 'red' ? 'bg-red-600 hover:bg-red-500' : 'bg-emerald-600 hover:bg-emerald-500'}
         ${onClick || onInvalidClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}
         ${isSelected ? 'ring-2 ring-[#d4a847]' : ''}
         ${flashing ? 'bg-red-800' : ''}

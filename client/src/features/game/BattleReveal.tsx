@@ -96,7 +96,7 @@ export default function BattleReveal({
               transition-all duration-500
               ${phase === 'sliding' ? '-translate-x-6' : ''}
               ${phase === 'done' && !showAttacker ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}
-              ${attacker.owner === 'red' ? 'bg-red-600' : 'bg-blue-600'}
+              ${attacker.owner === 'red' ? 'bg-red-600' : 'bg-emerald-600'}
             `}
           >
             <span className="text-white text-sm font-bold">{attackerSymbol}</span>
@@ -112,7 +112,7 @@ export default function BattleReveal({
               transition-all duration-500
               ${phase === 'sliding' ? 'translate-x-6' : ''}
               ${phase === 'done' && !showDefender ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}
-              ${defender.owner === 'red' ? 'bg-red-600' : 'bg-blue-600'}
+              ${defender.owner === 'red' ? 'bg-red-600' : 'bg-emerald-600'}
             `}
           >
             <span className="text-white text-sm font-bold">{defenderSymbol}</span>

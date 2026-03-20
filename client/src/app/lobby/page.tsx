@@ -261,7 +261,7 @@ function LobbyContent() {
               <button
                 onClick={handleJoinRoom}
                 disabled={!playerName.trim() || roomCode.length !== 6}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold rounded-lg transition-colors"
               >
                 Join Room
               </button>

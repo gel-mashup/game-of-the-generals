@@ -339,8 +339,8 @@ export default function GamePage() {
             </div>
             <span className="text-gray-500">|</span>
             <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-blue-400 font-medium">Blue: {scores.blue}</span>
+              <div className="w-2 h-2 rounded-full bg-emerald-500" />
+              <span className="text-emerald-400 font-medium">Blue: {scores.blue}</span>
             </div>
           </div>
         </div>
