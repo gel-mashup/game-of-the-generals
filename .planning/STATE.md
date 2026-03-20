@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: UI Redesign
-status: planning
-stopped_at: Phase 07 UI-SPEC approved
-last_updated: "2026-03-20T05:28:27.783Z"
-last_activity: 2026-03-20 — Phase 7 plans created (3 plans, 7 requirements mapped)
+status: Plan 01 executed, 2 more plans ready
+stopped_at: Completed 07-01-PLAN.md
+last_updated: "2026-03-20T06:30:11.445Z"
+last_activity: 2026-03-20 — Phase 7 Plan 01 complete (layout restructure + DeploymentSidebar)
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 90
 ---
 
 # State: Game of the Generals
@@ -24,9 +24,9 @@ progress:
 ## Current Position
 
 Phase: 7 of 8 (Side-by-Side Layout + Board Perspective Flip)
-Plan: 3 plans created for current phase
-Status: Plans ready for execution
-Last activity: 2026-03-20 — Phase 7 plans created (3 plans, 7 requirements mapped)
+Plan: 1 of 3 plans executed (07-01 complete)
+Status: Plan 01 executed, 2 more plans ready
+Last activity: 2026-03-20 — Phase 7 Plan 01 complete (layout restructure + DeploymentSidebar)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -69,6 +69,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 | 4 | AI Opponent | ✓ Complete |
 | 5 | Dockerize | ✓ Complete |
 | 6 | Debug Game Flow | ✓ Complete |
+| Phase 07-side-by-side-layout-board-perspective-flip P01 | 3min | 2 tasks | 2 files |
 
 ### Key Architecture (carries forward)
 
@@ -110,10 +111,14 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-20T05:28:27.779Z
-Stopped at: Phase 07 UI-SPEC approved
-Resume file: .planning/phases/07-side-by-side-layout-board-perspective-flip/07-UI-SPEC.md
+Last session: 2026-03-20T06:30:11.441Z
+Stopped at: Completed 07-01-PLAN.md
+Resume file: None
 
 ---
 
 *State updated: 2026-03-20 after v1.1 roadmap created*
+
+*Plan 07-01 decisions added:*
+- Sidebar uses absolute overlay inside relative board container (not flex sibling) — preserves board full width while sidebar overlaps right edge
+- Mobile fallback (md:hidden) keeps old inline PiecePalette + buttons below board — avoids over-engineering before mobile design finalized
