@@ -73,7 +73,7 @@ Phases execute in numeric order: 7 → 8
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 7. Side-by-Side Layout + Board Perspective Flip | v1.1 | 3/3 | Complete | 2026-03-20 |
-| 8. Fog-of-War | 1/1 | Complete   | 2026-03-20 | - |
+| 8. Fog-of-War | 1/1 | Complete    | 2026-03-20 | - |
 
 ---
 
