@@ -17,10 +17,10 @@ Requirements for v1.1 UI Redesign. Each maps to roadmap phases.
 
 ### Fog-of-War
 
-- [ ] **FOGWAR-01**: Enemy pieces display "?" instead of rank symbol during playing phase
-- [ ] **FOGWAR-02**: Own pieces always show their rank symbol
-- [ ] **FOGWAR-03**: Enemy piece ranks revealed when pieces battle (BattleReveal shows actual ranks)
-- [ ] **FOGWAR-04**: All pieces revealed on game-over (winner decided)
+- [x] **FOGWAR-01**: Enemy pieces display "?" instead of rank symbol during playing phase
+- [x] **FOGWAR-02**: Own pieces always show their rank symbol
+- [x] **FOGWAR-03**: Enemy piece ranks revealed when pieces battle (BattleReveal shows actual ranks)
+- [x] **FOGWAR-04**: All pieces revealed on game-over (winner decided)
 
 ### Piece Palette
 
@@ -65,10 +65,10 @@ Which phases cover which requirements.
 | LAYOUT-03 | Phase 7 | Complete |
 | LAYOUT-04 | Phase 7 | Complete |
 | LAYOUT-05 | Phase 7 | Complete |
-| FOGWAR-01 | Phase 8 | Pending |
-| FOGWAR-02 | Phase 8 | Pending |
-| FOGWAR-03 | Phase 8 | Pending |
-| FOGWAR-04 | Phase 8 | Pending |
+| FOGWAR-01 | Phase 8 | Complete |
+| FOGWAR-02 | Phase 8 | Complete |
+| FOGWAR-03 | Phase 8 | Complete |
+| FOGWAR-04 | Phase 8 | Complete |
 | PALETTE-01 | Phase 7 | Complete |
 | PALETTE-02 | Phase 7 | Complete |
 

@@ -30,7 +30,7 @@
 **Milestone Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
 
 - [x] **Phase 7: Side-by-Side Layout + Board Perspective Flip** - Restructure UI to board-left/sidebar-right, flip board so player deploys at bottom, restyle piece palette
-- [ ] **Phase 8: Fog-of-War** - Hide enemy piece identities during gameplay, reveal on battle and game over
+- [x] **Phase 8: Fog-of-War** - Hide enemy piece identities during gameplay, reveal on battle and game over (completed 2026-03-20)
 
 ## Phase Details
 
@@ -73,7 +73,7 @@ Phases execute in numeric order: 7 → 8
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 7. Side-by-Side Layout + Board Perspective Flip | v1.1 | 3/3 | Complete | 2026-03-20 |
-| 8. Fog-of-War | v1.1 | 0/TBD | Not started | - |
+| 8. Fog-of-War | 1/1 | Complete   | 2026-03-20 | - |
 
 ---
 
