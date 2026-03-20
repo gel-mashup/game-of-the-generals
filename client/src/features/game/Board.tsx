@@ -50,7 +50,7 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
           {isMyTurn ? 'Your turn' : 'Waiting for opponent…'}
         </div>
       )}
-      <div className="relative grid grid-cols-9 grid-rows-8 gap-0 aspect-[9/8] border-4 border-[#2d4a2d] rounded-lg overflow-hidden shadow-2xl">
+      <div className="relative grid grid-cols-9 grid-rows-8 gap-0 aspect-[9/8] border-4 border-[#1e3a5f] rounded-lg overflow-hidden shadow-2xl">
         {Array.from({ length: ROWS }, (_, rowIndex) =>
           Array.from({ length: COLS }, (_, colIndex) => {
             const isDark = (rowIndex + colIndex) % 2 === 1;
@@ -66,8 +66,8 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
                 onClick={() => handlePieceClick(rowIndex, colIndex)}
                 className={`
                   relative flex items-center justify-center aspect-square
-                  ${isDark ? 'bg-[#3a6a3a]' : 'bg-[#4a7c4a]'}
-                  border border-[#2d4a2d]/30
+                  ${isDark ? 'bg-[#1e3a5f]' : 'bg-[#2d5a6b]'}
+                  border border-[#1e3a5f]/20
                   transition-colors duration-100
                   ${hasValidMove ? 'bg-[rgba(74,124,74,0.5)]' : ''}
                 `}
