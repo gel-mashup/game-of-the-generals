@@ -52,12 +52,12 @@ export default function Piece({ piece, position, onClick, isSelected, onInvalidC
     <button
       onClick={handleClick}
       className={`
-        w-full h-full flex items-center justify-center p-1
-        rounded-full shadow-lg
+        w-full h-full flex items-center justify-center p-2
+        rounded-lg shadow-lg
         transition-all duration-150
         ${piece.owner === 'red' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'}
         ${onClick || onInvalidClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}
-        ${isSelected ? 'ring-2 ring-[#d4a847] ring-2' : ''}
+        ${isSelected ? 'ring-2 ring-[#d4a847]' : ''}
         ${flashing ? 'bg-red-800' : ''}
         relative
       `}
@@ -66,7 +66,7 @@ export default function Piece({ piece, position, onClick, isSelected, onInvalidC
       {flashing && (
         <div className="absolute inset-0 rounded-full bg-[rgba(192,57,43,0.6)] animate-ping" />
       )}
-      <span className="text-white text-xs font-bold select-none drop-shadow">
+      <span className="text-white text-base font-bold select-none drop-shadow">
         {symbol}
       </span>
     </button>
