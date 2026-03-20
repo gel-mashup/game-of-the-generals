@@ -73,7 +73,7 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
                 `}
               >
                 {piece && (
-                  <div className={playerSide === 'red' ? 'rotate-180' : ''}>
+                  <div className={`w-[80%] h-[80%] ${playerSide === 'red' ? 'rotate-180' : ''}`}>
                     <Piece
                       piece={piece}
                       position={{ row: rowIndex, col: colIndex }}

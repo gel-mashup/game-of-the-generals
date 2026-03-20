@@ -52,7 +52,7 @@ export default function Piece({ piece, position, onClick, isSelected, onInvalidC
     <button
       onClick={handleClick}
       className={`
-        w-[80%] h-[80%] flex items-center justify-center p-2
+        w-full h-full flex items-center justify-center p-2
         rounded-lg shadow-lg
         transition-all duration-150
         ${piece.owner === 'red' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'}

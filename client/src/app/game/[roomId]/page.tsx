@@ -40,6 +40,7 @@ export default function GamePage() {
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [botThinking, setBotThinking] = useState(false);
+  const [winModalMinimized, setWinModalMinimized] = useState(false);
 
   // Compute deployed counts from board
   useEffect(() => {
@@ -54,6 +55,13 @@ export default function GamePage() {
     }
     setDeployedCounts(counts);
   }, [board, playerSide]);
+
+  // Reset win modal state when game restarts
+  useEffect(() => {
+    if (gameStatus !== 'finished') {
+      setWinModalMinimized(false);
+    }
+  }, [gameStatus]);
 
   const totalDeployed = Object.values(deployedCounts).reduce((a, b) => a + b, 0);
   const allPiecesDeployed = totalDeployed === 21;
@@ -423,6 +431,8 @@ export default function GamePage() {
             }}
             onLeave={handleLeave}
             opponentWantsRematch={opponentWantsRematch}
+            isMinimized={winModalMinimized}
+            onMinimize={() => setWinModalMinimized(!winModalMinimized)}
           />
         )}
 

@@ -33,6 +33,8 @@ export interface WinModalProps {
   onRematch: () => void;
   onLeave: () => void;
   opponentWantsRematch?: boolean;
+  isMinimized?: boolean;
+  onMinimize?: () => void;
 }
 
 export default function WinModal({
@@ -42,8 +44,10 @@ export default function WinModal({
   onRematch,
   onLeave,
   opponentWantsRematch = false,
+  isMinimized = false,
+  onMinimize,
 }: WinModalProps) {
-  const [phase, setPhase] = useState<'entering' | 'visible' | 'hidden'>('entering');
+  const [phase, setPhase] = useState<'entering' | 'visible'>('entering');
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
@@ -54,10 +58,10 @@ export default function WinModal({
 
   const isEntering = phase === 'entering';
 
-  if (phase === 'hidden') {
+  if (isMinimized) {
     return (
       <button
-        onClick={() => setPhase('entering')}
+        onClick={onMinimize}
         className="fixed bottom-4 right-4 z-40 px-4 py-2 bg-[#d4a847] hover:bg-[#c49a3f] text-white font-bold rounded-lg shadow-lg transition-colors"
       >
         Show Results
@@ -142,7 +146,7 @@ export default function WinModal({
         )}
 
         <button
-          onClick={() => setPhase('hidden')}
+          onClick={onMinimize}
           className="w-full py-2 bg-gray-600/80 hover:bg-gray-600 active:bg-gray-500 text-white font-medium rounded-lg mb-2 transition-colors"
         >
           Show Board
