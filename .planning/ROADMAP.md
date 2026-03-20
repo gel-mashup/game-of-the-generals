@@ -7,6 +7,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-6 (shipped 2026-03-20)
+- 🚧 **v1.1 UI Redesign** — Phases 7-8 (in progress)
 
 ## Phases
 
@@ -24,14 +25,53 @@
 
 </details>
 
-### 🚧 v2.0 Enhancements (Planned)
+### 🚧 v1.1 UI Redesign (In Progress)
 
-Features identified but not yet planned:
-- Piece movement animations (UX-01)
-- Move history display (UX-02)
-- Undo move for friendly games (UX-03)
-- In-game chat (SOCL-01)
-- Friend list (SOCL-2)
+**Milestone Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
+
+- [ ] **Phase 7: Side-by-Side Layout + Board Perspective Flip** - Restructure UI to board-left/sidebar-right, flip board so player deploys at bottom, restyle piece palette
+- [ ] **Phase 8: Fog-of-War** - Hide enemy piece identities during gameplay, reveal on battle and game over
+
+## Phase Details
+
+### Phase 7: Side-by-Side Layout + Board Perspective Flip
+**Goal**: Board displays on left with deployment panel as sidebar overlay on right; player always sees their deployment zone at the bottom; piece palette renders as categorized vertical list in sidebar
+**Depends on**: Nothing (first v1.1 phase)
+**Requirements**: LAYOUT-01, LAYOUT-02, LAYOUT-03, LAYOUT-04, LAYOUT-05, PALETTE-01, PALETTE-02
+**Success Criteria** (what must be TRUE):
+  1. User sees board on left and deployment panel on right on desktop (>= 768px), stacked vertically on mobile
+  2. User always sees their deployment zone at the bottom of the board regardless of player color
+  3. Deployment sidebar is visible during deployment phase and hidden during playing phase
+  4. All overlays (DeploymentZone, BattleReveal, WinModal, bot thinking) remain correctly positioned in the new layout
+  5. Piece palette displays as a vertical list grouped by rank tier (Generals, Officers, Special, Privates) in the sidebar
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: [TBD during planning]
+
+### Phase 8: Fog-of-War
+**Goal**: Enemy piece identities are hidden during gameplay, revealed only on battle or game over
+**Depends on**: Phase 7
+**Requirements**: FOGWAR-01, FOGWAR-02, FOGWAR-03, FOGWAR-04
+**Success Criteria** (what must be TRUE):
+  1. User sees enemy pieces displayed as "?" during the playing phase instead of rank symbols
+  2. User always sees their own pieces with correct rank symbols
+  3. User sees actual enemy piece ranks revealed during BattleReveal when pieces engage in combat
+  4. User sees all pieces revealed with true ranks when the game ends
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: [TBD during planning]
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 7 → 8
+
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 7. Side-by-Side Layout + Board Perspective Flip | v1.1 | 0/TBD | Not started | - |
+| 8. Fog-of-War | v1.1 | 0/TBD | Not started | - |
 
 ---
 

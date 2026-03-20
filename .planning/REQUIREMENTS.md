@@ -56,26 +56,26 @@ Deferred to future release. Tracked but not in current roadmap.
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LAYOUT-01 | — | Pending |
-| LAYOUT-02 | — | Pending |
-| LAYOUT-03 | — | Pending |
-| LAYOUT-04 | — | Pending |
-| LAYOUT-05 | — | Pending |
-| FOGWAR-01 | — | Pending |
-| FOGWAR-02 | — | Pending |
-| FOGWAR-03 | — | Pending |
-| FOGWAR-04 | — | Pending |
-| PALETTE-01 | — | Pending |
-| PALETTE-02 | — | Pending |
+| LAYOUT-01 | Phase 7 | Pending |
+| LAYOUT-02 | Phase 7 | Pending |
+| LAYOUT-03 | Phase 7 | Pending |
+| LAYOUT-04 | Phase 7 | Pending |
+| LAYOUT-05 | Phase 7 | Pending |
+| FOGWAR-01 | Phase 8 | Pending |
+| FOGWAR-02 | Phase 8 | Pending |
+| FOGWAR-03 | Phase 8 | Pending |
+| FOGWAR-04 | Phase 8 | Pending |
+| PALETTE-01 | Phase 7 | Pending |
+| PALETTE-02 | Phase 7 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️ (pending roadmap creation)
+- Mapped to phases: 11
+- Unmapped: 0 ✓ (100% coverage)
 
 ---
 *Requirements defined: 2026-03-20*
