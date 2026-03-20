@@ -30,13 +30,11 @@ export default function DeploymentSidebar({
   return (
     <div
       className={`
-        absolute right-0 top-0 bottom-0 w-[32%] z-30
+        fixed right-0 top-0 bottom-0 w-[320px] max-w-[32vw] z-30
         bg-[rgba(30,58,95,0.5)] backdrop-blur-md
         border-l border-white/10 rounded-l-lg
         shadow-2xl shadow-black/30
         overflow-y-auto
-        transition-transform duration-300 ease-in-out
-        translate-x-0
         hidden md:block
       `}
     >

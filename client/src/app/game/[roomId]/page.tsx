@@ -301,7 +301,7 @@ export default function GamePage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-[#1a2e1a] gap-4">
+    <main className="relative min-h-screen flex flex-col items-center justify-center p-4 bg-[#1a2e1a] gap-4">
       {/* Error toast */}
       {errorMsg && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
@@ -388,8 +388,8 @@ export default function GamePage() {
         </div>
       )}
 
-      {/* Board Container — relative for overlays, flex-1 on desktop */}
-      <div className="relative max-w-3xl w-full md:flex-1">
+      {/* Board Container — relative for overlays */}
+      <div className="relative w-full max-w-3xl">
         {/* Deployment Zone Overlay */}
         <DeploymentZone side={playerSide ?? 'red'} isVisible={gameStatus === 'deploying'} />
 
@@ -436,14 +436,7 @@ export default function GamePage() {
         )}
       </div>
 
-      {/* Playing phase status */}
-      {gameStatus === 'playing' && (
-        <div className="w-full max-w-3xl text-center text-gray-400 text-sm">
-          Tap your piece to select, then tap a green square to move
-        </div>
-      )}
-
-      {/* Deployment sidebar — overlay on desktop, hidden on mobile */}
+      {/* Deployment sidebar — absolute overlay at page right edge (desktop only) */}
       {gameStatus === 'deploying' && (
         <DeploymentSidebar
           deployedCounts={deployedCounts}
@@ -456,6 +449,13 @@ export default function GamePage() {
           playerReady={playerReady}
           totalDeployed={totalDeployed}
         />
+      )}
+
+      {/* Playing phase status */}
+      {gameStatus === 'playing' && (
+        <div className="w-full max-w-3xl text-center text-gray-400 text-sm">
+          Tap your piece to select, then tap a green square to move
+        </div>
       )}
 
       {/* Mobile deployment fallback — shown below 768px during deployment */}

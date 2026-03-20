@@ -13,7 +13,7 @@ A playable two-player strategy game capturing the traditional Filipino Game of t
 **Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
 
 **Target features:**
-- Side-by-side layout: board on left, piece deployment panel on right
+- Deployment sidebar overlay on right side of board (visible during deployment, hidden during play)
 - Swap player/bot positions: player deploys at bottom, bot on top
 - Hide enemy pieces during gameplay (display "?" instead of rank symbols)
 
