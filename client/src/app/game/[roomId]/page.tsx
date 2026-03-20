@@ -8,6 +8,7 @@ import { useSocket } from '@/components/SocketProvider';
 import { PIECE_CONFIG } from '@/types';
 import Board from '@/features/game/Board';
 import DeploymentZone from '@/features/game/DeploymentZone';
+import DeploymentSidebar from '@/features/game/DeploymentSidebar';
 import PiecePalette from '@/features/game/PiecePalette';
 import BattleReveal from '@/features/game/BattleReveal';
 import WinModal from '@/features/game/WinModal';
@@ -300,7 +301,7 @@ export default function GamePage() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-[#1a2e1a] gap-4">
+    <main className="min-h-screen flex flex-col md:flex-row items-center justify-center p-4 bg-[#1a2e1a] gap-4">
       {/* Error toast */}
       {errorMsg && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
@@ -387,8 +388,8 @@ export default function GamePage() {
         </div>
       )}
 
-      {/* Board Container */}
-      <div className="relative max-w-3xl w-full">
+      {/* Board Container — relative for overlays, flex-1 on desktop */}
+      <div className="relative max-w-3xl w-full md:flex-1">
         {/* Deployment Zone Overlay */}
         <DeploymentZone side={playerSide ?? 'red'} isVisible={gameStatus === 'deploying'} />
 
@@ -442,9 +443,24 @@ export default function GamePage() {
         </div>
       )}
 
-      {/* Deployment phase controls */}
+      {/* Deployment sidebar — overlay on desktop, hidden on mobile */}
       {gameStatus === 'deploying' && (
-        <div className="w-full max-w-3xl">
+        <DeploymentSidebar
+          deployedCounts={deployedCounts}
+          selectedType={selectedPieceType}
+          onSelectPiece={(type) => setSelectedPieceType(type as PieceType)}
+          playerSide={playerSide ?? 'red'}
+          onAutoDeploy={handleAutoDeploy}
+          onReady={handleReady}
+          allPiecesDeployed={allPiecesDeployed}
+          playerReady={playerReady}
+          totalDeployed={totalDeployed}
+        />
+      )}
+
+      {/* Mobile deployment fallback — shown below 768px during deployment */}
+      {gameStatus === 'deploying' && (
+        <div className="md:hidden w-full max-w-3xl">
           <div className="mb-2 text-center">
             <h2 className="text-lg font-bold text-[#d4a847]">Deploy Your Forces</h2>
             <p className="text-sm text-gray-400">
@@ -457,8 +473,6 @@ export default function GamePage() {
             onSelectPiece={(type) => setSelectedPieceType(type as PieceType)}
             playerSide={playerSide ?? 'red'}
           />
-
-          {/* Auto-Deploy and Ready buttons */}
           <div className="flex gap-3 mt-3">
             <button
               onClick={handleAutoDeploy}
