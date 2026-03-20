@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Piece, Position } from '@/types';
 import type { BattleOutcome, BattleOutcomeResult } from '@/store/gameStore';
+import { useRoomStore } from '@/store/roomStore';
 
 const PIECE_SYMBOLS: Record<string, string> = {
   '5-star': '5★',
@@ -56,8 +57,13 @@ export default function BattleReveal({
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
   }, [onComplete]);
 
-  const attackerSymbol = PIECE_SYMBOLS[attacker.type] ?? attacker.type[0].toUpperCase();
-  const defenderSymbol = PIECE_SYMBOLS[defender.type] ?? defender.type[0].toUpperCase();
+  const { playerSide } = useRoomStore();
+  const attackerSymbol = attacker.owner !== playerSide
+    ? '?'
+    : (PIECE_SYMBOLS[attacker.type] ?? attacker.type[0].toUpperCase());
+  const defenderSymbol = defender.owner !== playerSide
+    ? '?'
+    : (PIECE_SYMBOLS[defender.type] ?? defender.type[0].toUpperCase());
 
   const getResultText = (result: BattleOutcomeResult) => {
     if (result === 'attacker_wins') return 'Attacker Wins!';
@@ -68,6 +74,7 @@ export default function BattleReveal({
   const showAttacker = outcome.result !== 'defender_wins';
   const showDefender = outcome.result !== 'attacker_wins';
   const showExplosion = outcome.result === 'tie';
+  const battleLabel = `${attacker.owner !== playerSide ? '?' : attacker.type} vs ${defender.owner !== playerSide ? '?' : defender.type}`;
 
   return (
     <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
@@ -76,7 +83,7 @@ export default function BattleReveal({
         <div className="text-center">
           <p className="text-2xl font-bold text-white mb-1">BATTLE!</p>
           <p className="text-sm text-gray-300">
-            {attacker.type} vs {defender.type}
+            {battleLabel}
           </p>
         </div>
 
