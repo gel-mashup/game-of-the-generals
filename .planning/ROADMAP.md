@@ -7,7 +7,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1-6 (shipped 2026-03-20)
-- 🚧 **v1.1 UI Redesign** — Phases 7-8 (in progress)
+- ✅ **v1.1 UI Redesign** — Phases 7-8 (shipped 2026-03-20)
 
 ## Phases
 
@@ -25,7 +25,7 @@
 
 </details>
 
-### 🚧 v1.1 UI Redesign (In Progress)
+### ✅ v1.1 UI Redesign (Complete)
 
 **Milestone Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
 
@@ -63,7 +63,7 @@ Plans:
 **Plans**: 1 plan in 1 wave
 
 Plans:
-- [ ] 08-01: Fog-of-war rendering + battle overlay fog + verification (Wave 1)
+- [x] 08-01: Fog-of-war rendering + battle overlay fog + verification (Wave 1)
 
 ## Progress
 

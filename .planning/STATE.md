@@ -16,17 +16,17 @@ progress:
 
 # State: Game of the Generals
 
-**Project Phase:** Phase 7 of 8 — Side-by-Side Layout + Board Perspective Flip
-**Current Milestone:** v1.1 UI Redesign
+**Project Phase:** Phase 8 of 8 — Fog-of-War
+**Current Milestone:** v1.1 UI Redesign — COMPLETE
 
 ---
 
 ## Current Position
 
-Phase: 7 of 8 (Side-by-Side Layout + Board Perspective Flip)
-Plan: 3 of 3 plans executed (all complete)
-Status: All 3 plans complete — Phase 7 complete
-Last activity: 2026-03-20 — Phase 7 Plan 03 complete (board perspective flip)
+Phase: 8 of 8 (Fog-of-War)
+Plan: 1 of 1 plans executed (all complete)
+Status: All phases complete — Milestone v1.1 COMPLETE
+Last activity: 2026-03-20 — Phase 8 Plan 01 complete (fog-of-war)
 
 Progress: [██████████] 100%
 
@@ -37,7 +37,7 @@ Progress: [██████████] 100%
 See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Core value:** A playable two-player strategy game capturing the traditional Filipino Game of the Generals experience in a modern web interface.
-**Current focus:** Phase 7 — board layout restructuring, board perspective flip, piece palette redesign
+**Current focus:** Phase 8 — fog-of-war (complete), v1.1 milestone shipped
 
 ---
 
@@ -45,7 +45,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 
 **Velocity:**
 - v1.0 completed: 18 plans across 6 phases (2 days)
-- v1.1 plans: TBD (pending Phase 7 planning)
+- v1.1 plans: 4 plans across 2 phases (all complete)
 
 **Recent Trend:**
 - v1.0: Strong velocity — 18 plans in 2 days
@@ -81,7 +81,7 @@ See: .planning/PROJECT.md (updated 2026-03-20)
 - CSS Grid 9x8 board with alternating green cells
 - Red (rows 0-2) and Blue (rows 5-7) deployment zones
 - Minimax AI depth 3 for bot opponent
-- Piece ranks currently visible to both players (60% opacity for unrevealed)
+- Piece ranks hidden behind "?" for enemy — fog-of-war enforced (Phase 8 complete)
 
 ### Key Files for v1.1 Work
 
