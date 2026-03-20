@@ -50,7 +50,7 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
           {isMyTurn ? 'Your turn' : 'Waiting for opponent…'}
         </div>
       )}
-      <div className="relative grid grid-cols-9 grid-rows-8 gap-0 aspect-[9/8] border-4 border-[#1e3a5f] rounded-lg overflow-hidden shadow-2xl">
+      <div className={`relative grid grid-cols-9 grid-rows-8 gap-0 aspect-[9/8] border-4 border-[#1e3a5f] rounded-lg overflow-hidden shadow-2xl transition-transform duration-500 ease-in-out ${playerSide === 'red' ? 'rotate-180' : ''}`}>
         {Array.from({ length: ROWS }, (_, rowIndex) =>
           Array.from({ length: COLS }, (_, colIndex) => {
             const isDark = (rowIndex + colIndex) % 2 === 1;
@@ -73,13 +73,15 @@ export default function Board({ onCellClick, onOpponentPieceClick }: BoardProps)
                 `}
               >
                 {piece && (
-                  <Piece
-                    piece={piece}
-                    position={{ row: rowIndex, col: colIndex }}
-                    isSelected={isSelected}
-                    onClick={() => piece.owner === playerSide ? handleCellClick(rowIndex, colIndex) : undefined}
-                    onInvalidClick={() => onOpponentPieceClick?.(rowIndex, colIndex)}
-                  />
+                  <div className={playerSide === 'red' ? 'rotate-180' : ''}>
+                    <Piece
+                      piece={piece}
+                      position={{ row: rowIndex, col: colIndex }}
+                      isSelected={isSelected}
+                      onClick={() => piece.owner === playerSide ? handleCellClick(rowIndex, colIndex) : undefined}
+                      onInvalidClick={() => onOpponentPieceClick?.(rowIndex, colIndex)}
+                    />
+                  </div>
                 )}
               </div>
             );
