@@ -11,9 +11,9 @@ Requirements for v1.1 UI Redesign. Each maps to roadmap phases.
 
 - [x] **LAYOUT-01**: Deployment panel renders as sidebar overlay on the right side of the board during deployment phase
 - [x] **LAYOUT-02**: Layout stacks vertically on mobile (below 768px) — board on top, controls below
-- [ ] **LAYOUT-03**: Player always sees their deployment zone at the bottom of the board (board perspective flip)
+- [x] **LAYOUT-03**: Player always sees their deployment zone at the bottom of the board (board perspective flip)
 - [x] **LAYOUT-04**: Deployment sidebar hidden during playing phase (only visible during deployment)
-- [ ] **LAYOUT-05**: All overlays (DeploymentZone, BattleReveal, WinModal, bot thinking) remain correctly positioned in new layout
+- [x] **LAYOUT-05**: All overlays (DeploymentZone, BattleReveal, WinModal, bot thinking) remain correctly positioned in new layout
 
 ### Fog-of-War
 
@@ -62,9 +62,9 @@ Which phases cover which requirements.
 |-------------|-------|--------|
 | LAYOUT-01 | Phase 7 | Complete |
 | LAYOUT-02 | Phase 7 | Complete |
-| LAYOUT-03 | Phase 7 | Pending |
+| LAYOUT-03 | Phase 7 | Complete |
 | LAYOUT-04 | Phase 7 | Complete |
-| LAYOUT-05 | Phase 7 | Pending |
+| LAYOUT-05 | Phase 7 | Complete |
 | FOGWAR-01 | Phase 8 | Pending |
 | FOGWAR-02 | Phase 8 | Pending |
 | FOGWAR-03 | Phase 8 | Pending |
