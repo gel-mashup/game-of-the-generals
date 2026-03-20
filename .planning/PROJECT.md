@@ -8,6 +8,15 @@ A real-time multiplayer web-based strategy board game (Salpakan) where two playe
 
 A playable two-player strategy game capturing the traditional Filipino Game of the Generals experience in a modern web interface.
 
+## Current Milestone: v1.1 UI Redesign
+
+**Goal:** Modernize the board layout and enforce fog-of-war by hiding enemy piece identities.
+
+**Target features:**
+- Side-by-side layout: board on left, piece deployment panel on right
+- Swap player/bot positions: player deploys at bottom, bot on top
+- Hide enemy pieces during gameplay (display "?" instead of rank symbols)
+
 ## Requirements
 
 ### Validated (v1.0)
@@ -23,13 +32,19 @@ A playable two-player strategy game capturing the traditional Filipino Game of t
 - ✓ Session scores with rematch — v1.0
 - ✓ Docker deployment — v1.0
 
-### Active (v2)
+### Active (v1.1)
 
-- [ ] Piece movement animations
-- [ ] Move history display
-- [ ] Undo move (friendly games only)
-- [ ] Chat during game
-- [ ] Friend list
+- [ ] Board layout redesigned to side-by-side (board left, deployment panel right)
+- [ ] Player deployment zone at bottom (rows 5-7), bot at top (rows 0-2)
+- [ ] Enemy pieces hidden during gameplay (shown as "?" question marks)
+
+### Deferred (v2)
+
+- Piece movement animations
+- Move history display
+- Undo move (friendly games only)
+- Chat during game
+- Friend list
 
 ### Out of Scope
 
@@ -66,4 +81,4 @@ A playable two-player strategy game capturing the traditional Filipino Game of t
 - **Ports**: Client :3000, Server :3001
 
 ---
-*Last updated: 2026-03-20 after v1.0 milestone*
+*Last updated: 2026-03-20 after v1.1 milestone started*
