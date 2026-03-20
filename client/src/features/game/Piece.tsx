@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import type { Piece, Position } from '@/types';
+import { useRoomStore } from '@/store/roomStore';
+import { useGameStore } from '@/store/gameStore';
 
 const PIECE_SYMBOLS: Record<string, string> = {
   '5-star': '5★',
@@ -31,7 +33,10 @@ interface PieceProps {
 
 export default function Piece({ piece, position, onClick, isSelected, onInvalidClick }: PieceProps) {
   const [flashing, setFlashing] = useState(false);
-  const symbol = PIECE_SYMBOLS[piece.type] ?? piece.type[0].toUpperCase();
+  const { playerSide } = useRoomStore();
+  const { gameStatus } = useGameStore();
+  const isFogged = piece.owner !== playerSide && gameStatus !== 'finished';
+  const symbol = isFogged ? '?' : (PIECE_SYMBOLS[piece.type] ?? piece.type[0].toUpperCase());
 
   const handleClick = () => {
     if (flashing) return;
@@ -51,7 +56,6 @@ export default function Piece({ piece, position, onClick, isSelected, onInvalidC
         rounded-full shadow-lg
         transition-all duration-150
         ${piece.owner === 'red' ? 'bg-red-600 hover:bg-red-500' : 'bg-blue-600 hover:bg-blue-500'}
-        ${!piece.revealed ? 'opacity-60' : ''}
         ${onClick || onInvalidClick ? 'cursor-pointer hover:scale-105' : 'cursor-default'}
         ${isSelected ? 'ring-2 ring-[#d4a847] ring-2' : ''}
         ${flashing ? 'bg-red-800' : ''}
