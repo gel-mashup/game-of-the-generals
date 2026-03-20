@@ -60,10 +60,10 @@ Plans:
   2. User always sees their own pieces with correct rank symbols
   3. User sees actual enemy piece ranks revealed during BattleReveal when pieces engage in combat
   4. User sees all pieces revealed with true ranks when the game ends
-**Plans**: TBD
+**Plans**: 1 plan in 1 wave
 
 Plans:
-- [ ] 08-01: [TBD during planning]
+- [ ] 08-01: Fog-of-war rendering + battle overlay fog + verification (Wave 1)
 
 ## Progress
 
