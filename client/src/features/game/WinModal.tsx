@@ -43,7 +43,7 @@ export default function WinModal({
   onLeave,
   opponentWantsRematch = false,
 }: WinModalProps) {
-  const [phase, setPhase] = useState<'entering' | 'visible'>('entering');
+  const [phase, setPhase] = useState<'entering' | 'visible' | 'hidden'>('entering');
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
@@ -51,6 +51,19 @@ export default function WinModal({
     const t = setTimeout(() => setPhase('visible'), 100);
     return () => clearTimeout(t);
   }, []);
+
+  const isEntering = phase === 'entering';
+
+  if (phase === 'hidden') {
+    return (
+      <button
+        onClick={() => setPhase('entering')}
+        className="fixed bottom-4 right-4 z-40 px-4 py-2 bg-[#d4a847] hover:bg-[#c49a3f] text-white font-bold rounded-lg shadow-lg transition-colors"
+      >
+        Show Results
+      </button>
+    );
+  }
 
   const winnerName = winner === null ? 'Draw' : winner === 'red' ? 'Red' : 'Blue';
   const winnerColor = winner === 'red' ? 'text-red-400' : winner === 'blue' ? 'text-blue-400' : 'text-gray-400';
@@ -62,7 +75,7 @@ export default function WinModal({
         absolute inset-0 flex items-center justify-center z-50
         bg-black/50 backdrop-blur-sm
         transition-opacity duration-500
-        ${phase === 'entering' ? 'opacity-0' : 'opacity-100'}
+        ${isEntering ? 'opacity-0' : 'opacity-100'}
       `}
     >
       <div
@@ -70,7 +83,7 @@ export default function WinModal({
           relative bg-[#2d4a2d] rounded-xl p-8 max-w-sm w-full mx-4 shadow-2xl
           border-2 ${winner === 'red' ? 'border-red-500' : winner === 'blue' ? 'border-blue-500' : 'border-gray-500'}
           transform transition-all duration-500
-          ${phase === 'entering' ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}
+          ${isEntering ? 'scale-95 opacity-0' : 'scale-100 opacity-100'}
         `}
       >
         {/* Trophy / Draw icon */}
@@ -127,6 +140,13 @@ export default function WinModal({
             Waiting for opponent…
           </div>
         )}
+
+        <button
+          onClick={() => setPhase('hidden')}
+          className="w-full py-2 bg-gray-600/80 hover:bg-gray-600 active:bg-gray-500 text-white font-medium rounded-lg mb-2 transition-colors"
+        >
+          Show Board
+        </button>
 
         <button
           onClick={onLeave}
