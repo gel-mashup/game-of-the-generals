@@ -72,7 +72,7 @@ Phases execute in numeric order: 7 → 8
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 7. Side-by-Side Layout + Board Perspective Flip | v1.1 | 0/TBD | Not started | - |
+| 7. Side-by-Side Layout + Board Perspective Flip | v1.1 | 0/3 | Planned | - |
 | 8. Fog-of-War | v1.1 | 0/TBD | Not started | - |
 
 ---
