@@ -24,8 +24,8 @@ Requirements for v1.1 UI Redesign. Each maps to roadmap phases.
 
 ### Piece Palette
 
-- [ ] **PALETTE-01**: PiecePalette renders as vertical list in side panel during deployment (not horizontal scroll)
-- [ ] **PALETTE-02**: Pieces grouped by rank tier (Generals, Officers, Special, Privates)
+- [x] **PALETTE-01**: PiecePalette renders as vertical list in side panel during deployment (not horizontal scroll)
+- [x] **PALETTE-02**: Pieces grouped by rank tier (Generals, Officers, Special, Privates)
 
 ## v2 Requirements
 
@@ -69,8 +69,8 @@ Which phases cover which requirements.
 | FOGWAR-02 | Phase 8 | Pending |
 | FOGWAR-03 | Phase 8 | Pending |
 | FOGWAR-04 | Phase 8 | Pending |
-| PALETTE-01 | Phase 7 | Pending |
-| PALETTE-02 | Phase 7 | Pending |
+| PALETTE-01 | Phase 7 | Complete |
+| PALETTE-02 | Phase 7 | Complete |
 
 **Coverage:**
 - v1.1 requirements: 11 total
