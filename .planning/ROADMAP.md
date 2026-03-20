@@ -44,10 +44,12 @@
   3. Deployment sidebar is visible during deployment phase and hidden during playing phase
   4. All overlays (DeploymentZone, BattleReveal, WinModal, bot thinking) remain correctly positioned in the new layout
   5. Piece palette displays as a vertical list grouped by rank tier (Generals, Officers, Special, Privates) in the sidebar
-**Plans**: TBD
+**Plans**: 3 plans in 3 waves
 
 Plans:
-- [ ] 07-01: [TBD during planning]
+- [ ] 07-01: Layout restructure + sidebar component (Wave 1)
+- [ ] 07-02: Piece palette vertical layout + color scheme (Wave 2)
+- [ ] 07-03: Board perspective flip + overlay verification (Wave 3)
 
 ### Phase 8: Fog-of-War
 **Goal**: Enemy piece identities are hidden during gameplay, revealed only on battle or game over
