@@ -9,7 +9,11 @@ function LobbyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { socket } = useSocket();
-  const { setRoom, addPlayer, removePlayer, clearRoom } = useRoomStore();
+  const { setRoom, addPlayer, removePlayer, clearRoom, isHost, players: roomPlayers } = useRoomStore();
+
+  // Host control state
+  const [canAddBot, setCanAddBot] = useState(false);
+  const [canStartGame, setCanStartGame] = useState(false);
 
   const mode = searchParams.get('mode') || 'online';
 
@@ -89,6 +93,42 @@ function LobbyContent() {
     };
   }, [socket, setRoom, addPlayer, removePlayer, clearRoom]);
 
+  // Listen for room updates to control button visibility
+  useEffect(() => {
+    if (!socket || !isHost) return;
+
+    const handleGameStarted = ({ status }: { status: string }) => {
+      if (status === 'deploying') {
+        setCanAddBot(false);
+        setCanStartGame(false);
+      }
+    };
+
+    const handlePlayerJoined = () => {
+      setCanStartGame(true);
+    };
+
+    const handlePlayerLeft = () => {
+      setCanStartGame(false);
+      setCanAddBot(true);
+    };
+
+    socket.on('game:started', handleGameStarted);
+    socket.on('player:joined', handlePlayerJoined);
+    socket.on('player:left', handlePlayerLeft);
+
+    // Initial state - can add bot if waiting and room not full
+    if (createdRoomId && !isJoined) {
+      setCanAddBot(true);
+    }
+
+    return () => {
+      socket.off('game:started', handleGameStarted);
+      socket.off('player:joined', handlePlayerJoined);
+      socket.off('player:left', handlePlayerLeft);
+    };
+  }, [socket, isHost, createdRoomId, isJoined]);
+
   // Navigate to game when both players present (for non-bot games)
   useEffect(() => {
     if (createdRoomId && isJoined) {
@@ -130,6 +170,16 @@ function LobbyContent() {
     router.push('/');
   };
 
+  const handleAddBot = () => {
+    if (!socket) return;
+    socket.emit('add-bot');
+  };
+
+  const handleStartGame = () => {
+    if (!socket) return;
+    socket.emit('start-game');
+  };
+
   // If in a room, show waiting state
   if (createdRoomId) {
     return (
@@ -156,7 +206,27 @@ function LobbyContent() {
           ) : !isJoined ? (
             <>
               <p className="text-gray-300 text-lg mb-2">Waiting for opponent&hellip;</p>
-              <p className="text-gray-500 text-sm mb-6">Share the room code with a friend</p>
+              <p className="text-gray-500 text-sm mb-4">Share the room code with a friend</p>
+              
+              {/* Host Controls - Add Bot */}
+              {isHost && canAddBot && (
+                <button
+                  onClick={handleAddBot}
+                  className="mb-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg text-sm"
+                >
+                  + Add Bot
+                </button>
+              )}
+            </>
+          ) : isHost && roomPlayers.length === 2 ? (
+            <>
+              <p className="text-gray-300 text-lg mb-4">Room is full!</p>
+              <button
+                onClick={handleStartGame}
+                className="mb-4 px-6 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-bold rounded-lg"
+              >
+                Start Game
+              </button>
             </>
           ) : (
             <p className="text-gray-300 text-lg">Starting game...</p>
