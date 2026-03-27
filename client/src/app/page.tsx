@@ -46,7 +46,7 @@ export default function LandingPage() {
     });
 
     socket.once('room:joined', ({ roomId }: { roomId: string }) => {
-      router.push(`/game/${roomId}`);
+      router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
     });
 
     socket.once('error', ({ message }: { message: string }) => {
