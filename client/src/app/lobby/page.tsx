@@ -12,8 +12,9 @@ function LobbyContent() {
   const { setRoom, addPlayer, removePlayer, clearRoom } = useRoomStore();
 
   const mode = searchParams.get('mode') || 'online';
+  const nameFromUrl = searchParams.get('name') || '';
 
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(nameFromUrl);
   const [roomCode, setRoomCode] = useState('');
   const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [isJoined, setIsJoined] = useState(false);
@@ -102,6 +103,13 @@ function LobbyContent() {
       router.push(`/game/${createdRoomId}`);
     }
   }, [createdRoomId, mode, router]);
+
+  // Auto-create room when name is provided from landing page
+  useEffect(() => {
+    if (socket && playerName.trim() && mode === 'online' && !createdRoomId) {
+      handleCreateRoom();
+    }
+  }, [socket, playerName, mode, createdRoomId]);
 
   const handleCreateRoom = () => {
     if (!socket || !playerName.trim()) return;
