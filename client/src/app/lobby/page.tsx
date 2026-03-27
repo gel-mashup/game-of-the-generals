@@ -9,14 +9,18 @@ function LobbyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { socket } = useSocket();
-  const { setRoom, addPlayer, removePlayer, clearRoom } = useRoomStore();
+  const { setRoom, addPlayer, removePlayer, clearRoom, players } = useRoomStore();
 
   const mode = searchParams.get('mode') || 'online';
+  const nameFromUrl = searchParams.get('name') || '';
 
-  const [playerName, setPlayerName] = useState('');
+  const [playerName, setPlayerName] = useState(nameFromUrl);
   const [roomCode, setRoomCode] = useState('');
   const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [isJoined, setIsJoined] = useState(false);
+  const [isHost, setIsHost] = useState(false);
+  const [canAddBot, setCanAddBot] = useState(false);
+  const [canStartGame, setCanStartGame] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
 
@@ -42,6 +46,8 @@ function LobbyContent() {
     }) => {
       setRoom(roomId, playerId, playerSide, true, isBotGame);
       setCreatedRoomId(roomId);
+      setIsHost(true);
+      setCanAddBot(true);
     };
 
     const handleRoomJoined = ({
@@ -73,11 +79,17 @@ function LobbyContent() {
       setTimeout(() => setError(null), 5000);
     };
 
+    const handleGameStarted = () => {
+      setCanAddBot(false);
+      setCanStartGame(false);
+    };
+
     socket.on('room:created', handleRoomCreated);
     socket.on('room:joined', handleRoomJoined);
     socket.on('player:joined', handlePlayerJoined);
     socket.on('player:left', handlePlayerLeft);
     socket.on('error', handleError);
+    socket.on('game:started', handleGameStarted);
 
     return () => {
       socket.off('room:created', handleRoomCreated);
@@ -85,7 +97,7 @@ function LobbyContent() {
       socket.off('player:joined', handlePlayerJoined);
       socket.off('player:left', handlePlayerLeft);
       socket.off('error', handleError);
-    socket.off('player:left', handlePlayerLeft);
+      socket.off('game:started', handleGameStarted);
     };
   }, [socket, setRoom, addPlayer, removePlayer, clearRoom]);
 
@@ -102,6 +114,13 @@ function LobbyContent() {
       router.push(`/game/${createdRoomId}`);
     }
   }, [createdRoomId, mode, router]);
+
+  // Auto-create room when name is provided from landing page
+  useEffect(() => {
+    if (socket && playerName.trim() && mode === 'online' && !createdRoomId) {
+      handleCreateRoom();
+    }
+  }, [socket, playerName, mode, createdRoomId]);
 
   const handleCreateRoom = () => {
     if (!socket || !playerName.trim()) return;
@@ -127,8 +146,46 @@ function LobbyContent() {
     clearRoom();
     setCreatedRoomId(null);
     setIsJoined(false);
+    setIsHost(false);
+    setCanAddBot(false);
+    setCanStartGame(false);
     router.push('/');
   };
+
+  const handleAddBot = () => {
+    if (!socket) return;
+    socket.emit('add-bot');
+    setCanAddBot(false);
+  };
+
+  const handleStartGame = () => {
+    if (!socket) return;
+    socket.emit('start-game');
+    setCanStartGame(false);
+  };
+
+  // Listen for player joined/left to update host controls
+  useEffect(() => {
+    if (!socket || !isHost) return;
+
+    const handlePlayerJoined = () => {
+      setCanStartGame(true);
+      setCanAddBot(false);
+    };
+
+    const handlePlayerLeft = () => {
+      setCanStartGame(false);
+      setCanAddBot(true);
+    };
+
+    socket.on('player:joined', handlePlayerJoined);
+    socket.on('player:left', handlePlayerLeft);
+
+    return () => {
+      socket.off('player:joined', handlePlayerJoined);
+      socket.off('player:left', handlePlayerLeft);
+    };
+  }, [socket, isHost]);
 
   // If in a room, show waiting state
   if (createdRoomId) {
@@ -156,7 +213,29 @@ function LobbyContent() {
           ) : !isJoined ? (
             <>
               <p className="text-gray-300 text-lg mb-2">Waiting for opponent&hellip;</p>
-              <p className="text-gray-500 text-sm mb-6">Share the room code with a friend</p>
+              <p className="text-gray-500 text-sm mb-4">Share the room code with a friend</p>
+              
+              {/* Host Controls - Add Bot */}
+              {isHost && canAddBot && (
+                <button
+                  onClick={handleAddBot}
+                  className="mb-4 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg text-sm"
+                >
+                  + Add Bot
+                </button>
+              )}
+            </>
+          ) : players.length >= 2 ? (
+            <>
+              <p className="text-gray-300 text-lg mb-4">Room is full!</p>
+              {isHost && (
+                <button
+                  onClick={handleStartGame}
+                  className="mb-4 px-6 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-bold rounded-lg"
+                >
+                  Start Game
+                </button>
+              )}
             </>
           ) : (
             <p className="text-gray-300 text-lg">Starting game...</p>
