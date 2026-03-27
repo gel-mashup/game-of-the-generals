@@ -47,8 +47,8 @@ export function isValidDeployment(
     return { valid: false, error: 'Cell already occupied' };
   }
 
-  // Extract piece type from pieceId (e.g. '5-star', 'private-0', 'flag')
-  const pieceTypeMatch = pieceId.match(/^([a-zA-Z0-9][a-zA-Z0-9-]*)(?:-\d+)?$/);
+  // Extract piece type from pieceId (e.g. '5-star', 'private-0', '5-star-1700000000000-abc123')
+  const pieceTypeMatch = pieceId.match(/^(.+?)(?:-\d+.*)?$/);
   if (!pieceTypeMatch) {
     return { valid: false, error: 'Invalid piece ID format' };
   }
@@ -61,7 +61,7 @@ export function isValidDeployment(
 
   // Count how many of this type are already deployed
   const deployedOfType = Array.from(deployed).filter(id => {
-    const m = id.match(/^([a-z-]+)(?:-\d+)?$/);
+    const m = id.match(/^(.+?)(?:-\d+.*)?$/);
     return m && m[1] === pieceType;
   }).length;
 

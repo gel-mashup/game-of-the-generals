@@ -139,7 +139,9 @@ export default function GamePage() {
       for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 9; c++) {
           const p = data.board[r][c];
-          if (p) counts[p.type] = (counts[p.type] ?? 0) + 1;
+          if (p && p.owner === playerSide) {
+            counts[p.type] = (counts[p.type] ?? 0) + 1;
+          }
         }
       }
       setDeployedCounts(counts);

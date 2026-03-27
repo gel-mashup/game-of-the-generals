@@ -20,7 +20,8 @@ function createEmptyBoard(): (null)[][] {
 
 export function roomHandler(io: Server, socket: Socket) {
   socket.on('create-room', ({ hostName, isBotMode }: { hostName: string; isBotMode?: boolean }) => {
-    const roomId = generateRoomCode();
+    console.log('[DEBUG] create-room received', { hostName, isBotMode, socketId: socket.id });
+    const roomId = generateRoomCode().toUpperCase();
 
     // Ensure room ID is unique
     while (rooms.has(roomId)) {
@@ -102,7 +103,9 @@ export function roomHandler(io: Server, socket: Socket) {
     });
 
   socket.on('join-room', ({ roomId, playerName }: { roomId: string; playerName: string }) => {
-    const room = rooms.get(roomId);
+    // Normalize room code to uppercase for consistent lookup
+    const normalizedRoomId = roomId.trim().toUpperCase();
+    const room = rooms.get(normalizedRoomId);
 
     if (!room) {
       socket.emit('error', { message: 'Room not found. Check the code and try again.' });
@@ -140,6 +143,8 @@ export function roomHandler(io: Server, socket: Socket) {
 
     // Trigger game:started when both players are present
     if (room.players.length === 2) {
+      // Set room status to deploying before emitting game:started
+      room.status = 'deploying';
       socket.to(roomId).emit('game:started', {
         board: room.board,
         currentTurn: 'red',

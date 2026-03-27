@@ -228,7 +228,7 @@ export function gameHandler(io: Server, socket: Socket) {
     }
 
     // Extract piece type from pieceId
-    const pieceTypeMatch = pieceId.match(/^([a-zA-Z0-9][a-zA-Z0-9-]*?)(?:-\d+)?$/);
+    const pieceTypeMatch = pieceId.match(/^(.+?)(?:-\d+.*)?$/);
     if (!pieceTypeMatch) {
       socket.emit('error', { message: 'Invalid piece ID format' });
       return;
@@ -284,6 +284,20 @@ export function gameHandler(io: Server, socket: Socket) {
     if (room.status !== 'deploying') return;
 
     const playerSide = player.side;
+
+    // Clear existing deployed pieces in player's deployment zone before auto-deploying
+    const rowStart = playerSide === 'red' ? 0 : 5;
+    const rowEnd = playerSide === 'red' ? 2 : 7;
+    for (let r = rowStart; r <= rowEnd; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (room.board[r][c] && room.board[r][c]?.owner === playerSide) {
+          room.board[r][c] = null;
+        }
+      }
+    }
+    // Clear the deployed pieces set for this player
+    room.deployedPieces[playerSide].clear();
+
     const positions = generateAutoDeploy(playerSide);
 
     let isLast = false;
