@@ -36,6 +36,15 @@ export interface Player {
   side: 'red' | 'blue';
 }
 
+export interface PublicRoom {
+  roomId: string;
+  hostName: string;
+  playerCount: number;
+  isFull: boolean;
+  isBotGame: boolean;
+  status: 'waiting' | 'deploying' | 'playing' | 'finished';
+}
+
 export interface Room {
   id: string;
   hostId: string;
