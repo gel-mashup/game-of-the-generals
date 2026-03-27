@@ -128,9 +128,15 @@ export default function WinModal({
         {/* Rematch state */}
         {opponentWantsRematch ? (
           <div className="text-center mb-4">
-            <p className="text-yellow-400 font-medium animate-pulse">
+            <p className="text-yellow-400 font-medium animate-pulse mb-3">
               Opponent wants a rematch…
             </p>
+            <button
+              onClick={() => { setShowConfirm(true); onRematch(); }}
+              className="w-full py-3 bg-[#d4a847] hover:bg-[#c49a3f] active:bg-[#b08a35] text-white font-bold rounded-lg transition-colors"
+            >
+              Accept Rematch
+            </button>
           </div>
         ) : !showConfirm ? (
           <button

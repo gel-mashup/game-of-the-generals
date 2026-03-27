@@ -227,6 +227,7 @@ export default function GamePage() {
 
     // SES-02: Rematch state from server
     socket.on('rematch:ready', (data: { bothReady: boolean; requestedByMe: boolean }) => {
+      console.log('[DEBUG] rematch:ready received', { bothReady: data.bothReady, requestedByMe: data.requestedByMe, socketId: socket.id });
       if (data.bothReady) {
         // Both confirmed — server will send rematch:confirmed next
         setOpponentWantsRematch(false);
