@@ -48,6 +48,15 @@ export interface Room {
   scores: { red: number; blue: number; draws: number; gamesPlayed: number };
 }
 
+export interface PublicRoom {
+  roomId: string;
+  hostName: string;
+  playerCount: number;
+  isFull: boolean;
+  isBotGame: boolean;
+  status: 'waiting' | 'deploying' | 'playing' | 'finished';
+}
+
 export interface PieceConfig {
   type: PieceType;
   rank: PieceRank;

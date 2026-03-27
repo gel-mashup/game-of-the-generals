@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game of the Generals - Mockup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { background: #1a2e1a; }
+    .room-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+    .btn-primary { background: #d4a847; color: #1a2e1a; }
+    .btn-primary:hover { background: #c49a3d; }
+  </style>
+</head>
+<body class="min-h-screen text-white">
+  <div class="max-w-4xl mx-auto p-8">
+    <!-- Header -->
+    <h1 class="text-4xl font-bold text-[#d4a847] mb-2 text-center">Game of the Generals</h1>
+    <p class="text-gray-400 text-center mb-8">The classic Filipino strategy game, online</p>
+
+    <!-- Create Room Button -->
+    <div class="flex justify-center mb-8">
+      <button class="btn-primary px-8 py-3 font-semibold rounded-lg text-lg">
+        + Create Room
+      </button>
+    </div>
+
+    <!-- Room List -->
+    <div class="bg-[#2d4a2d] rounded-xl p-6">
+      <h2 class="text-xl font-semibold mb-4">Open Rooms</h2>
+      
+      <div class="grid grid-cols-2 gap-3">
+        <!-- Room Card 1 -->
+        <div class="room-card bg-[#1a2e1a] rounded-lg p-4 border border-gray-700 transition-all cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-sm">👤</div>
+              <span class="font-semibold">PlayerOne</span>
+            </div>
+            <span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 rounded text-xs">PVP</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-400 font-mono">ABC123</span>
+            <span class="text-gray-400 text-sm">1/2</span>
+          </div>
+          <button class="w-full mt-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded text-sm">
+            Join
+          </button>
+        </div>
+
+        <!-- Room Card 2 -->
+        <div class="room-card bg-[#1a2e1a] rounded-lg p-4 border border-gray-700 transition-all cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-sm">🎮</div>
+              <span class="font-semibold">GeneralSmith</span>
+            </div>
+            <span class="px-2 py-1 bg-green-600/20 text-green-400 rounded text-xs">vs Bot</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-400 font-mono">XYZ789</span>
+            <span class="text-gray-400 text-sm">2/2</span>
+          </div>
+          <button class="w-full mt-3 py-2 bg-gray-600 text-gray-400 font-medium rounded text-sm cursor-not-allowed" disabled>
+            Full
+          </button>
+        </div>
+
+        <!-- Room Card 3 -->
+        <div class="room-card bg-[#1a2e1a] rounded-lg p-4 border border-gray-700 transition-all cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-sm">👤</div>
+              <span class="font-semibold">WarLord99</span>
+            </div>
+            <span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 rounded text-xs">PVP</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-400 font-mono">DEF456</span>
+            <span class="text-gray-400 text-sm">1/2</span>
+          </div>
+          <button class="w-full mt-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded text-sm">
+            Join
+          </button>
+        </div>
+
+        <!-- Room Card 4 -->
+        <div class="room-card bg-[#1a2e1a] rounded-lg p-4 border border-gray-700 transition-all cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-sm">👤</div>
+              <span class="font-semibold">Tactician</span>
+            </div>
+            <span class="px-2 py-1 bg-yellow-600/20 text-yellow-400 rounded text-xs">PVP</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-400 font-mono">GHI321</span>
+            <span class="text-gray-400 text-sm">1/2</span>
+          </div>
+          <button class="w-full mt-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-medium rounded text-sm">
+            Join
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State (hidden) -->
+      <div class="text-center py-8 text-gray-500 hidden">
+        <p class="text-lg">No open rooms</p>
+        <p class="text-sm">Create a room to start playing!</p>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 40px 0; border-color: #444;">
+
+  <!-- Host Waiting Room Mockup -->
+  <div class="max-w-md mx-auto p-8">
+    <div class="bg-[#2d4a2d] rounded-xl p-8 text-center">
+      <p class="text-gray-400 text-sm mb-2">Room Code</p>
+      <p class="text-4xl font-mono font-bold tracking-widest text-[#d4a847] mb-6">ABC123</p>
+
+      <p class="text-gray-300 text-lg mb-2">Waiting for opponent...</p>
+      <p class="text-gray-500 text-sm mb-6">Share the room code with a friend</p>
+
+      <!-- Host Controls -->
+      <div class="flex gap-3 justify-center">
+        <button class="px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-medium rounded-lg text-sm">
+          + Add Bot
+        </button>
+        <button class="px-4 py-2 bg-red-600/80 hover:bg-red-600 text-white font-medium rounded-lg text-sm">
+          Leave Room
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <hr style="margin: 40px 0; border-color: #444;">
+
+  <!-- Full Room (Ready to Start) Mockup -->
+  <div class="max-w-md mx-auto p-8">
+    <div class="bg-[#2d4a2d] rounded-xl p-8 text-center">
+      <p class="text-gray-400 text-sm mb-2">Room Code</p>
+      <p class="text-4xl font-mono font-bold tracking-widest text-[#d4a847] mb-6">XYZ789</p>
+
+      <p class="text-gray-300 text-lg mb-6">Room is full!</p>
+
+      <!-- Player Slots -->
+      <div class="flex justify-center gap-8 mb-6">
+        <div class="text-center">
+          <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-2">
+            <span>👤</span>
+          </div>
+          <p class="text-sm font-medium">You</p>
+          <p class="text-xs text-gray-400">Host</p>
+        </div>
+        <div class="text-center">
+          <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+            <span>🤖</span>
+          </div>
+          <p class="text-sm font-medium">Bot</p>
+          <p class="text-xs text-gray-400">Ready</p>
+        </div>
+      </div>
+
+      <!-- Host Start Button -->
+      <button class="w-full py-4 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-bold rounded-lg text-lg">
+        Start Game
+      </button>
+    </div>
+  </div>
+</body>
+</html>

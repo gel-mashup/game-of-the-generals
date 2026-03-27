@@ -1,0 +1,38 @@
+- Battle resolution follows strict priority: flag → spy/private → equal rank → higher rank
+- Spy beats ALL officers (rank ≥ 0) per game spec; only Private can beat Spy
+- Auto-deploy uses Fisher-Yates shuffle for randomized placement within zone
+- Piece IDs use 'type-index' format for multi-count pieces (private-0 through private-5)
+- Shared rooms Map moved to dedicated module for cross-handler access
+- game:started emitted from roomHandler on join; handled by gameHandler for bot auto-deploy
+- Bot auto-deploy triggered via socket.emit('auto-deploy') from gameHandler's game:started handler
+- Battle reveal uses inline overlay (not modal) with 3-phase animation: slide→reveal→result
+- Board manages piece click propagation via callback props (onCellClick, onOpponentPieceClick)
+- selectPiece computes validMoves from board state at click time via useGameStore.getState()
+- Ready button is accent gold, Auto-Deploy is secondary gray
+- Use optional chaining (socket?.emit) for deploy-piece — matches existing make-move pattern and handles unconnected socket safely
+- Include attacker/defender/positions at top-level of move:result (not nested in outcome) to avoid modifying server BattleOutcome type
+- Transform server BattleOutcome (attackerWins boolean) to client BattleOutcomeResult (attacker_wins/defender_wins/tie) in client handleMoveResult
+- Capture attacker and defender from room.board BEFORE applyMove modifies it
+- Dead code block was removed during 02-05 execution (Rule 1 auto-fix)
+- Flags excluded from playerHasValidMove — flags cannot move by game rules
+- Scores updated atomically with game:over event before emitting
+- All pieces revealed on game over board for full visibility
+- Room rematchRequests and rematchTimeout stored in-memory on Room object
+- WinModal uses 2-click rematch confirmation flow (click Rematch → waiting state)
+- WinModal follows BattleReveal pattern: absolute overlay, backdrop-blur-sm, z-50
+- WinModal onRematch inlined as anonymous arrow function instead of separate handler
+- rematch:ready with bothReady=false means opponent wants rematch (not self), so set opponentWantsRematch=true
+- Sidebar positioned absolutely over board's right edge (w-[32%]) rather than as flex sibling — preserves board width
+- Board container uses md:flex-1 so it fills available space on desktop
+- DeploymentZone, BattleReveal, WinModal, bot thinking all stay inside board container — absolute inset-0 continues to work
+- Mobile fallback (md:hidden) keeps old PiecePalette + buttons inline below board for < 768px
+- Tier grouping maps PIECE_CONFIG types to 4 sections: Generals (5★, 4★), Officers (4-2★), Special, Privates (PVT)
+- Board dark squares use #1e3a5f (deep navy), light squares use #2d5a6b (teal)
+- Mobile fallback was already implemented in Plan 01 — verified present in page.tsx
+- CSS transform rotate-180 on grid container keeps data-row/data-col unchanged — click coordinates resolve correctly
+- Counter-rotation applied via wrapper div inside each cell (not inside Piece component) — preserves Piece reusability
+- Board flip transitions over 500ms ease-in-out for smooth visual experience
+- Derived fog state: isFogged = piece.owner !== playerSide && gameStatus !== 'finished' — no store mutations, auto-resets on rematch
+- Fog applies during all phases: deploying, countdown, playing — only clears when gameStatus === 'finished'
+- Fogged pieces are fully opaque — removed opacity-60 per user decision
+- BattleReveal fogs both attacker and defender — whichever piece belongs to enemy shows '?'
