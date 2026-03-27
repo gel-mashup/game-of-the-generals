@@ -49,9 +49,7 @@ export function rematchHandler(io: Server, socket: Socket) {
     room.rematchRequests.add(socket.id);
     const bothReady = room.rematchRequests.size >= 2;
     // Tell the requester they want rematch, tell opponent opponent wants rematch
-    console.log(`[DEBUG] Emitting rematch:ready to requester ${socket.id}:`, { bothReady, requestedByMe: true });
     socket.emit('rematch:ready', { bothReady, requestedByMe: true });
-    console.log(`[DEBUG] Emitting rematch:ready to room ${roomId} (excluding ${socket.id}):`, { bothReady: false, requestedByMe: false });
     socket.to(roomId).emit('rematch:ready', { bothReady: false, requestedByMe: false });
 
     // For bot games: auto-confirm rematch on bot side
