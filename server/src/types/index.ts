@@ -52,6 +52,15 @@ export interface Room {
   rematchTimeout: NodeJS.Timeout | null;
 }
 
+export interface PublicRoom {
+  roomId: string;
+  hostName: string;
+  playerCount: number;
+  isFull: boolean;
+  isBotGame: boolean;
+  status: 'waiting' | 'deploying' | 'playing' | 'finished';
+}
+
 export interface BattleOutcome {
   winner: 'red' | 'blue' | 'tie';
   capturedPieceIds: string[];

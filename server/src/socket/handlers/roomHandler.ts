@@ -1,6 +1,6 @@
 import { Server, Socket } from 'socket.io';
 import { customAlphabet } from 'nanoid';
-import { rooms } from '../rooms';
+import { rooms, publicRooms, addToPublicRooms, updatePublicRoom, removeFromPublicRooms } from '../rooms';
 import type { Room, Player, Piece } from '../../types';
 import { generateAutoDeploy } from '../../game/engine';
 import { PIECE_CONFIG } from '../../types';
@@ -47,6 +47,10 @@ export function roomHandler(io: Server, socket: Socket) {
     rooms.set(roomId, room);
     socket.join(roomId);
 
+    // Add to public room list
+    addToPublicRooms(room);
+    io.emit('rooms:list', Array.from(publicRooms.values()));
+
     socket.emit('room:created', {
       roomId,
       playerId: socket.id,
@@ -54,53 +58,57 @@ export function roomHandler(io: Server, socket: Socket) {
       isBotGame: room.isBotGame,
     });
 
-      console.log(`Room ${roomId} created by ${hostName} (${socket.id}), bot mode: ${room.isBotGame}`);
+    console.log(`Room ${roomId} created by ${hostName} (${socket.id}), bot mode: ${room.isBotGame}`);
 
-      // For bot games: add synthetic bot player, auto-deploy bot, start game
-      if (room.isBotGame) {
-        // Add synthetic bot player to room (needed by ready handler to find bot)
-        const botPlayer: Player = { id: `bot-${roomId}`, name: 'Bot', side: 'blue' };
-        room.players.push(botPlayer);
+    // For bot games: add synthetic bot player, auto-deploy bot, start game
+    if (room.isBotGame) {
+      // Add synthetic bot player to room (needed by ready handler to find bot)
+      const botPlayer: Player = { id: `bot-${roomId}`, name: 'Bot', side: 'blue' };
+      room.players.push(botPlayer);
 
-        // Bot auto-deploys: generate positions and emit piece:deployed for each piece
-        const botPositions = generateAutoDeploy('blue');
-        for (const [typeKey, position] of botPositions) {
-          const pieceType = typeKey.replace(/-\d+$/, '');
-          const config = PIECE_CONFIG.find((p) => p.type === pieceType);
-          if (!config) continue;
+      // Bot auto-deploys: generate positions and emit piece:deployed for each piece
+      const botPositions = generateAutoDeploy('blue');
+      for (const [typeKey, position] of botPositions) {
+        const pieceType = typeKey.replace(/-\d+$/, '');
+        const config = PIECE_CONFIG.find((p) => p.type === pieceType);
+        if (!config) continue;
 
-          const piece: Piece = {
-            id: `${typeKey}-bot-${Math.random().toString(36).slice(2, 8)}`,
-            type: pieceType as Piece['type'],
-            owner: 'blue',
-            rank: config.rank as Piece['rank'],
-            revealed: false,
-          };
+        const piece: Piece = {
+          id: `${typeKey}-bot-${Math.random().toString(36).slice(2, 8)}`,
+          type: pieceType as Piece['type'],
+          owner: 'blue',
+          rank: config.rank as Piece['rank'],
+          revealed: false,
+        };
 
-          room.board[position.row][position.col] = piece;
-          room.deployedPieces.blue.add(piece.id);
+        room.board[position.row][position.col] = piece;
+        room.deployedPieces.blue.add(piece.id);
 
-          io.to(roomId).emit('piece:deployed', {
-            piece,
-            row: position.row,
-            col: position.col,
-            deployedCount: room.deployedPieces.blue.size,
-            board: room.board,
-            autoDeployComplete: room.deployedPieces.blue.size === 21,
-          });
-        }
-
-        // Transition to deploying and emit game:started
-        room.status = 'deploying';
-        io.to(roomId).emit('game:started', {
+        io.to(roomId).emit('piece:deployed', {
+          piece,
+          row: position.row,
+          col: position.col,
+          deployedCount: room.deployedPieces.blue.size,
           board: room.board,
-          currentTurn: 'red',
-          status: 'deploying',
+          autoDeployComplete: room.deployedPieces.blue.size === 21,
         });
-
-        console.log(`Bot game ${roomId}: bot auto-deployed, game started in deploying phase`);
       }
-    });
+
+      // Transition to deploying and emit game:started
+      room.status = 'deploying';
+      io.to(roomId).emit('game:started', {
+        board: room.board,
+        currentTurn: 'red',
+        status: 'deploying',
+      });
+
+      console.log(`Bot game ${roomId}: bot auto-deployed, game started in deploying phase`);
+    }
+  });
+
+  socket.on('get-rooms', () => {
+    socket.emit('rooms:list', Array.from(publicRooms.values()));
+  });
 
   socket.on('join-room', ({ roomId, playerName }: { roomId: string; playerName: string }) => {
     // Normalize room code to uppercase for consistent lookup
@@ -157,6 +165,152 @@ export function roomHandler(io: Server, socket: Socket) {
         status: 'deploying',
       });
     }
+
+    // Update public rooms
+    updatePublicRoom(room);
+    io.emit('rooms:list', Array.from(publicRooms.values()));
+  });
+
+  socket.on('join-room-by-id', ({ roomId, playerName }: { roomId: string; playerName: string }) => {
+    const normalizedRoomId = roomId.trim().toUpperCase();
+    const room = rooms.get(normalizedRoomId);
+
+    if (!room) {
+      socket.emit('error', { message: 'Room not found.' });
+      return;
+    }
+
+    if (room.isBotGame && room.players.length >= 1) {
+      socket.emit('error', { message: 'Room is full.' });
+      return;
+    }
+
+    if (room.players.length >= 2) {
+      socket.emit('error', { message: 'Room is full.' });
+      return;
+    }
+
+    if (room.status !== 'waiting') {
+      socket.emit('error', { message: 'Game already in progress.' });
+      return;
+    }
+
+    const player: Player = {
+      id: socket.id,
+      name: playerName,
+      side: 'blue',
+    };
+
+    room.players.push(player);
+    socket.join(normalizedRoomId);
+
+    socket.emit('room:joined', {
+      roomId: normalizedRoomId,
+      playerId: socket.id,
+      playerSide: 'blue',
+    });
+
+    socket.to(normalizedRoomId).emit('player:joined', { player });
+
+    // Update public rooms
+    updatePublicRoom(room);
+    io.emit('rooms:list', Array.from(publicRooms.values()));
+
+    // Start game if now full
+    if (room.players.length === 2) {
+      room.status = 'deploying';
+      removeFromPublicRooms(normalizedRoomId);
+      io.emit('rooms:list', Array.from(publicRooms.values()));
+      io.to(normalizedRoomId).emit('game:started', {
+        board: room.board,
+        currentTurn: 'red',
+        status: 'deploying',
+      });
+    }
+  });
+
+  socket.on('add-bot', () => {
+    // Find room where socket is host
+    for (const [roomId, room] of rooms.entries()) {
+      if (room.hostId === socket.id && room.status === 'waiting') {
+        if (room.players.length >= 2 || room.isBotGame) {
+          socket.emit('error', { message: 'Room is already full.' });
+          return;
+        }
+
+        // Add synthetic bot player
+        const botPlayer: Player = { id: `bot-${roomId}`, name: 'Bot', side: 'blue' };
+        room.players.push(botPlayer);
+        room.isBotGame = true;
+        room.botSide = 'blue';
+
+        // Update public rooms
+        updatePublicRoom(room);
+        removeFromPublicRooms(roomId);
+        io.emit('rooms:list', Array.from(publicRooms.values()));
+
+        // Auto-start game for PVB
+        room.status = 'deploying';
+
+        // Bot auto-deploy (reusing existing function)
+        const botPositions = generateAutoDeploy('blue');
+        for (const [typeKey, position] of botPositions) {
+          const pieceType = typeKey.replace(/-\d+$/, '');
+          const config = PIECE_CONFIG.find((p) => p.type === pieceType);
+          if (!config) continue;
+
+          const piece: Piece = {
+            id: `${typeKey}-bot-${Math.random().toString(36).slice(2, 8)}`,
+            type: pieceType as Piece['type'],
+            owner: 'blue',
+            rank: config.rank as Piece['rank'],
+            revealed: false,
+          };
+
+          room.board[position.row][position.col] = piece;
+          room.deployedPieces.blue.add(piece.id);
+
+          io.to(roomId).emit('piece:deployed', {
+            piece,
+            row: position.row,
+            col: position.col,
+            deployedCount: room.deployedPieces.blue.size,
+            board: room.board,
+            autoDeployComplete: room.deployedPieces.blue.size === 21,
+          });
+        }
+
+        io.to(roomId).emit('game:started', {
+          board: room.board,
+          currentTurn: 'red',
+          status: 'deploying',
+        });
+
+        console.log(`Host ${socket.id} added bot to room ${roomId}`);
+        break;
+      }
+    }
+  });
+
+  socket.on('start-game', () => {
+    for (const [roomId, room] of rooms.entries()) {
+      if (room.hostId === socket.id && room.players.length === 2 && room.status === 'waiting') {
+        room.status = 'deploying';
+
+        // Remove from public list
+        removeFromPublicRooms(roomId);
+        io.emit('rooms:list', Array.from(publicRooms.values()));
+
+        io.to(roomId).emit('game:started', {
+          board: room.board,
+          currentTurn: 'red',
+          status: 'deploying',
+        });
+
+        console.log(`Host ${socket.id} started game in room ${roomId}`);
+        break;
+      }
+    }
   });
 
   socket.on('leave-room', () => {
@@ -166,6 +320,16 @@ export function roomHandler(io: Server, socket: Socket) {
         const player = room.players.find((p) => p.id === socket.id);
         room.players = room.players.filter((p) => p.id !== socket.id);
         socket.leave(roomId);
+
+        // Update public rooms if room still exists
+        if (room) {
+          if (room.players.length === 0) {
+            removeFromPublicRooms(roomId);
+          } else {
+            updatePublicRoom(room);
+          }
+          io.emit('rooms:list', Array.from(publicRooms.values()));
+        }
 
         if (room.players.length === 0) {
           rooms.delete(roomId);
