@@ -48,7 +48,9 @@ export function rematchHandler(io: Server, socket: Socket) {
 
     room.rematchRequests.add(socket.id);
     const bothReady = room.rematchRequests.size >= 2;
-    io.to(roomId).emit('rematch:ready', { bothReady });
+    // Tell the requester they want rematch, tell opponent opponent wants rematch
+    socket.emit('rematch:ready', { bothReady, requestedByMe: true });
+    socket.to(roomId).emit('rematch:ready', { bothReady: false, requestedByMe: false });
 
     // For bot games: auto-confirm rematch on bot side
     if (room.isBotGame && room.rematchRequests.size === 1) {
@@ -57,7 +59,7 @@ export function rematchHandler(io: Server, socket: Socket) {
       if (botPlayer && !room.rematchRequests.has(botPlayer.id)) {
         room.rematchRequests.add(botPlayer.id);
         console.log(`Rematch: bot auto-confirmed, total requests=${room.rematchRequests.size}`);
-        io.to(roomId).emit('rematch:ready', { bothReady: true });
+        io.to(roomId).emit('rematch:ready', { bothReady: true, requestedByMe: false });
       } else {
         console.log(`Rematch: bot player not found or already confirmed. botPlayer=${botPlayer?.id}, has=${room.rematchRequests.has(botPlayer?.id ?? '')}`);
       }

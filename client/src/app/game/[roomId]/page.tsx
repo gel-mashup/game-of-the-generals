@@ -226,9 +226,12 @@ export default function GamePage() {
     });
 
     // SES-02: Rematch state from server
-    socket.on('rematch:ready', (data: { bothReady: boolean }) => {
+    socket.on('rematch:ready', (data: { bothReady: boolean; requestedByMe: boolean }) => {
       if (data.bothReady) {
         // Both confirmed — server will send rematch:confirmed next
+        setOpponentWantsRematch(false);
+      } else if (data.requestedByMe) {
+        // I requested rematch — show "waiting for opponent"
         setOpponentWantsRematch(false);
       } else {
         // Opponent wants rematch — show prompt
