@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Player } from '@/types';
+import type { Player, PublicRoom } from '@/types';
 
 interface RoomState {
   roomId: string | null;
@@ -24,6 +24,10 @@ interface RoomState {
   setScores: (scores: { red: number; blue: number; draws: number; gamesPlayed: number }) => void;
   setOpponentWantsRematch: (value: boolean) => void;
   setIWantRematch: (value: boolean) => void;
+  rooms: PublicRoom[];
+  setRooms: (rooms: PublicRoom[]) => void;
+  updateRoom: (room: PublicRoom) => void;
+  removeRoom: (roomId: string) => void;
 }
 
 export const useRoomStore = create<RoomState>((set) => ({
@@ -71,4 +75,22 @@ export const useRoomStore = create<RoomState>((set) => ({
   setOpponentWantsRematch: (value) => set({ opponentWantsRematch: value }),
 
   setIWantRematch: (value) => set({ iWantRematch: value }),
+
+  rooms: [],
+
+  setRooms: (rooms) => set({ rooms }),
+
+  updateRoom: (room) =>
+    set((state) => {
+      const index = state.rooms.findIndex((r) => r.roomId === room.roomId);
+      if (index === -1) return state;
+      const newRooms = [...state.rooms];
+      newRooms[index] = room;
+      return { rooms: newRooms };
+    }),
+
+  removeRoom: (roomId) =>
+    set((state) => ({
+      rooms: state.rooms.filter((r) => r.roomId !== roomId),
+    })),
 }));
