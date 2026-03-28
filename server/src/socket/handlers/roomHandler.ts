@@ -96,6 +96,8 @@ export function roomHandler(io: Server, socket: Socket) {
 
       // Transition to deploying and emit game:started
       room.status = 'deploying';
+      removeFromPublicRooms(roomId);
+      io.emit('rooms:list', Array.from(publicRooms.values()));
       io.to(roomId).emit('game:started', {
         board: room.board,
         currentTurn: 'red',
