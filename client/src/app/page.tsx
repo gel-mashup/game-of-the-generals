@@ -40,17 +40,23 @@ export default function LandingPage() {
       return;
     }
     setError(null);
+
+    const handleRoomJoined = ({ roomId: joinedRoomId }: { roomId: string }) => {
+      router.push(`/game/${joinedRoomId}?name=${encodeURIComponent(playerName.trim())}`);
+    };
+
+    const handleError = ({ message }: { message: string }) => {
+      setError(message);
+      socket.off('room:joined', handleRoomJoined);
+      socket.off('error', handleError);
+    };
+
+    socket.on('room:joined', handleRoomJoined);
+    socket.on('error', handleError);
+
     socket.emit('join-room-by-id', {
       roomId,
       playerName: playerName.trim(),
-    });
-
-    socket.once('room:joined', ({ roomId }: { roomId: string }) => {
-      router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
-    });
-
-    socket.once('error', ({ message }: { message: string }) => {
-      setError(message);
     });
   };
 
@@ -93,12 +99,23 @@ export default function LandingPage() {
               return;
             }
             setError(null);
+
+            const handleRoomCreated = ({ roomId }: { roomId: string }) => {
+              router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
+            };
+
+            const handleError = ({ message }: { message: string }) => {
+              setError(message);
+              socket.off('room:created', handleRoomCreated);
+              socket.off('error', handleError);
+            };
+
+            socket.on('room:created', handleRoomCreated);
+            socket.on('error', handleError);
+
             socket.emit('create-room', {
               hostName: playerName.trim(),
               isBotMode: false,
-            });
-            socket.once('room:created', ({ roomId }: { roomId: string }) => {
-              router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
             });
           }}
           className="px-8 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-semibold rounded-lg text-lg"
