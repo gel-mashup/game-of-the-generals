@@ -13,10 +13,11 @@ function LobbyContent() {
 
   const mode = searchParams.get('mode') || 'online';
   const nameFromUrl = searchParams.get('name') || '';
+  const roomFromUrl = searchParams.get('room') || null;
 
   const [playerName, setPlayerName] = useState(nameFromUrl);
   const [roomCode, setRoomCode] = useState('');
-  const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
+  const [createdRoomId, setCreatedRoomId] = useState<string | null>(roomFromUrl);
   const [isJoined, setIsJoined] = useState(false);
   const [isHost, setIsHost] = useState(false);
   const [canAddBot, setCanAddBot] = useState(false);
@@ -161,12 +162,12 @@ function LobbyContent() {
     }
   }, [createdRoomId, mode, router]);
 
-  // Auto-create room when name is provided from landing page
+  // Auto-create room when name is provided from landing page (only if no room in URL)
   useEffect(() => {
-    if (socket && playerName.trim() && mode === 'online' && !createdRoomId) {
+    if (socket && playerName.trim() && mode === 'online' && !createdRoomId && !roomFromUrl) {
       handleCreateRoom();
     }
-  }, [socket, playerName, mode, createdRoomId]);
+  }, [socket, playerName, mode, createdRoomId, roomFromUrl]);
 
   const handleCreateRoom = () => {
     if (!socket || !playerName.trim()) return;
