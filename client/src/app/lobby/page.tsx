@@ -80,8 +80,18 @@ function LobbyContent() {
     };
 
     const handleGameStarted = () => {
+      console.log('game:started received in lobby, createdRoomId:', createdRoomId);
       setCanAddBot(false);
       setCanStartGame(false);
+      // Navigate to game when game starts (after bot added or player joined)
+      // Use the roomId from URL params as fallback
+      const roomId = createdRoomId || searchParams.get('room');
+      if (roomId) {
+        console.log('Navigating to game:', roomId);
+        router.push(`/game/${roomId}`);
+      } else {
+        console.log('No roomId found');
+      }
     };
 
     socket.on('room:created', handleRoomCreated);
@@ -189,8 +199,8 @@ function LobbyContent() {
   };
 
   const handleAddBot = () => {
-    if (!socket) return;
-    socket.emit('add-bot');
+    if (!socket || !createdRoomId) return;
+    socket.emit('add-bot', { roomId: createdRoomId });
     setCanAddBot(false);
   };
 

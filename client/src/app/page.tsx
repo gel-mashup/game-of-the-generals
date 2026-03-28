@@ -88,11 +88,18 @@ export default function LandingPage() {
       <div className="flex justify-center mb-8">
         <button
           onClick={() => {
-            if (!playerName.trim()) {
+            if (!socket || !playerName.trim()) {
               setError('Please enter your name first');
               return;
             }
-            router.push('/lobby?mode=online&name=' + encodeURIComponent(playerName.trim()));
+            setError(null);
+            socket.emit('create-room', {
+              hostName: playerName.trim(),
+              isBotMode: false,
+            });
+            socket.once('room:created', ({ roomId }: { roomId: string }) => {
+              router.push(`/lobby?mode=online&name=${encodeURIComponent(playerName.trim())}&room=${roomId}`);
+            });
           }}
           className="px-8 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-semibold rounded-lg text-lg"
         >
