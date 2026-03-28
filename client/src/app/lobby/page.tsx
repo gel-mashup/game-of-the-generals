@@ -55,14 +55,20 @@ function LobbyContent() {
       roomId,
       playerId,
       playerSide,
+      isHost = false,
     }: {
       roomId: string;
       playerId: string;
       playerSide: 'red' | 'blue';
+      isHost?: boolean;
     }) => {
-      setRoom(roomId, playerId, playerSide, false, false);
+      setRoom(roomId, playerId, playerSide, isHost, false);
       setCreatedRoomId(roomId);
       setIsJoined(true);
+      setIsHost(isHost);
+      if (isHost) {
+        setCanAddBot(true);
+      }
     };
 
     const handlePlayerJoined = ({ player }: { player: { id: string; name: string; side: string } }) => {
@@ -148,12 +154,12 @@ function LobbyContent() {
     };
   }, [socket, isHost, createdRoomId, isJoined]);
 
-  // Navigate to game when both players present (for non-bot games)
+  // Navigate to game when a second player joins (for non-bot games) - but not for the host
   useEffect(() => {
-    if (createdRoomId && isJoined) {
+    if (createdRoomId && isJoined && !isHost) {
       router.push(`/game/${createdRoomId}`);
     }
-  }, [createdRoomId, isJoined, router]);
+  }, [createdRoomId, isJoined, isHost, router]);
 
   // For bot games, navigate immediately
   useEffect(() => {
@@ -163,8 +169,20 @@ function LobbyContent() {
   }, [createdRoomId, mode, router]);
 
   // Auto-create room when name is provided from landing page (only if no room in URL)
+  // OR rejoin existing room when room ID is in URL
   useEffect(() => {
-    if (socket && playerName.trim() && mode === 'online' && !createdRoomId && !roomFromUrl) {
+    if (!socket || !playerName.trim()) return;
+    
+    // Skip if we already have a room (either created or joined)
+    if (createdRoomId) return;
+    
+    if (roomFromUrl) {
+      // Rejoin existing room when room ID is in URL
+      socket.emit('join-room', {
+        roomId: roomFromUrl,
+        playerName: playerName.trim(),
+      });
+    } else if (mode === 'online') {
       handleCreateRoom();
     }
   }, [socket, playerName, mode, createdRoomId, roomFromUrl]);

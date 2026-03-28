@@ -122,6 +122,19 @@ export function roomHandler(io: Server, socket: Socket) {
       return;
     }
 
+    // Check if socket is already in this room (e.g., host rejoining)
+    const existingPlayer = room.players.find(p => p.id === socket.id);
+    if (existingPlayer) {
+      // Already in room - just emit room:joined again with existing data
+      socket.emit('room:joined', {
+        roomId: normalizedRoomId,
+        playerId: socket.id,
+        playerSide: existingPlayer.side,
+        isHost: socket.id === room.hostId,
+      });
+      return;
+    }
+
     if (room.isBotGame && room.players.length >= 1) {
       socket.emit('error', { message: 'Room is full.' });
       return;
@@ -145,6 +158,7 @@ export function roomHandler(io: Server, socket: Socket) {
       roomId,
       playerId: socket.id,
       playerSide: 'blue',
+      isHost: false,
     });
 
     socket.to(roomId).emit('player:joined', { player });
@@ -182,6 +196,17 @@ export function roomHandler(io: Server, socket: Socket) {
       return;
     }
 
+    // Check if socket is already in this room
+    const existingPlayer = room.players.find(p => p.id === socket.id);
+    if (existingPlayer) {
+      socket.emit('room:joined', {
+        roomId: normalizedRoomId,
+        playerId: socket.id,
+        playerSide: existingPlayer.side,
+      });
+      return;
+    }
+
     if (room.isBotGame && room.players.length >= 1) {
       socket.emit('error', { message: 'Room is full.' });
       return;
@@ -210,6 +235,7 @@ export function roomHandler(io: Server, socket: Socket) {
       roomId: normalizedRoomId,
       playerId: socket.id,
       playerSide: 'blue',
+      isHost: false,
     });
 
     socket.to(normalizedRoomId).emit('player:joined', { player });

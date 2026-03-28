@@ -98,7 +98,7 @@ export default function LandingPage() {
               isBotMode: false,
             });
             socket.once('room:created', ({ roomId }: { roomId: string }) => {
-              router.push(`/lobby?mode=online&name=${encodeURIComponent(playerName.trim())}&room=${roomId}`);
+              router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
             });
           }}
           className="px-8 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-semibold rounded-lg text-lg"
