@@ -104,6 +104,9 @@ export function roomHandler(io: Server, socket: Socket) {
         status: 'deploying',
       });
 
+      // Emit bot:auto-deploy to trigger player's auto-deploy
+      io.to(roomId).emit('bot:auto-deploy');
+
       console.log(`Bot game ${roomId}: bot auto-deployed, game started in deploying phase`);
     }
   });

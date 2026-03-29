@@ -108,6 +108,15 @@ function LobbyContent() {
     socket.on('error', handleError);
     socket.on('game:started', handleGameStarted);
 
+    // Forward bot:auto-deploy to trigger auto-deploy after navigation
+    socket.on('bot:auto-deploy', () => {
+      console.log('[LOBBY] bot:auto-deploy received, will emit auto-deploy after navigation');
+      // Wait for navigation to complete then emit
+      setTimeout(() => {
+        socket.emit('auto-deploy');
+      }, 1000);
+    });
+
     return () => {
       socket.off('room:created', handleRoomCreated);
       socket.off('room:joined', handleRoomJoined);
