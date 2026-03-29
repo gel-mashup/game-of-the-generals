@@ -17,7 +17,7 @@ function LobbyContent() {
 
   const [playerName, setPlayerName] = useState(nameFromUrl);
   const [roomCode, setRoomCode] = useState('');
-  const [createdRoomId, setCreatedRoomId] = useState<string | null>(roomFromUrl);
+  const [createdRoomId, setCreatedRoomId] = useState<string | null>(null);
   const [isJoined, setIsJoined] = useState(false);
   const [isHost, setIsHost] = useState(false);
   const [canAddBot, setCanAddBot] = useState(false);
@@ -178,10 +178,7 @@ function LobbyContent() {
     
     if (roomFromUrl) {
       // Rejoin existing room when room ID is in URL
-      socket.emit('join-room', {
-        roomId: roomFromUrl,
-        playerName: playerName.trim(),
-      });
+      socket.emit('rejoin-room', { roomId: roomFromUrl });
     } else if (mode === 'online') {
       handleCreateRoom();
     }

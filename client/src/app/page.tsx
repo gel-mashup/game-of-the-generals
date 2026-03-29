@@ -55,7 +55,7 @@ export default function LandingPage() {
     setError(null);
 
     const handleRoomJoined = ({ roomId: joinedRoomId }: { roomId: string }) => {
-      router.push(`/game/${joinedRoomId}?name=${encodeURIComponent(playerName.trim())}`);
+      router.push(`/lobby?name=${encodeURIComponent(playerName.trim())}&room=${joinedRoomId}`);
     };
 
     const handleError = ({ message }: { message: string }) => {
@@ -77,7 +77,7 @@ export default function LandingPage() {
     if (!socket) return;
     setError(null);
     const handleRoomCreated = ({ roomId }: { roomId: string }) => {
-      router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
+      router.push(`/lobby?name=${encodeURIComponent(playerName.trim())}&room=${roomId}`);
     };
 
     const handleError = ({ message }: { message: string }) => {

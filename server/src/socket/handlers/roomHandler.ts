@@ -111,6 +111,57 @@ export function roomHandler(io: Server, socket: Socket) {
     }
   });
 
+  socket.on('rejoin-room', ({ roomId }: { roomId: string }) => {
+    const normalizedRoomId = roomId.trim().toUpperCase();
+    const room = rooms.get(normalizedRoomId);
+
+    if (!room) {
+      socket.emit('error', { message: 'Room not found.' });
+      return;
+    }
+
+    // Host rejoining their own room
+    if (room.hostId === socket.id) {
+      socket.emit('room:created', {
+        roomId: normalizedRoomId,
+        playerId: socket.id,
+        playerSide: 'red',
+        isBotGame: room.isBotGame,
+      });
+      // If game already started, send current state so host navigates to game
+      if (room.status !== 'waiting') {
+        socket.emit('game:started', {
+          board: room.board,
+          currentTurn: room.currentTurn,
+          status: room.status,
+        });
+      }
+      return;
+    }
+
+    // Non-host player rejoining
+    const existingPlayer = room.players.find(p => p.id === socket.id);
+    if (existingPlayer) {
+      socket.emit('room:joined', {
+        roomId: normalizedRoomId,
+        playerId: socket.id,
+        playerSide: existingPlayer.side,
+        isHost: false,
+      });
+      // If game already started, send current state so player navigates to game
+      if (room.status !== 'waiting') {
+        socket.emit('game:started', {
+          board: room.board,
+          currentTurn: room.currentTurn,
+          status: room.status,
+        });
+      }
+      return;
+    }
+
+    socket.emit('error', { message: 'Not authorized to rejoin this room.' });
+  });
+
   socket.on('get-rooms', () => {
     socket.emit('rooms:list', Array.from(publicRooms.values()));
   });
