@@ -85,9 +85,6 @@ export default function LandingPage() {
       roomId,
       playerName: playerName.trim(),
     });
-    console.log('[DEBUG] emit called');
-
-    // Add this AFTER emit call
     setTimeout(() => {
       console.log('[DEBUG] No response after 2s, socket state:', {
         id: socket.id,
