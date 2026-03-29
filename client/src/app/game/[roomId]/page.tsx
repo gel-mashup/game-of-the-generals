@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useGameStore } from '@/store/gameStore';
 import { useRoomStore } from '@/store/roomStore';
 import { useSocket } from '@/components/SocketProvider';
@@ -41,6 +41,9 @@ export default function GamePage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [botThinking, setBotThinking] = useState(false);
   const [winModalMinimized, setWinModalMinimized] = useState(false);
+
+  // Track auto-deploy emission to prevent double emits
+  const autoDeployEmitted = useRef(false);
 
   // Compute deployed counts from board
   useEffect(() => {
@@ -263,8 +266,13 @@ export default function GamePage() {
       setWinner(null, null);
     });
 
-    // Bot auto-deploy trigger
+    // Bot auto-deploy trigger - use ref to prevent double emission
     socket.on('bot:auto-deploy', () => {
+      if (autoDeployEmitted.current) {
+        console.log('[CLIENT] bot:auto-deploy already emitted, skipping');
+        return;
+      }
+      autoDeployEmitted.current = true;
       console.log('[CLIENT] bot:auto-deploy received, emitting auto-deploy');
       socket.emit('auto-deploy');
     });
