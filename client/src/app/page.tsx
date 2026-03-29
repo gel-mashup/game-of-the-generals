@@ -74,12 +74,26 @@ export default function LandingPage() {
     socket.on('room:joined', handleRoomJoined);
     socket.on('error', handleError);
 
+    console.log('[DEBUG] Socket state before emit:', {
+      id: socket.id,
+      connected: socket.connected,
+      roomId
+    });
+
     console.log('[DEBUG] About to emit join-room-by-id, socket.id:', socket.id);
     socket.emit('join-room-by-id', {
       roomId,
       playerName: playerName.trim(),
     });
     console.log('[DEBUG] emit called');
+
+    // Add this AFTER emit call
+    setTimeout(() => {
+      console.log('[DEBUG] No response after 2s, socket state:', {
+        id: socket.id,
+        connected: socket.connected
+      });
+    }, 2000);
   };
 
   const performCreateRoom = () => {

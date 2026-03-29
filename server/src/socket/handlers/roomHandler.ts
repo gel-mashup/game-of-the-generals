@@ -192,6 +192,8 @@ export function roomHandler(io: Server, socket: Socket) {
     const normalizedRoomId = roomId.trim().toUpperCase();
     const room = rooms.get(normalizedRoomId);
 
+    console.log(`[SERVER] Room ${normalizedRoomId} status: ${room?.status || 'not found'}`);
+
     if (!room) {
       socket.emit('error', { message: 'Room not found.' });
       return;
