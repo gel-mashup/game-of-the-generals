@@ -129,10 +129,10 @@ export default function GamePage() {
     const handleGameStarted = (data: {
       board: (Piece | null)[][];
       currentTurn: 'red' | 'blue';
-      status: 'deploying';
+      status: 'waiting' | 'deploying' | 'playing' | 'finished';
     }) => {
       setBoard(data.board);
-      setGameStatus('deploying');
+      setGameStatus(data.status);
       setTurn(data.currentTurn);
     };
 
