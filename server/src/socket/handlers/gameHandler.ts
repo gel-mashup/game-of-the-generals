@@ -262,8 +262,6 @@ export function gameHandler(io: Server, socket: Socket) {
    * auto-deploy — randomly deploy all 21 pieces in the player's deployment zone.
    */
   socket.on('auto-deploy', () => {
-    console.log(`[SERVER] auto-deploy received from socket: ${socket.id}`);
-    
     let room: Room | undefined;
     let roomId: string | undefined;
     for (const [id, r] of rooms.entries()) {
@@ -275,17 +273,13 @@ export function gameHandler(io: Server, socket: Socket) {
     }
 
     if (!room || !roomId) {
-      console.log('[SERVER] auto-deploy: room not found');
       return;
     }
 
     const player = getPlayerFromSocket(socket.id, room);
     if (!player) {
-      console.log('[SERVER] auto-deploy: player not found');
       return;
     }
-
-    console.log(`[SERVER] auto-deploy: player ${player.side}, status: ${room.status}`);
 
     // Cannot auto-deploy if already ready
     if (room.readyPlayers.has(socket.id)) return;

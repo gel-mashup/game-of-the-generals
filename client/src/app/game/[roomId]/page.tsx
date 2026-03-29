@@ -137,13 +137,6 @@ export default function GamePage() {
     };
 
     const handlePieceDeployed = (data: { piece: Piece; row: number; col: number; deployedCount: number; board: (Piece | null)[][]; autoDeployComplete?: boolean }) => {
-      console.log('[CLIENT] piece:deployed received:', {
-        piece: data.piece,
-        row: data.row,
-        col: data.col,
-        deployedCount: data.deployedCount,
-        autoDeployComplete: data.autoDeployComplete
-      });
       setBoard(data.board);
       const counts: Record<string, number> = {};
       for (let r = 0; r < 8; r++) {
@@ -269,11 +262,9 @@ export default function GamePage() {
     // Bot auto-deploy trigger - use ref to prevent double emission
     socket.on('bot:auto-deploy', () => {
       if (autoDeployEmitted.current) {
-        console.log('[CLIENT] bot:auto-deploy already emitted, skipping');
         return;
       }
       autoDeployEmitted.current = true;
-      console.log('[CLIENT] bot:auto-deploy received, emitting auto-deploy');
       socket.emit('auto-deploy');
     });
 

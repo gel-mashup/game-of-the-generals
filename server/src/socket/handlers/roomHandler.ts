@@ -191,11 +191,8 @@ export function roomHandler(io: Server, socket: Socket) {
   });
 
   socket.on('join-room-by-id', ({ roomId, playerName }: { roomId: string; playerName: string }) => {
-    console.log(`[SERVER] join-room-by-id received: ${playerName} -> ${roomId}, socket: ${socket.id}`);
     const normalizedRoomId = roomId.trim().toUpperCase();
     const room = rooms.get(normalizedRoomId);
-
-    console.log(`[SERVER] Room ${normalizedRoomId} status: ${room?.status || 'not found'}`);
 
     if (!room) {
       socket.emit('error', { message: 'Room not found.' });

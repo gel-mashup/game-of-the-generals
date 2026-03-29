@@ -35,15 +35,12 @@ export default function LandingPage() {
   }, [socket, setRooms]);
 
   const handleJoinRoom = (roomId: string) => {
-    console.log('[DEBUG] handleJoinRoom called with roomId:', roomId, 'socket.connected:', socket?.connected);
     if (!socket || !playerName.trim()) {
       setError('Please enter your name first');
       return;
     }
     if (!socket.connected) {
-      console.log('[DEBUG] Socket not connected, waiting...');
       socket.on('connect', () => {
-        console.log('[DEBUG] Socket connected, emitting join-room-by-id');
         performJoinRoom(roomId);
       });
       return;
@@ -53,19 +50,15 @@ export default function LandingPage() {
 
   const performJoinRoom = (roomId: string) => {
     if (!socket) {
-      console.log('[DEBUG] Socket is null in performJoinRoom');
       return;
     }
     setError(null);
-    console.log('[DEBUG] performJoinRoom - emitting join-room-by-id for:', roomId);
 
     const handleRoomJoined = ({ roomId: joinedRoomId }: { roomId: string }) => {
-      console.log('[DEBUG] room:joined received, navigating to:', joinedRoomId);
       router.push(`/game/${joinedRoomId}?name=${encodeURIComponent(playerName.trim())}`);
     };
 
     const handleError = ({ message }: { message: string }) => {
-      console.log('[DEBUG] Error received:', message);
       setError(message);
       socket.off('room:joined', handleRoomJoined);
       socket.off('error', handleError);
@@ -74,23 +67,10 @@ export default function LandingPage() {
     socket.on('room:joined', handleRoomJoined);
     socket.on('error', handleError);
 
-    console.log('[DEBUG] Socket state before emit:', {
-      id: socket.id,
-      connected: socket.connected,
-      roomId
-    });
-
-    console.log('[DEBUG] About to emit join-room-by-id, socket.id:', socket.id);
     socket.emit('join-room-by-id', {
       roomId,
       playerName: playerName.trim(),
     });
-    setTimeout(() => {
-      console.log('[DEBUG] No response after 2s, socket state:', {
-        id: socket.id,
-        connected: socket.connected
-      });
-    }, 2000);
   };
 
   const performCreateRoom = () => {
