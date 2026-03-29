@@ -2,6 +2,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { io as ioc, Socket as ClientSocket } from 'socket.io-client';
 import { roomHandler } from '../src/socket/handlers/roomHandler';
+import { gameHandler } from '../src/socket/handlers/gameHandler';
 import { rooms } from '../src/socket/rooms';
 
 // Helper: create a server on a random port, register roomHandler per-connection
@@ -13,6 +14,7 @@ function createServerPair() {
 
   io.on('connection', (socket) => {
     roomHandler(io, socket);
+    gameHandler(io, socket);
   });
 
   return new Promise<{ httpServer: ReturnType<typeof createServer>; io: Server; port: number }>(
@@ -182,6 +184,56 @@ describe('Room Handler', () => {
 
     // Bot should have 21 deployed pieces
     expect(room!.deployedPieces.blue.size).toBe(21);
+
+    await cleanup([client], io, httpServer);
+  });
+
+  test('PVP room status stays waiting after sync-game-state', async () => {
+    const { httpServer, io, port } = await createServerPair();
+    const client = await connectClient(port);
+
+    // Create PVP room
+    client.emit('create-room', { hostName: 'Alice', isBotMode: false });
+    const created = await waitForEvent<{ roomId: string }>(client, 'room:created');
+
+    // Verify room is in waiting status
+    const room = rooms.get(created.roomId);
+    expect(room!.status).toBe('waiting');
+
+    // Emulate game page mount: client emits sync-game-state
+    client.emit('sync-game-state');
+    const state = await waitForEvent<{ status: string }>(client, 'game:started');
+
+    // Should receive 'waiting' status, NOT 'deploying'
+    expect(state.status).toBe('waiting');
+    expect(state.status).not.toBe('deploying');
+
+    // Room should still be in waiting status
+    expect(room!.status).toBe('waiting');
+
+    await cleanup([client], io, httpServer);
+  });
+
+  test('PVP room does not auto-start game:started on create', async () => {
+    const { httpServer, io, port } = await createServerPair();
+    const client = await connectClient(port);
+
+    // Create PVP room - should NOT emit game:started
+    client.emit('create-room', { hostName: 'Alice', isBotMode: false });
+    const created = await waitForEvent<{ roomId: string }>(client, 'room:created');
+
+    // Try to receive game:started - should timeout (not emitted)
+    let gameStartedReceived = false;
+    client.on('game:started', () => {
+      gameStartedReceived = true;
+    });
+
+    await new Promise((r) => setTimeout(r, 500));
+
+    expect(gameStartedReceived).toBe(false);
+
+    const room = rooms.get(created.roomId);
+    expect(room!.status).toBe('waiting');
 
     await cleanup([client], io, httpServer);
   });

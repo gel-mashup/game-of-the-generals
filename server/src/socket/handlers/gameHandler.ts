@@ -134,6 +134,7 @@ export function gameHandler(io: Server, socket: Socket) {
   socket.on('sync-game-state', () => {
     for (const [roomId, room] of rooms.entries()) {
       if (room.players.some((p) => p.id === socket.id)) {
+        console.log(`[SERVER] sync-game-state: emitting game:started with status=${room.status} for room ${roomId}`);
         socket.emit('game:started', {
           board: room.board,
           currentTurn: room.currentTurn,

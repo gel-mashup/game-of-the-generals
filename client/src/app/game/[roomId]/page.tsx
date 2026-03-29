@@ -124,6 +124,7 @@ export default function GamePage() {
     if (!socket) return;
 
     // Request current game state on mount (handles late join / missed events)
+    console.log('[CLIENT] emitting sync-game-state');
     socket.emit('sync-game-state');
 
     const handleGameStarted = (data: {
@@ -131,6 +132,7 @@ export default function GamePage() {
       currentTurn: 'red' | 'blue';
       status: 'waiting' | 'deploying' | 'playing' | 'finished';
     }) => {
+      console.log('[CLIENT] game:started received:', data.status);
       setBoard(data.board);
       setGameStatus(data.status);
       setTurn(data.currentTurn);
