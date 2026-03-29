@@ -35,17 +35,37 @@ export default function LandingPage() {
   }, [socket, setRooms]);
 
   const handleJoinRoom = (roomId: string) => {
+    console.log('[DEBUG] handleJoinRoom called with roomId:', roomId, 'socket.connected:', socket?.connected);
     if (!socket || !playerName.trim()) {
       setError('Please enter your name first');
       return;
     }
+    if (!socket.connected) {
+      console.log('[DEBUG] Socket not connected, waiting...');
+      socket.on('connect', () => {
+        console.log('[DEBUG] Socket connected, emitting join-room-by-id');
+        performJoinRoom(roomId);
+      });
+      return;
+    }
+    performJoinRoom(roomId);
+  };
+
+  const performJoinRoom = (roomId: string) => {
+    if (!socket) {
+      console.log('[DEBUG] Socket is null in performJoinRoom');
+      return;
+    }
     setError(null);
+    console.log('[DEBUG] performJoinRoom - emitting join-room-by-id for:', roomId);
 
     const handleRoomJoined = ({ roomId: joinedRoomId }: { roomId: string }) => {
+      console.log('[DEBUG] room:joined received, navigating to:', joinedRoomId);
       router.push(`/game/${joinedRoomId}?name=${encodeURIComponent(playerName.trim())}`);
     };
 
     const handleError = ({ message }: { message: string }) => {
+      console.log('[DEBUG] Error received:', message);
       setError(message);
       socket.off('room:joined', handleRoomJoined);
       socket.off('error', handleError);
@@ -54,9 +74,33 @@ export default function LandingPage() {
     socket.on('room:joined', handleRoomJoined);
     socket.on('error', handleError);
 
+    console.log('[DEBUG] About to emit join-room-by-id, socket.id:', socket.id);
     socket.emit('join-room-by-id', {
       roomId,
       playerName: playerName.trim(),
+    });
+    console.log('[DEBUG] emit called');
+  };
+
+  const performCreateRoom = () => {
+    if (!socket) return;
+    setError(null);
+    const handleRoomCreated = ({ roomId }: { roomId: string }) => {
+      router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
+    };
+
+    const handleError = ({ message }: { message: string }) => {
+      setError(message);
+      socket.off('room:created', handleRoomCreated);
+      socket.off('error', handleError);
+    };
+
+    socket.on('room:created', handleRoomCreated);
+    socket.on('error', handleError);
+
+    socket.emit('create-room', {
+      hostName: playerName.trim(),
+      isBotMode: false,
     });
   };
 
@@ -98,25 +142,14 @@ export default function LandingPage() {
               setError('Please enter your name first');
               return;
             }
-            setError(null);
-
-            const handleRoomCreated = ({ roomId }: { roomId: string }) => {
-              router.push(`/game/${roomId}?name=${encodeURIComponent(playerName.trim())}`);
-            };
-
-            const handleError = ({ message }: { message: string }) => {
-              setError(message);
-              socket.off('room:created', handleRoomCreated);
-              socket.off('error', handleError);
-            };
-
-            socket.on('room:created', handleRoomCreated);
-            socket.on('error', handleError);
-
-            socket.emit('create-room', {
-              hostName: playerName.trim(),
-              isBotMode: false,
-            });
+            if (!socket.connected) {
+              setError('Connecting...');
+              socket.on('connect', () => {
+                performCreateRoom();
+              });
+              return;
+            }
+            performCreateRoom();
           }}
           className="px-8 py-3 bg-[#d4a847] hover:bg-[#c49a3d] text-[#1a2e1a] font-semibold rounded-lg text-lg"
         >
